@@ -43,17 +43,18 @@ public class MainActivity extends AppCompatActivity {
         //lecture du fichier
         String[][] array1 = read(fileName);
 
-
+        //recuperration des views pour ajouter une alarme
         this.addAlarm = findViewById(R.id.floatingActionButton4);
         this.addAlarmText = findViewById(R.id.editTextTextPersonName);
 
 
         addAlarm.setOnClickListener(view -> {
-
+            //si l'edit text est deja visible et que l'on click sur le +
             if (addAlarmText.getVisibility() == View.VISIBLE) {
-
+                //creation de l'object alarm
                 Alarm alarm1 = new Alarm();
                 alarm1.setNameAlarm(addAlarmText.getText().toString());
+                //ajout dans la liste d'object alarm
 
                 Intent gameActivityIntent = new Intent(MainActivity.this, AddActivity.class);
                 startActivity(gameActivityIntent);
