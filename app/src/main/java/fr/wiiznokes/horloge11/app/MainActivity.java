@@ -14,6 +14,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.utils.*;
@@ -36,12 +39,19 @@ public class MainActivity extends AppCompatActivity {
 
         //creation du fichier si il n'existe pas avec un tableau vide
         if(read(fileName)== null){
-            Object[] ArrayInit = {};
+            List<Object> ArrayInit = new ArrayList<Object>();
             write(fileName, ArrayInit);
         }
 
         //lecture du fichier
-        String[][] array1 = read(fileName);
+        List<Object> Array1 = read(fileName);
+
+
+
+
+
+
+
 
         //recuperration des views pour ajouter une alarme
         this.addAlarm = findViewById(R.id.floatingActionButton4);
@@ -52,9 +62,11 @@ public class MainActivity extends AppCompatActivity {
             //si l'edit text est deja visible et que l'on click sur le +
             if (addAlarmText.getVisibility() == View.VISIBLE) {
                 //creation de l'object alarm
-                Alarm alarm1 = new Alarm();
-                alarm1.setNameAlarm(addAlarmText.getText().toString());
+                Alarm Alarm1 = new Alarm();
+                Alarm1.setNameAlarm(addAlarmText.getText().toString());
                 //ajout dans la liste d'object alarm
+                Array1.add(Alarm1);
+
 
                 //lancement de AddActivity
                 Intent gameActivityIntent = new Intent(MainActivity.this, AddActivity.class);
@@ -104,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void write(String fileName, Object[] tab){
+    public void write(String fileName, List<Object> tab){
 
         try {
             FileOutputStream output = this.openFileOutput(fileName, MODE_PRIVATE);
@@ -118,12 +130,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public Object[] read(String fileName){
-        String [][] Array1;
+    public List<Object> read(String fileName){
+        List<Object> Array1;
         try {
             FileInputStream input = this.openFileInput(fileName);
             ObjectInputStream in = new ObjectInputStream(input);
-            Array1 = (String[][]) in.readObject();
+            Array1 = (List<Object>) in.readObject();
             in.close();
             input.close();
             return Array1;
