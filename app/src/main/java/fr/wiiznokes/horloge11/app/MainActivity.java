@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         //creation du fichier si il n'existe pas avec un tableau vide
         if(read(fileName)== null){
-            String[][] ArrayInit = {};
+            Object[] ArrayInit = {};
             write(fileName, ArrayInit);
         }
 
@@ -56,21 +56,26 @@ public class MainActivity extends AppCompatActivity {
                 alarm1.setNameAlarm(addAlarmText.getText().toString());
                 //ajout dans la liste d'object alarm
 
+                //lancement de AddActivity
                 Intent gameActivityIntent = new Intent(MainActivity.this, AddActivity.class);
                 startActivity(gameActivityIntent);
 
             }
             else{
+                //edit text visible
             addAlarmText.setVisibility(View.VISIBLE);
+            //demande du focus
             addAlarmText.requestFocus();
+            //demande du clavier
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-
+            //on regarde un chamgement de focus
             addAlarmText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
                 @Override
                 public void onFocusChange(View view, boolean hasFocus) {
                     if (!hasFocus) {
+                        //si plus de focus
                         addAlarmText.setVisibility(View.INVISIBLE);
                         addAlarmText.setText("");
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -99,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void write(String fileName, String[][] tab){
+    public void write(String fileName, Object[] tab){
 
         try {
             FileOutputStream output = this.openFileOutput(fileName, MODE_PRIVATE);
@@ -113,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public String[][] read(String fileName){
+    public Object[] read(String fileName){
         String [][] Array1;
         try {
             FileInputStream input = this.openFileInput(fileName);
