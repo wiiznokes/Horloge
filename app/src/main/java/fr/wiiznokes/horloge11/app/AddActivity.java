@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
 import java.util.List;
 
 import fr.wiiznokes.horloge11.R;
@@ -28,13 +29,14 @@ public class AddActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
         List<Object> Array1 = read(fileName);
-        Alarm AlarmNew = (Alarm) Array1.get(-1);
+        Alarm AlarmNew = (Alarm) Array1.get(Array1.size()-1);
 
         this.alarmName = findViewById(R.id.textView12);
         alarmName.setText(AlarmNew.getNameAlarm());
