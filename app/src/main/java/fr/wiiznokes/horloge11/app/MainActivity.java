@@ -42,22 +42,12 @@ public class MainActivity extends AppCompatActivity {
         if(read(fileName)== null){
 
             List<Object> ArrayInit = new ArrayList<Object>();
+            //ecriture
             write(fileName, ArrayInit);
         }
 
         //lecture du fichier
         List<Object> Array1 = read(fileName);
-
-        //ajoue d'un objet
-        Alarm AlarmTest = new Alarm();
-        AlarmTest.setNameAlarm("hector");
-        Array1.add(AlarmTest);
-        //eriture
-        write2(fileName, Array1);
-        //lecture
-        ArrayList <Object> ArrayTest = (ArrayList<Object>) read(fileName);
-
-        System.out.println(ArrayTest.get(0));
 
 
 
@@ -75,8 +65,10 @@ public class MainActivity extends AppCompatActivity {
                 //creation de l'object alarm
                 Alarm Alarm1 = new Alarm();
                 Alarm1.setNameAlarm(addAlarmText.getText().toString());
-                //ajout dans la liste d'object alarm
+
+                //ajout dans la liste d'object alarm et ecriture
                 Array1.add(Alarm1);
+                write(fileName, Array1);
 
 
                 //lancement de AddActivity
@@ -156,16 +148,4 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    public void write2(String fileName, List<Object> tab) {
-
-        try {
-            FileOutputStream output = new FileOutputStream(fileName);
-            ObjectOutputStream out = new ObjectOutputStream(output);
-            out.writeObject(tab);
-            out.close();
-            output.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
