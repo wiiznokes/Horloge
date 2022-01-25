@@ -34,8 +34,6 @@ public class AddActivity extends AppCompatActivity {
     private RadioButton radioMonday;
 
     int nbChiffreDesHeures = 0;
-    StringBuilder alarmHoursTxtCopy = new StringBuilder(":");
-
 
 
 
@@ -75,22 +73,10 @@ public class AddActivity extends AppCompatActivity {
                 //recuperation du texte
                 String alarmHoursTxt = alarmHours.getText().toString();
                 //si suppression de ":"
-                if (!(alarmHoursTxt.contains(":"))){
-                    try {
-                        //on remet le texte precedent en enlevant le caractère avant les :
-                        alarmHours.setText(alarmHoursTxtCopy.deleteCharAt(alarmHoursTxtCopy.indexOf(":") - 1));
-                        alarmHours.setSelection(alarmHoursTxtCopy.indexOf(":"));
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                    finally {
-                        alarmHours.setText(":");
-                    }
+                if (!(alarmHoursTxt.contains(":"))) {
+                    alarmHours.setText(":");
                 }
                 else{
-
-
-
 
                 //remise a zero si taille depasse 5
                 if (alarmHoursTxt.length() > 5) {
@@ -148,16 +134,10 @@ public class AddActivity extends AppCompatActivity {
                 }
 
                 nbChiffreDesHeures = alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":")).length();
-                alarmHoursTxtCopy.replace(0, alarmHoursTxtCopy.length(), alarmHours.getText().toString());
 
             }}
 
         });
-
-
-
-
-
 
     }
 
