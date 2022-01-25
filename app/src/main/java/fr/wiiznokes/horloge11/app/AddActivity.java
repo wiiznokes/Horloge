@@ -74,6 +74,34 @@ public class AddActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 //recuperation du texte
                 String alarmHoursTxt = alarmHours.getText().toString();
+                //si suppression de ":"
+                /*if (!(alarmHoursTxt.contains(":"))){
+                    try {
+                        //on remet le texte precedent en enlevant le caractère avant les :
+                        alarmHours.setText(alarmHoursTxtCopy.deleteCharAt(alarmHoursTxtCopy.indexOf(":") - 1));
+                        alarmHours.setSelection(alarmHoursTxtCopy.indexOf(":"));
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    finally {
+                        alarmHours.setText(":");
+                    }
+                }*/
+
+                if (!(alarmHoursTxt.contains(":"))){
+                    try {
+                        //on remet le texte precedent en enlevant le caractère avant les :
+                        alarmHours.setText(alarmHoursTxtCopy.deleteCharAt(alarmHoursTxtCopy.indexOf(":") - 1));
+                        alarmHours.setSelection(alarmHoursTxtCopy.indexOf(":"));
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    finally {
+                        alarmHours.setText(":");
+                    }
+                }
+                else{
+
 
 
 
@@ -100,12 +128,7 @@ public class AddActivity extends AppCompatActivity {
                 }
 
 
-                //si suppression de ":"
-                if (!(alarmHoursTxt.contains(":"))){
-                    //on remet le texte precedent en enlevant le caractère avant les :
-                    alarmHours.setText(alarmHoursTxtCopy.deleteCharAt(alarmHoursTxtCopy.indexOf(":") - 1));
-                    alarmHours.setSelection(alarmHoursTxtCopy.indexOf(":") - 1);
-                }
+
                 //condition pour savoir si une heure est écrite
                 if (alarmHoursTxt.indexOf(":") > 0) {
                 //heure > 23
@@ -140,7 +163,7 @@ public class AddActivity extends AppCompatActivity {
                 nbChiffreDesHeures = alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":")).length();
                 alarmHoursTxtCopy.replace(0, alarmHoursTxtCopy.length(), alarmHours.getText().toString());
 
-            }
+            }}
 
         });
 
