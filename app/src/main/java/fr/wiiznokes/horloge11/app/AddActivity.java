@@ -75,19 +75,6 @@ public class AddActivity extends AppCompatActivity {
                 //recuperation du texte
                 String alarmHoursTxt = alarmHours.getText().toString();
                 //si suppression de ":"
-                /*if (!(alarmHoursTxt.contains(":"))){
-                    try {
-                        //on remet le texte precedent en enlevant le caractère avant les :
-                        alarmHours.setText(alarmHoursTxtCopy.deleteCharAt(alarmHoursTxtCopy.indexOf(":") - 1));
-                        alarmHours.setSelection(alarmHoursTxtCopy.indexOf(":"));
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                    finally {
-                        alarmHours.setText(":");
-                    }
-                }*/
-
                 if (!(alarmHoursTxt.contains(":"))){
                     try {
                         //on remet le texte precedent en enlevant le caractère avant les :
