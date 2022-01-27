@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Space;
@@ -32,6 +33,7 @@ public class AddActivity extends AppCompatActivity {
     private EditText alarmName;
     private EditText alarmHours;
     private RadioButton radioMonday;
+    private ImageButton buttonRetour;
 
     int nbChiffreDesHeures = 0;
 
