@@ -1,5 +1,6 @@
 package fr.wiiznokes.horloge11.app;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -33,7 +34,7 @@ public class AddActivity extends AppCompatActivity {
     private EditText alarmName;
     private EditText alarmHours;
     private RadioButton radioMonday;
-    private ImageButton buttonRetour;
+    private ImageButton boutonRetour;
 
     int nbChiffreDesHeures = 0;
 
@@ -44,20 +45,30 @@ public class AddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+/*
+        //bouton retour
+        boutonRetour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //lancement de MainActivity
+                Intent mainActivityIntent = new Intent(AddActivity.this, MainActivity.class);
+                startActivity(mainActivityIntent);
+            }
+        });
+*/
+
+
+
         //lecture et recuperation du dernier objet Alarm du fichier
         List<Object> Array1 = read(fileName);
         Alarm AlarmNew = (Alarm) Array1.get(Array1.size()-1);
-
         //nom de l'alarme
         this.alarmName = findViewById(R.id.textView12);
         alarmName.setText(AlarmNew.getNameAlarm());
 
         //heure de l'alarme
-
         this.alarmHours = findViewById(R.id.textView13);
         this.radioMonday = findViewById(R.id.radioButton);
-
-
         alarmHours.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
