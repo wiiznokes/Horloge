@@ -2,6 +2,7 @@ package fr.wiiznokes.horloge11.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,8 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
     private final String fileName = "save.txt";
 
-    private EditText addAlarmText;
     private ImageButton addAlarm;
+    private EditText addAlarmText;
+    private final static int ADD_ACTIVITY_CALL_ID = 10;
 
 
 
@@ -51,9 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
         //recuperration des views pour ajouter une alarme
         this.addAlarm = findViewById(R.id.floatingActionButton4);
         this.addAlarmText = findViewById(R.id.editTextTextPersonName);
@@ -66,26 +65,29 @@ public class MainActivity extends AppCompatActivity {
                 Alarm Alarm1 = new Alarm();
                 Alarm1.setNameAlarm(addAlarmText.getText().toString());
 
-                //ajout dans la liste d'object alarm et ecriture
-                Array1.add(Alarm1);
-                write(fileName, Array1);
-
 
                 //lancement de AddActivity
-                Intent gameActivityIntent = new Intent(MainActivity.this, AddActivity.class);
-                startActivity(gameActivityIntent);
+                //creation de l'intention à partir du context et du fichier .class à ouvrir
+                Intent intent = new Intent(
+                        MainActivity.this,
+                        AddActivity.class
+                );
+                //ajout d'information dans l'intention
+                intent.putExtra("alarmName", addAlarmText.getText().toString());
+                //lancement de addActivity avec un id de lancement
+                startActivityForResult(intent, ADD_ACTIVITY_CALL_ID);
 
             }
             else{
                 //edit text visible
-            addAlarmText.setVisibility(View.VISIBLE);
-            //demande du focus
-            addAlarmText.requestFocus();
-            //demande du clavier
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-            //on regarde un chamgement de focus
-            addAlarmText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                addAlarmText.setVisibility(View.VISIBLE);
+                //demande du focus
+                addAlarmText.requestFocus();
+                //demande du clavier
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+                //on regarde un changement de focus
+                addAlarmText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
                 @Override
                 public void onFocusChange(View view, boolean hasFocus) {
@@ -105,19 +107,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-
-
-
-
-
-
-
-
-
-
+        if (requestCode == ADD_ACTIVITY_CALL_ID){
+            
+        }
+    }
 
     public void write(String fileName, List<Object> tab){
 

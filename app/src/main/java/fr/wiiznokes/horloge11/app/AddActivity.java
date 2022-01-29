@@ -28,14 +28,11 @@ public class AddActivity extends AppCompatActivity {
 
 
     private final String fileName = "save.txt";
+    private ImageButton boutonRetour;
+    private EditText alarmName;
 
     private String[] numberList = {"3","4","5","6","7","8","9"};
-
-    private EditText alarmName;
     private EditText alarmHours;
-    private RadioButton radioMonday;
-    private ImageButton boutonRetour;
-
     int nbChiffreDesHeures = 0;
 
 
@@ -45,30 +42,26 @@ public class AddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-/*
+
+        //lecture du fichier de sauvegarde
+        List<Object> Array1 = read(fileName);
+
         //bouton retour
+        this.boutonRetour = findViewById(R.id.imageButton4);
         boutonRetour.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                //lancement de MainActivity
-                Intent mainActivityIntent = new Intent(AddActivity.this, MainActivity.class);
-                startActivity(mainActivityIntent);
+            public void onClick(View v) {
+                setResult(11);
+                finish();
             }
         });
-*/
 
-
-
-        //lecture et recuperation du dernier objet Alarm du fichier
-        List<Object> Array1 = read(fileName);
-        Alarm AlarmNew = (Alarm) Array1.get(Array1.size()-1);
         //nom de l'alarme
         this.alarmName = findViewById(R.id.textView12);
-        alarmName.setText(AlarmNew.getNameAlarm());
+        alarmName.setText(this.getIntent().getExtras().getString("alarmName"));
 
         //heure de l'alarme
         this.alarmHours = findViewById(R.id.textView13);
-        this.radioMonday = findViewById(R.id.radioButton);
         alarmHours.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
