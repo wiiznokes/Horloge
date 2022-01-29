@@ -35,6 +35,7 @@ public class AddActivity extends AppCompatActivity {
     private String[] numberList = {"3","4","5","6","7","8","9"};
     int nbChiffreDesHeures = 0;
 
+    private RadioButton monday;
 
 
 
@@ -142,6 +143,19 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
+        monday = (RadioButton) findViewById(R.id.radioButton);
+        monday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(monday.isChecked()){
+                    System.out.println(monday.isChecked());
+                    monday.setChecked(false);
+                }
+                else{
+                    monday.setChecked(true);
+                }
+            }
+        });
     }
 
 
