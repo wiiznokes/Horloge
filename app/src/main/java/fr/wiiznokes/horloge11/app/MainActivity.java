@@ -109,13 +109,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+    //recuperation resultat d'une activité lancée
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ADD_ACTIVITY_CALL_ID){
-            
+
         }
     }
 
