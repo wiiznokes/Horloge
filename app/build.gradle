@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 30
 
     defaultConfig {
         applicationId "fr.wiiznokes.horloge11"
-        minSdk 28
-        targetSdk 32
+        minSdk 15
+        targetSdk 30
         versionCode 1
         versionName "1.0"
 
