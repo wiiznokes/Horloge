@@ -1,5 +1,6 @@
 package fr.wiiznokes.horloge11.app;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,9 +37,23 @@ public class AddActivity extends AppCompatActivity {
     int nbChiffreDesHeures = 0;
 
     private RadioButton monday;
+    private Boolean mondayState = false;
+    private RadioButton tuesday;
+    private Boolean tuesdayState = false;
+    private RadioButton wednesday;
+    private Boolean wednesdayState = false;
+    private RadioButton thursday;
+    private Boolean thursdayState = false;
+    private RadioButton friday;
+    private Boolean fridayState = false;
+    private RadioButton saturday;
+    private Boolean saturdayState = false;
+    private RadioButton sunday;
+    private Boolean sundayState = false;
 
 
 
+    @SuppressLint("CutPasteId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,16 +159,72 @@ public class AddActivity extends AppCompatActivity {
         });
 
         monday = (RadioButton) findViewById(R.id.radioButton);
+        monday.setChecked(false);
         monday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(monday.isChecked()){
-                    System.out.println(monday.isChecked());
-                    monday.setChecked(false);
-                }
-                else{
-                    monday.setChecked(true);
-                }
+                mondayState = !mondayState;
+                monday.setChecked(mondayState);
+            }
+        });
+
+        tuesday = (RadioButton) findViewById(R.id.radioButton2);
+        tuesday.setChecked(false);
+        tuesday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tuesdayState = !tuesdayState;
+                tuesday.setChecked(tuesdayState);
+            }
+        });
+
+        wednesday = (RadioButton) findViewById(R.id.radioButton3);
+        wednesday.setChecked(false);
+        wednesday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wednesdayState = !wednesdayState;
+                wednesday.setChecked(wednesdayState);
+            }
+        });
+
+        thursday = (RadioButton) findViewById(R.id.radioButton4);
+        thursday.setChecked(false);
+        thursday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                thursdayState = !thursdayState;
+                thursday.setChecked(thursdayState);
+            }
+        });
+
+        friday = (RadioButton) findViewById(R.id.radioButton5);
+        friday.setChecked(false);
+        friday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fridayState = !fridayState;
+                friday.setChecked(fridayState);
+            }
+        });
+
+        saturday = (RadioButton) findViewById(R.id.radioButton6);
+        saturday.setChecked(false);
+        saturday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saturdayState = !saturdayState;
+                saturday.setChecked(saturdayState);
+            }
+        });
+
+        sunday = (RadioButton) findViewById(R.id.radioButton7);
+        sunday.setChecked(false);
+        sunday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sundayState = !sundayState;
+                sunday.setChecked(sundayState);
             }
         });
     }
