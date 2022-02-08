@@ -115,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ADD_ACTIVITY_CALL_ID){
+            addAlarmText.setVisibility(View.INVISIBLE);
+
 
         }
     }
