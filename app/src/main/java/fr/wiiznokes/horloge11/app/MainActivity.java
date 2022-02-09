@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton addAlarm;
     private EditText addAlarmText;
     private final static int ADD_ACTIVITY_CALL_ID = 10;
+    private final static int defaultAjoutAlarmResult = 0;
 
 
 
@@ -59,23 +60,24 @@ public class MainActivity extends AppCompatActivity {
 
 
         addAlarm.setOnClickListener(view -> {
-            //si l'edit text est deja visible et que l'on click sur le +
+            //si l'edit text est deja visible et que l'on click sur le + et que l'on a donné une nom à l'alarme
             if (addAlarmText.getVisibility() == View.VISIBLE) {
-                //creation de l'object alarm
-                Alarm Alarm1 = new Alarm();
-                Alarm1.setNameAlarm(addAlarmText.getText().toString());
+
+                if(addAlarmText.length() != 0){
 
 
-                //lancement de AddActivity
-                //creation de l'intention à partir du context et du fichier .class à ouvrir
-                Intent intent = new Intent(
-                        MainActivity.this,
-                        AddActivity.class
-                );
-                //ajout d'information dans l'intention
-                intent.putExtra("alarmName", addAlarmText.getText().toString());
-                //lancement de addActivity avec un id de lancement
-                startActivityForResult(intent, ADD_ACTIVITY_CALL_ID);
+
+                    //lancement de AddActivity
+                    //creation de l'intention à partir du context et du fichier .class à ouvrir
+                    Intent intent = new Intent(
+                            MainActivity.this,
+                            AddActivity.class
+                    );
+                    //ajout d'information dans l'intention
+                    intent.putExtra("alarmName", addAlarmText.getText().toString());
+                    //lancement de addActivity avec un id de lancement
+                    startActivityForResult(intent, ADD_ACTIVITY_CALL_ID);
+                }
 
             }
             else{
@@ -116,8 +118,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == ADD_ACTIVITY_CALL_ID){
             addAlarmText.setVisibility(View.INVISIBLE);
-
-
+        }
+        if(requestCode == defaultAjoutAlarmResult){
+            addAlarmText.setVisibility(View.INVISIBLE);
         }
     }
 
