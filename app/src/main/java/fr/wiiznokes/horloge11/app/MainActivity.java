@@ -3,6 +3,8 @@ package fr.wiiznokes.horloge11.app;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -160,16 +162,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void afficheAlarmes(){
 
-        /*for( Object alarmObject : List1){
-            Alarm alarm = (Alarm) alarmObject;
 
-
-        }*/
         LinearLayout linearLayout= findViewById(R.id.linearLayout1);
-        TextView textView = new TextView(this);
-        textView.setText("hello");
 
-        linearLayout.addView(textView);
+        ConstraintLayout constraintLayout = new ConstraintLayout(this);
+        constraintLayout.setId(View.generateViewId());
+
+        TextView textView = new TextView(this);
+        textView.setText("08:18");
+        textView.setId(View.generateViewId());
+
+        constraintLayout.addView(textView);
+
+        ConstraintSet set = new ConstraintSet();
+        set.clone(constraintLayout);
+        set.connect(textView.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.PARENT_ID);
+        set.applyTo(constraintLayout);
+
+        linearLayout.addView(constraintLayout);
 
 
     }
