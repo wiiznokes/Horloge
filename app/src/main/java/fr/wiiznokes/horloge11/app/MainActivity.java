@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        afficheAlarmes();
-
 
 
         //creation du fichier si il n'existe pas avec un tableau vide
