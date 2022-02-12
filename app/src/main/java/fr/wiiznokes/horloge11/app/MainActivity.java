@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -39,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        afficheAlarmes();
+
 
 
         //creation du fichier si il n'existe pas avec un tableau vide
@@ -151,6 +156,22 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("erreur dans la lecture");
         }
         return null;
+    }
+
+    public void afficheAlarmes(){
+
+        /*for( Object alarmObject : List1){
+            Alarm alarm = (Alarm) alarmObject;
+
+
+        }*/
+        LinearLayout linearLayout= findViewById(R.id.linearLayout1);
+        TextView textView = new TextView(this);
+        textView.setText("hello");
+
+        linearLayout.addView(textView);
+
+
     }
 
 }
