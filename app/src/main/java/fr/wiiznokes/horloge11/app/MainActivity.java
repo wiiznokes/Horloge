@@ -209,24 +209,24 @@ public class MainActivity extends AppCompatActivity {
         set.clone(constraintLayout);
 
         //constraint pour l'heure de l'alarme
-
+        set.connect(textView.getId(), ConstraintSet.LEFT, ((View) textView.getParent()).getId(), ConstraintSet.LEFT);
 
         //constraint pour le nom de l'alarme
         set.connect(textView2.getId(), ConstraintSet.LEFT, textView.getId(), ConstraintSet.RIGHT);
         set.connect(textView2.getId(), ConstraintSet.RIGHT, switch2.getId(), ConstraintSet.LEFT);
+        set.connect(textView2.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.TOP);
 
         //consraint pour le switch
-        set.connect(switch2.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.RIGHT);
+        set.connect(switch2.getId(), ConstraintSet.RIGHT, ((View) switch2.getParent()).getId(), ConstraintSet.RIGHT);
         set.connect(switch2.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.TOP);
         set.connect(switch2.getId(), ConstraintSet.BOTTOM, textView3.getId(), ConstraintSet.BOTTOM);
 
         //constraint pour les jours de sonnerie
-        set.connect(textView2.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.BOTTOM);
-        set.connect(textView2.getId(), ConstraintSet.RIGHT, switch2.getId(), ConstraintSet.LEFT);
-        set.connect(textView2.getId(), ConstraintSet.LEFT, textView.getId(), ConstraintSet.LEFT);
+        set.connect(textView3.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.BOTTOM);
+        set.connect(textView3.getId(), ConstraintSet.RIGHT, switch2.getId(), ConstraintSet.LEFT);
+        set.connect(textView3.getId(), ConstraintSet.LEFT, textView.getId(), ConstraintSet.LEFT);
 
-
-
+        //application des constraints 
         set.applyTo(constraintLayout);
 
 
