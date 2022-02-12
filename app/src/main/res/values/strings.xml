@@ -4,5 +4,7 @@
     <string name="home_next_alarme">"00:00"</string>
     <string name="parametre">parametre</string>
     <string name="nom_de_l_alarme">Nom de l\'alarme</string>
+    <string name="active_alarme">Nombre d\'alarme active :\ </string>
+    <string name="actives_alarmes">Nombre d\'alarmes actives :\ </string>
 
 </resources>

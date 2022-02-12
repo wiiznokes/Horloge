@@ -269,7 +269,8 @@ public class AddActivity extends AppCompatActivity {
 
                     //lecture du fichier de sauvegarde
                     List<Object> Array1 = read(fileName);
-                    //ajout de l'objet Alarm à la liste
+                    //ajout de l'objet Alarm à la list
+
                     Array1.add(Alarm1);
                     //ecriture sur le fichier de sauvegarde
                     write(fileName, Array1);

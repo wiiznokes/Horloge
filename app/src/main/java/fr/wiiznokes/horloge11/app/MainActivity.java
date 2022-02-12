@@ -2,7 +2,10 @@ package fr.wiiznokes.horloge11.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
+import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +26,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.utils.*;
@@ -35,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton addAlarm;
     private EditText addAlarmText;
     private final static int ADD_ACTIVITY_CALL_ID = 10;
-    private final static int defaultAjoutAlarmResult = 0;
 
 
 
@@ -57,16 +62,71 @@ public class MainActivity extends AppCompatActivity {
 
         //lecture du fichier
         List<Object> Array1 = read(fileName);
-        //affichage des alarmes crées
-        afficheAlarmes(Array1);
+
+
+        //affichage des alarmes crées et récuperation d'une liste de view des ConstraintLayouts, Switchs
+        List<List> Ids = afficheAlarmes(Array1);
+        //recuperation de la liste des views des switchs
+        List<Switch> switchsView = Ids.get(1);
+
+
+        //recuperatiion de la vue des alarme active et initialisation
+        TextView alarmeActive = (TextView) findViewById(R.id.textView2);
+        int nbactAlrm = numberActivAlarm(Array1);
+        if(nbactAlrm == 0 || nbactAlrm == 1){
+            String a = String.valueOf(nbactAlrm);
+            alarmeActive.setText(getString(R.string.active_alarme) + a);
+        }
+        else{
+            String a = String.valueOf(nbactAlrm);
+            alarmeActive.setText(getString(R.string.active_alarme) + a);
+        }
+
+        //boucle pour changer le nombre d'alarme active
+        //compteur pour lister tous les objets Alarm
+        int i = 0;
+        for(Switch switchView : switchsView){
+                int finalI = i;
+                switchView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if(switchView.isChecked()){
+                            Alarm alarm = (Alarm) Array1.get(finalI);
+                            alarm.setActive(true);
+                        }
+                        else{
+                            Alarm alarm = (Alarm) Array1.get(finalI);
+                            alarm.setActive(false);
+                        }
+                        int nbactAlrm = numberActivAlarm(Array1);
+                        if(nbactAlrm == 0 || nbactAlrm == 1){
+                            String a = String.valueOf(nbactAlrm);
+                            alarmeActive.setText(getString(R.string.active_alarme) + a);
+                        }
+                        else{
+                            String a = String.valueOf(nbactAlrm);
+                            alarmeActive.setText(getString(R.string.active_alarme) + a);
+                        }
+                    }
+                });
+                i = i+1;
+            }
+
+
+
+
+
+
+
+
+
 
 
 
         //recuperration des views pour ajouter une alarme
         this.addAlarm = findViewById(R.id.floatingActionButton4);
         this.addAlarmText = findViewById(R.id.editTextTextPersonName);
-
-
         addAlarm.setOnClickListener(view -> {
             //si l'edit text est deja visible et que l'on click sur le + et que l'on a donné une nom à l'alarme
             if (addAlarmText.getVisibility() == View.VISIBLE) {
@@ -116,9 +176,10 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-
-
     }
+
+
+
     //recuperation resultat d'une activité lancée
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -174,10 +235,21 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    public void afficheAlarmes(List<Object> listeDesAlarmes){
+    public List<List> afficheAlarmes(List<Object> listeDesAlarmes){
+
+
+
+        //creation list pour les id des constraints layout
+        List<ConstraintLayout> constraintsView = new ArrayList<>();
+
+        //creation list pour les id des switchs
+        List<Switch> switchsView = new ArrayList<>();
+
+
 
         for (Object AlarmeObject : listeDesAlarmes){
 
+            //cast object Alarm
             Alarm Alarme = (Alarm) AlarmeObject;
 
             //recupération de linear layout
@@ -186,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
             //création du constraint Layout
             ConstraintLayout constraintLayout = new ConstraintLayout(this);
             constraintLayout.setId(View.generateViewId());
+            constraintsView.add((ConstraintLayout) findViewById(constraintLayout.getId()));
 
             //objet set pour ajouter des contraintes
             ConstraintSet set = new ConstraintSet();
@@ -205,6 +278,10 @@ public class MainActivity extends AppCompatActivity {
             switch2.setText("");
             switch2.setChecked(Alarme.isActive());
             switch2.setId(View.generateViewId());
+
+            //ajout de switch a la liste des views
+            switchsView.add(switch2);
+
 
             //création jour alarme
             TextView textView3 = new TextView(this);
@@ -275,6 +352,57 @@ public class MainActivity extends AppCompatActivity {
             //application des constraints
             set.applyTo(constraintLayout);
 
+        }
+
+
+        List<List> ListIds = new ArrayList<>();
+        ListIds.add(constraintsView);
+        ListIds.add(switchsView);
+
+
+        return ListIds;
+
+    }
+
+
+    public Integer numberActivAlarm (List<Object> listeDesAlarmes){
+
+        Integer i = 0;
+
+        for (Object AlarmeObject : listeDesAlarmes) {
+
+            //cast object Alarm
+            Alarm Alarme = (Alarm) AlarmeObject;
+
+            if(Alarme.isActive()){
+
+                i = i + 1;
+            }
+
+
+
+        }
+        return i;
+    }
+
+   //List de list d'index de l'alarme trié en focntion de la date de sonnerie d'une alarme et list de date de sonnerie trié
+/*
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public List<List> listTriee (List<Alarm> Array1){
+
+
+        //creation list des index triés
+        List<Integer> indexTries = new ArrayList<>();
+
+        //création list des dates triés en focntion des indexs
+        List<>
+
+        //recuperation de la date
+        Date now = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/YYYY HH:mm");
+        String result = formatter.format(now);
+
+        for(Alarm alrm: Array1){
 
 
         }
@@ -282,8 +410,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }*/
 
 
-    }
+
+    //fonction qui prend une liste d'index trié en fonction du temps restant et un liste d'objet Alarm et qui renvoie un liste d'index trié en fonction du temps restant avant sonnerie et de l'activation de l'alarme
+
+
 
 }
