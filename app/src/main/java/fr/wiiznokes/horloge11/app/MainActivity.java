@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 List<Object> Array1 = read(fileName);
                 List<Object> Array2 = new ArrayList<Object>();
                 Array2.add(Array1.get(Array1.size()-1));
-                //affichage des alarmes crées
+                //affichage de l'alarme crée
                 afficheAlarmes(Array2);
 
             }
