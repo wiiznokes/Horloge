@@ -29,7 +29,9 @@ public class AddActivity extends AppCompatActivity {
 
 
     private final String fileName = "save.txt";
+
     private ImageButton boutonRetour;
+
     private EditText alarmName;
 
     private EditText alarmHours;
@@ -51,6 +53,10 @@ public class AddActivity extends AppCompatActivity {
     private RadioButton sunday;
     private Boolean sundayState = false;
 
+    private EditText sonnerieName;
+
+    private ImageButton save;
+
 
 
     @SuppressLint("CutPasteId")
@@ -59,8 +65,7 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        //lecture du fichier de sauvegarde
-        List<Object> Array1 = read(fileName);
+
 
         //bouton retour
         this.boutonRetour = findViewById(R.id.imageButton4);
@@ -227,6 +232,51 @@ public class AddActivity extends AppCompatActivity {
                 sunday.setChecked(sundayState);
             }
         });
+
+        this.sonnerieName = (EditText) findViewById(R.id.editText29);
+        save = (ImageButton) findViewById(R.id.floatingActionButton);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(alarmName.length() != 0 && alarmHours.length() == 5) {
+
+                    //creation de l'object alarm
+                    Alarm Alarm1 = new Alarm();
+                    Alarm1.setNameAlarm(alarmName.getText().toString());
+                    Alarm1.setHours(Integer.parseInt(alarmHours.getText().toString().substring(0, 2)));
+                    Alarm1.setMinute(Integer.parseInt(alarmHours.getText().toString().substring(3, 5)));
+
+                    if (mondayState || tuesdayState || wednesdayState || thursdayState || fridayState || saturdayState || sundayState) {
+                        Alarm1.setMonday(mondayState);
+                        Alarm1.setTuesday(tuesdayState);
+                        Alarm1.setWednesday(wednesdayState);
+                        Alarm1.setThursday(thursdayState);
+                        Alarm1.setFriday(fridayState);
+                        Alarm1.setSaturday(saturdayState);
+                        Alarm1.setSunday(sundayState);
+                        Alarm1.setWeek(false);
+                    } else {
+                        Alarm1.setWeek(true);
+                    }
+
+                    Alarm1.setSonnerie(sonnerieName.getText().toString());
+
+                    //lecture du fichier de sauvegarde
+                    List<Object> Array1 = read(fileName);
+                    //ajout de l'objet Alarm à la liste
+                    Array1.add(Alarm1);
+                    //ecriture sur le fichier de sauvegarde
+                    write(fileName, Array1);
+
+                    setResult(0);
+                    finish();
+
+
+                }
+            }
+        });
+
     }
 
 

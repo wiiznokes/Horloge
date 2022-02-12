@@ -78,22 +78,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@android:drawable/ic_input_add" />
 
-        <EditText
-            android:id="@+id/editTextTextPersonName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/nom_de_l_alarme"
-            android:gravity="center"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text=""
-            android:focusable="true"
-            android:visibility="invisible"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/scrollView2" />
-
         <ScrollView
             android:id="@+id/scrollView2"
             android:layout_width="match_parent"
@@ -102,11 +86,28 @@
             tools:ignore="NotSibling">
 
             <LinearLayout
+                android:id="@+id/linearLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"/>
         </ScrollView>
-</android.support.constraint.ConstraintLayout>
+
+        <EditText
+            android:id="@+id/editTextTextPersonName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:focusable="true"
+            android:gravity="center"
+            android:hint="@string/nom_de_l_alarme"
+            android:inputType="textPersonName"
+            android:text=""
+            android:visibility="invisible"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/scrollView2" />
+    </android.support.constraint.ConstraintLayout>
 
 
 </LinearLayout>
