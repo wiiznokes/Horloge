@@ -243,7 +243,12 @@ public class AddActivity extends AppCompatActivity {
 
                     //creation de l'object alarm
                     Alarm Alarm1 = new Alarm();
+
                     Alarm1.setNameAlarm(alarmName.getText().toString());
+
+                    Alarm1.setActive(true);
+
+                    Alarm1.setHoursText(alarmHours.getText().toString());
                     Alarm1.setHours(Integer.parseInt(alarmHours.getText().toString().substring(0, 2)));
                     Alarm1.setMinute(Integer.parseInt(alarmHours.getText().toString().substring(3, 5)));
 
