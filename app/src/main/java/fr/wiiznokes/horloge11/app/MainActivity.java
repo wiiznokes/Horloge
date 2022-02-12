@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.io.File;
@@ -162,24 +163,73 @@ public class MainActivity extends AppCompatActivity {
 
     public void afficheAlarmes(){
 
-
+        //recupération de linear layout
         LinearLayout linearLayout= findViewById(R.id.linearLayout1);
 
+        //création du constraint Layout
         ConstraintLayout constraintLayout = new ConstraintLayout(this);
         constraintLayout.setId(View.generateViewId());
 
+        //objet set pour ajouter des contraintes
+        ConstraintSet set = new ConstraintSet();
+
+        //création heure alarme
         TextView textView = new TextView(this);
         textView.setText("08:18");
         textView.setId(View.generateViewId());
 
-        constraintLayout.addView(textView);
+        //création nom alarme
+        TextView textView2 = new TextView(this);
+        textView2.setText("AlarmeName");
+        textView2.setId(View.generateViewId());
 
-        ConstraintSet set = new ConstraintSet();
+        //création switch
+        Switch switch2 = new Switch(this);
+        switch2.setText("");
+        switch2.setId(View.generateViewId());
+
+        //création jour alarme
+        TextView textView3 = new TextView(this);
+        textView3.setText("lun mer jeu ven");
+        textView3.setId(View.generateViewId());
+
+
+
+
+        //ajout des view au constraint layout
+        constraintLayout.addView(textView);
+        constraintLayout.addView(textView2);
+        constraintLayout.addView(switch2);
+        constraintLayout.addView(textView3);
+
+        //ajout constraint layout au linear layout
+        linearLayout.addView(constraintLayout);
+
+        //lien entre set et constraint layout
         set.clone(constraintLayout);
-        set.connect(textView.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.PARENT_ID);
+
+        //constraint pour l'heure de l'alarme
+
+
+        //constraint pour le nom de l'alarme
+        set.connect(textView2.getId(), ConstraintSet.LEFT, textView.getId(), ConstraintSet.RIGHT);
+        set.connect(textView2.getId(), ConstraintSet.RIGHT, switch2.getId(), ConstraintSet.LEFT);
+
+        //consraint pour le switch
+        set.connect(switch2.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.RIGHT);
+        set.connect(switch2.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.TOP);
+        set.connect(switch2.getId(), ConstraintSet.BOTTOM, textView3.getId(), ConstraintSet.BOTTOM);
+
+        //constraint pour les jours de sonnerie
+        set.connect(textView2.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.BOTTOM);
+        set.connect(textView2.getId(), ConstraintSet.RIGHT, switch2.getId(), ConstraintSet.LEFT);
+        set.connect(textView2.getId(), ConstraintSet.LEFT, textView.getId(), ConstraintSet.LEFT);
+
+
+
         set.applyTo(constraintLayout);
 
-        linearLayout.addView(constraintLayout);
+
 
 
     }
