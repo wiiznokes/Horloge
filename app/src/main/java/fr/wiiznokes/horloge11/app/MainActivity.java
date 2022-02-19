@@ -387,6 +387,7 @@ public class MainActivity extends AppCompatActivity {
 
    //List de list d'index de l'alarme trié en focntion de la date de sonnerie d'une alarme et list de date de sonnerie trié
 
+    /*
     @RequiresApi(api = Build.VERSION_CODES.N)
     public List<List> listTriee (List<Alarm> Array1){
 
@@ -410,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    }
+    }*/
 
 
 
