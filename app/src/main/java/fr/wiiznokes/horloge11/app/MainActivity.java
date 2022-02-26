@@ -26,6 +26,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,7 @@ import fr.wiiznokes.horloge11.utils.*;
 public class MainActivity extends AppCompatActivity {
 
     private final String fileName = "save.txt";
+
 
     private ImageButton addAlarm;
     private EditText addAlarmText;
@@ -59,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
             //ecriture
             write(fileName, ArrayInit);
         }
-
         //lecture du fichier
         List<Object> Array1 = read(fileName);
 
@@ -192,13 +193,16 @@ public class MainActivity extends AppCompatActivity {
                 addAlarmText.setVisibility(View.INVISIBLE);
             }
             //bouton save
-            else if(resultCode == 0){
+            if(resultCode == 0){
 
                 addAlarmText.setVisibility(View.INVISIBLE);
                 //lecture du fichier
                 List<Object> Array1 = read(fileName);
                 List<Object> Array2 = new ArrayList<Object>();
                 Array2.add(Array1.get(Array1.size()-1));
+
+
+
                 //affichage de l'alarme crée
                 afficheAlarmes(Array2);
 
@@ -220,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     public List<Object> read(String fileName){
         List<Object> Array1;
         try {
@@ -234,6 +239,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return null;
     }
+
+
 
     public List<List> afficheAlarmes(List<Object> listeDesAlarmes){
 
@@ -385,37 +392,23 @@ public class MainActivity extends AppCompatActivity {
         return i;
     }
 
-   //List de list d'index de l'alarme trié en focntion de la date de sonnerie d'une alarme et list de date de sonnerie trié
-
-    /*
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public List<List> listTriee (List<Alarm> Array1){
-
-
-        //creation list des index triés
-        List<Integer> indexTries = new ArrayList<>();
-
-        //création list des dates triés en focntion des indexs
-        List<>
-
-        //recuperation de la date
-        Date now = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/YYYY HH:mm");
-        String result = formatter.format(now);
-
-        for(Alarm alrm: Array1){
+    //fonction qui active une alarm
+    public void activeAlarm (Alarm Alarme){
+        
+        onTimeSet(Alarme.getHours(), Alarme.getMinute(), Alarme.getId());
 
 
-        }
+    }
+    public void onTimeSet(int hourOfDay, int minute, int id) {
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        c.set(Calendar.MINUTE, minute);
+        c.set(Calendar.SECOND, 0);
 
 
-
-
-    }*/
-
-
-
-    //fonction qui prend une liste d'index trié en fonction du temps restant et un liste d'objet Alarm et qui renvoie un liste d'index trié en fonction du temps restant avant sonnerie et de l'activation de l'alarme
+        startAlarm(c, ArrayId);
+    }
 
 
 

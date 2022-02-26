@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.wiiznokes.horloge11.R;
@@ -29,6 +30,7 @@ public class AddActivity extends AppCompatActivity {
 
 
     private final String fileName = "save.txt";
+    private final String fileNameId = "saveIdNumber.txt";
 
     private ImageButton boutonRetour;
 
@@ -239,6 +241,7 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                //si l'alarm a un nom et une date
                 if(alarmName.length() != 0 && alarmHours.length() == 5) {
 
                     //creation de l'object alarm
@@ -262,15 +265,36 @@ public class AddActivity extends AppCompatActivity {
                         Alarm1.setSunday(sundayState);
                         Alarm1.setWeek(false);
                     } else {
+                        Alarm1.setMonday(mondayState);
+                        Alarm1.setTuesday(tuesdayState);
+                        Alarm1.setWednesday(wednesdayState);
+                        Alarm1.setThursday(thursdayState);
+                        Alarm1.setFriday(fridayState);
+                        Alarm1.setSaturday(saturdayState);
+                        Alarm1.setSunday(sundayState);
                         Alarm1.setWeek(true);
                     }
 
                     Alarm1.setSonnerie(sonnerieName.getText().toString());
 
+                    //set de l'id de l'alarm
+
+                    //verif si le fichier existe et sinon le crée avec un int=0
+                    int numberOfId = readAndIncId(fileNameId);
+                    if (numberOfId == -1){
+                        incId(fileNameId, 0);
+                        Alarm1.setId(0);
+                    }
+                    else{
+                        Alarm1.setId(numberOfId);
+                    }
+
+
                     //lecture du fichier de sauvegarde
                     List<Object> Array1 = read(fileName);
-                    //ajout de l'objet Alarm à la list
 
+
+                    //ajout de l'objet Alarm à la list
                     Array1.add(Alarm1);
                     //ecriture sur le fichier de sauvegarde
                     write(fileName, Array1);
@@ -318,5 +342,36 @@ public class AddActivity extends AppCompatActivity {
             System.out.println("erreur dans la lecture");
         }
         return null;
+    }
+
+    public int readAndIncId(String fileName){
+        int numberOfId;
+        try {
+            FileInputStream input = this.openFileInput(fileName);
+            ObjectInputStream in = new ObjectInputStream(input);
+            numberOfId = (int) in.readObject();
+
+            in.close();
+            input.close();
+            incId(fileName, numberOfId);
+            return numberOfId;
+        } catch (Exception e) {
+            System.out.println("erreur dans la lecture");
+            return -1;
+        }
+
+    }
+    public void incId(String fileName, int numberOfId){
+
+        try {
+            FileOutputStream output = this.openFileOutput(fileName, MODE_PRIVATE);
+            ObjectOutputStream out = new ObjectOutputStream(output);
+            out.writeObject(numberOfId+1);
+            out.close();
+            output.close();
+        } catch (Exception e) {
+            System.out.println("erreur dans l'écriture");
+        }
+
     }
 }

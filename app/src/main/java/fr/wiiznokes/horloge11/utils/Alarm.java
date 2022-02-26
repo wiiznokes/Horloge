@@ -159,5 +159,15 @@ public class Alarm implements Serializable {
     }
 
 
+    private int id;
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
+
 
 }
