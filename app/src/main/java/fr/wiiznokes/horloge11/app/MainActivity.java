@@ -1,36 +1,36 @@
 package fr.wiiznokes.horloge11.app;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
-import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.Dictionary;
 import java.util.List;
-import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.utils.*;
@@ -43,6 +43,57 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton addAlarm;
     private EditText addAlarmText;
     private final static int ADD_ACTIVITY_CALL_ID = 10;
+
+    //liste object Alarm
+    private List<Object> Array1;
+    //dictionnaire key:id valeur:position dans Array1
+    private Dictionary<Integer, Integer> DicIdPos;
+    //dictionnaire key:id valeur:dateSonnerie
+    private Dictionary<Integer, Calendar> DicIdDate;
+    //liste id alarm actif triée
+    private List<Integer> ListActif;
+    //liste id alarm Inactif triée
+    private List<Integer> ListInactif;
+    //liste somme de ListActif et Listinactif
+    private List<Integer> ListSortId;
+
+
+
+
+
+
+
+
+    //lancement d'une nouvelle activité
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    //bouton save addActivity
+                    if(result.getResultCode() == 0){
+
+                        addAlarmText.setVisibility(View.INVISIBLE);
+                        //lecture du fichier
+                        Array1 = read(fileName);
+
+                        //affichage de l'alarme crée
+
+
+                        //activation de l'alarme crée
+                        onTimeSet((Alarm) Array1.get(Array1.size()-1));
+
+                    }
+                    //bouton retour addActivity
+                    if(result.getResultCode() == 11){
+                        addAlarmText.setVisibility(View.INVISIBLE);
+                    }
+
+                }
+            }
+    );
+
 
 
 
@@ -62,63 +113,39 @@ public class MainActivity extends AppCompatActivity {
             write(fileName, ArrayInit);
         }
         //lecture du fichier
-        List<Object> Array1 = read(fileName);
+        Array1 = read(fileName);
 
 
-        //affichage des alarmes crées et récuperation d'une liste de view des ConstraintLayouts, Switchs
-        List<List> Ids = afficheAlarmes(Array1);
+        //affichage des alarmes crées
+        List<List> ListViews = new Affichage().afficheAlarmesInit(Array1, ListSortId, DicIdPos);
         //recuperation de la liste des views des switchs
-        List<Switch> switchsView = Ids.get(1);
+        List<Switch> switchsView = ListViews.get(0);
 
-
-        //recuperatiion de la vue des alarme active et initialisation
+        //affichage du nombre d'alarmes actives
         TextView alarmeActive = (TextView) findViewById(R.id.textView2);
-        int nbactAlrm = numberActivAlarm(Array1);
-        if(nbactAlrm == 0 || nbactAlrm == 1){
-            String a = String.valueOf(nbactAlrm);
-            alarmeActive.setText(getString(R.string.active_alarme) + a);
-        }
-        else{
-            String a = String.valueOf(nbactAlrm);
-            alarmeActive.setText(getString(R.string.active_alarme) + a);
-        }
+        alarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
 
-        //boucle pour changer le nombre d'alarme active
-        //compteur pour lister tous les objets Alarm
-        int i = 0;
+
+
+        //boucle qui recuperer les views des switchs
+
         for(Switch switchView : switchsView){
-                int finalI = i;
                 switchView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         if(switchView.isChecked()){
-                            Alarm alarm = (Alarm) Array1.get(finalI);
-                            alarm.setActive(true);
+                            ((Alarm) Array1.get(DicIdPos.get(switchView.getId()))).setActive(true);
+                            //rajouter la fonction pour changer la liste ListActif
+
                         }
                         else{
-                            Alarm alarm = (Alarm) Array1.get(finalI);
-                            alarm.setActive(false);
-                        }
-                        int nbactAlrm = numberActivAlarm(Array1);
-                        if(nbactAlrm == 0 || nbactAlrm == 1){
-                            String a = String.valueOf(nbactAlrm);
-                            alarmeActive.setText(getString(R.string.active_alarme) + a);
-                        }
-                        else{
-                            String a = String.valueOf(nbactAlrm);
-                            alarmeActive.setText(getString(R.string.active_alarme) + a);
+                            ((Alarm) Array1.get(DicIdPos.get(switchView.getId()))).setActive(false);
                         }
                     }
                 });
-                i = i+1;
+
             }
-
-
-
-
-
-
 
 
 
@@ -145,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                     //ajout d'information dans l'intention
                     intent.putExtra("alarmName", addAlarmText.getText().toString());
                     //lancement de addActivity avec un id de lancement
-                    startActivityForResult(intent, ADD_ACTIVITY_CALL_ID);
+                    activityResultLauncher.launch(intent);
                 }
 
             }
@@ -181,34 +208,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    //recuperation resultat d'une activité lancée
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == ADD_ACTIVITY_CALL_ID){
-
-            //bouton retour
-            if(resultCode == 11) {
-                addAlarmText.setVisibility(View.INVISIBLE);
-            }
-            //bouton save
-            if(resultCode == 0){
-
-                addAlarmText.setVisibility(View.INVISIBLE);
-                //lecture du fichier
-                List<Object> Array1 = read(fileName);
-                List<Object> Array2 = new ArrayList<Object>();
-                Array2.add(Array1.get(Array1.size()-1));
 
 
 
-                //affichage de l'alarme crée
-                afficheAlarmes(Array2);
-
-            }
-        }
-    }
 
     public void write(String fileName, List<Object> tab){
 
@@ -242,172 +244,39 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public List<List> afficheAlarmes(List<Object> listeDesAlarmes){
-
-
-
-        //creation list pour les id des constraints layout
-        List<ConstraintLayout> constraintsView = new ArrayList<>();
-
-        //creation list pour les id des switchs
-        List<Switch> switchsView = new ArrayList<>();
-
-
-
-        for (Object AlarmeObject : listeDesAlarmes){
-
-            //cast object Alarm
-            Alarm Alarme = (Alarm) AlarmeObject;
-
-            //recupération de linear layout
-            LinearLayout linearLayout= findViewById(R.id.linearLayout1);
-
-            //création du constraint Layout
-            ConstraintLayout constraintLayout = new ConstraintLayout(this);
-            constraintLayout.setId(View.generateViewId());
-            constraintsView.add((ConstraintLayout) findViewById(constraintLayout.getId()));
-
-            //objet set pour ajouter des contraintes
-            ConstraintSet set = new ConstraintSet();
-
-            //création heure alarme
-            TextView textView = new TextView(this);
-            textView.setText(Alarme.getHoursText());
-            textView.setId(View.generateViewId());
-
-            //création nom alarme
-            TextView textView2 = new TextView(this);
-            textView2.setText(Alarme.getNameAlarm());
-            textView2.setId(View.generateViewId());
-
-            //création switch
-            Switch switch2 = new Switch(this);
-            switch2.setText("");
-            switch2.setChecked(Alarme.isActive());
-            switch2.setId(View.generateViewId());
-
-            //ajout de switch a la liste des views
-            switchsView.add(switch2);
-
-
-            //création jour alarme
-            TextView textView3 = new TextView(this);
-            if (Alarme.isWeek()){
-                textView3.setText("Tous les jours");
-            }
-            else{
-                String joursActif = "";
-                if(Alarme.isMonday()){
-                    joursActif = joursActif + "lun ";
-                }
-                if (Alarme.isTuesday()){
-                    joursActif = joursActif + "mar ";
-                }
-                if (Alarme.isWednesday()){
-                    joursActif = joursActif + "mer ";
-                }
-                if (Alarme.isThursday()){
-                    joursActif = joursActif + "jeu ";
-                }
-                if (Alarme.isFriday()){
-                    joursActif = joursActif + "ven ";
-                }
-                if (Alarme.isSaturday()){
-                    joursActif = joursActif + "sam ";
-                }
-                if (Alarme.isSunday()){
-                    joursActif = joursActif + "dim ";
-                }
-                textView3.setText(joursActif);
-            }
-
-            textView3.setId(View.generateViewId());
 
 
 
 
-            //ajout des view au constraint layout
-            constraintLayout.addView(textView);
-            constraintLayout.addView(textView2);
-            constraintLayout.addView(switch2);
-            constraintLayout.addView(textView3);
-
-            //ajout constraint layout au linear layout
-            linearLayout.addView(constraintLayout);
-
-            //lien entre set et constraint layout
-            set.clone(constraintLayout);
-
-            //constraint pour l'heure de l'alarme
-            set.connect(textView.getId(), ConstraintSet.LEFT, ((View) textView.getParent()).getId(), ConstraintSet.LEFT);
-
-            //constraint pour le nom de l'alarme
-            set.connect(textView2.getId(), ConstraintSet.LEFT, textView.getId(), ConstraintSet.RIGHT);
-            set.connect(textView2.getId(), ConstraintSet.RIGHT, switch2.getId(), ConstraintSet.LEFT);
-            set.connect(textView2.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.TOP);
-
-            //consraint pour le switch
-            set.connect(switch2.getId(), ConstraintSet.RIGHT, ((View) switch2.getParent()).getId(), ConstraintSet.RIGHT);
-            set.connect(switch2.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.TOP);
-            set.connect(switch2.getId(), ConstraintSet.BOTTOM, textView3.getId(), ConstraintSet.BOTTOM);
-
-            //constraint pour les jours de sonnerie
-            set.connect(textView3.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.BOTTOM);
-            set.connect(textView3.getId(), ConstraintSet.RIGHT, switch2.getId(), ConstraintSet.LEFT);
-            set.connect(textView3.getId(), ConstraintSet.LEFT, textView.getId(), ConstraintSet.LEFT);
-
-            //application des constraints
-            set.applyTo(constraintLayout);
-
-        }
-
-
-        List<List> ListIds = new ArrayList<>();
-        ListIds.add(constraintsView);
-        ListIds.add(switchsView);
-
-
-        return ListIds;
-
-    }
-
-
-    public Integer numberActivAlarm (List<Object> listeDesAlarmes){
-
-        Integer i = 0;
-
-        for (Object AlarmeObject : listeDesAlarmes) {
-
-            //cast object Alarm
-            Alarm Alarme = (Alarm) AlarmeObject;
-
-            if(Alarme.isActive()){
-
-                i = i + 1;
-            }
-
-
-
-        }
-        return i;
-    }
 
     //fonction qui active une alarm
-    public void activeAlarm (Alarm Alarme){
-        
-        onTimeSet(Alarme.getHours(), Alarme.getMinute(), Alarme.getId());
+    public void onTimeSet(Alarm Alarme) {
+        Calendar c = new Trie().getCalendar(Alarme);
+        startAlarm(c, Alarme.getId());
+    }
+    private void startAlarm(Calendar c, int id){
+
+
+        Intent intent = new Intent(MainActivity.this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, id, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+
+        System.out.println("hello, je suis dans startAlarm");
+        System.out.println(c.getTime());
+        System.out.println(id);
 
 
     }
-    public void onTimeSet(int hourOfDay, int minute, int id) {
+    private void cancelAlarm(Alarm Alarm){
 
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        c.set(Calendar.MINUTE, minute);
-        c.set(Calendar.SECOND, 0);
+        Intent intent = new Intent(MainActivity.this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, Alarm.getId(), intent, 0);
 
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        startAlarm(c, ArrayId);
+        alarmManager.cancel(pendingIntent);
     }
 
 

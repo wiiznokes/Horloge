@@ -47,29 +47,7 @@ public class Alarm implements Serializable {
         this.minute = minute;
     }
 
-    private int days;
-    public int getDays() {
-        return days;
-    }
-    public void setDays(int days) {
-        this.days = days;
-    }
 
-    private int month;
-    public int getMonth() {
-        return month;
-    }
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    private int years;
-    public int getYears() {
-        return years;
-    }
-    public void setYears(int years) {
-        this.years = years;
-    }
 
 
 

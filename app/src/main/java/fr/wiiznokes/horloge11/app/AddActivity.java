@@ -1,26 +1,22 @@
 package fr.wiiznokes.horloge11.app;
 
 import android.annotation.SuppressLint;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.Space;
-
-import fr.wiiznokes.horloge11.utils.*;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.wiiznokes.horloge11.R;
@@ -278,7 +274,6 @@ public class AddActivity extends AppCompatActivity {
                     Alarm1.setSonnerie(sonnerieName.getText().toString());
 
                     //set de l'id de l'alarm
-
                     //verif si le fichier existe et sinon le crée avec un int=0
                     int numberOfId = readAndIncId(fileNameId);
                     if (numberOfId == -1){
@@ -298,7 +293,6 @@ public class AddActivity extends AppCompatActivity {
                     Array1.add(Alarm1);
                     //ecriture sur le fichier de sauvegarde
                     write(fileName, Array1);
-
                     setResult(0);
                     finish();
 
