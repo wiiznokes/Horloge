@@ -38,7 +38,6 @@ import fr.wiiznokes.horloge11.utils.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String fileName = "save.txt";
 
 
     private ImageButton addAlarm;
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
                         addAlarmText.setVisibility(View.INVISIBLE);
                         //lecture du fichier
-                        Array1 = new StorageUtils().read(fileName, MainActivity.this);
+                        Array1 = new StorageUtils().read(MainActivity.this);
                         MapIdPos = new Trie().MapIdPos(Array1);
                         MapIdDate = new Trie().MapIdDate(Array1);
 
@@ -131,14 +130,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         //creation du fichier si il n'existe pas avec un tableau vide
-        if(new StorageUtils().read(fileName, this)== null){
+        if(new StorageUtils().read(this)== null){
 
             List<Alarm> ArrayInit = new ArrayList<Alarm>();
             //ecriture
-            new StorageUtils().write(fileName, ArrayInit, this);
+            new StorageUtils().write(ArrayInit, this);
         }
         //lecture du fichier
-        Array1 = new StorageUtils().read(fileName, this);
+        Array1 = new StorageUtils().read(this);
         MapIdPos = new Trie().MapIdPos(Array1);
         MapIdDate = new Trie().MapIdDate(Array1);
         ListActif = new Trie().ListActifInit(Array1, MapIdDate, MapIdPos);

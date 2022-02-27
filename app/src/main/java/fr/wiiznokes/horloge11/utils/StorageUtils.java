@@ -13,14 +13,10 @@ import java.util.List;
 
 public class StorageUtils {
 
-    public static void afficher(String[][] tab){
-        for(int i=0; i<tab.length; i++){
-            for(int j=0; j<tab[i].length; j++){
-                System.out.println("Array["+i+"]["+j+"]="+tab[i][j]);
-            }
-        };
-    }
-    public void write(String fileName, List<Alarm> tab, Context context){
+    private final String fileNameId = "saveIdNumber.txt";
+    private final String fileName = "save.txt";
+
+    public void write(List<Alarm> tab, Context context){
 
         try {
             FileOutputStream output = context.openFileOutput(fileName, MODE_PRIVATE);
@@ -34,7 +30,7 @@ public class StorageUtils {
     }
 
 
-    public List<Alarm> read(String fileName, Context context){
+    public List<Alarm> read(Context context){
         List<Alarm> Array1;
         try {
             FileInputStream input = context.openFileInput(fileName);
@@ -47,6 +43,37 @@ public class StorageUtils {
             System.out.println("erreur dans la lecture");
         }
         return null;
+    }
+
+    public int readAndIncId(Context context){
+        int numberOfId;
+        try {
+            FileInputStream input = context.openFileInput(fileNameId);
+            ObjectInputStream in = new ObjectInputStream(input);
+            numberOfId = (int) in.readObject();
+
+            in.close();
+            input.close();
+            incId(numberOfId, context);
+            return numberOfId;
+        } catch (Exception e) {
+            System.out.println("erreur dans la lecture");
+            return -1;
+        }
+
+    }
+    public void incId(int numberOfId, Context context){
+
+        try {
+            FileOutputStream output = context.openFileOutput(fileNameId, MODE_PRIVATE);
+            ObjectOutputStream out = new ObjectOutputStream(output);
+            out.writeObject(numberOfId+1);
+            out.close();
+            output.close();
+        } catch (Exception e) {
+            System.out.println("erreur dans l'écriture");
+        }
+
     }
 
 

@@ -56,7 +56,7 @@ public class InteractHelper extends MainActivity {
             ListActif.remove((Integer) switchView.getId());
         }
         //ecriture du fichier
-        new StorageUtils().write(fileName, Array1, this);
+        new StorageUtils().write(Array1, this);
 
         //changer l'index d'affichage dans le LinearLayout
 

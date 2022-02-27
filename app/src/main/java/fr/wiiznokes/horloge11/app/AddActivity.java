@@ -21,12 +21,13 @@ import java.util.List;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.utils.Alarm;
+import fr.wiiznokes.horloge11.utils.StorageUtils;
 
 public class AddActivity extends AppCompatActivity {
 
 
-    private final String fileName = "save.txt";
-    private final String fileNameId = "saveIdNumber.txt";
+
+
 
     private ImageButton boutonRetour;
 
@@ -54,6 +55,9 @@ public class AddActivity extends AppCompatActivity {
     private EditText sonnerieName;
 
     private ImageButton save;
+
+    //liste object Alarm
+    private List<Alarm> Array1;
 
 
 
@@ -275,9 +279,9 @@ public class AddActivity extends AppCompatActivity {
 
                     //set de l'id de l'alarm
                     //verif si le fichier existe et sinon le crée avec un int=0
-                    int numberOfId = readAndIncId(fileNameId);
+                    int numberOfId = new StorageUtils().readAndIncId(AddActivity.this);
                     if (numberOfId == -1){
-                        incId(fileNameId, 0);
+                        new StorageUtils().incId(0, AddActivity.this);
                         Alarm1.setId(0);
                     }
                     else{
@@ -286,13 +290,13 @@ public class AddActivity extends AppCompatActivity {
 
 
                     //lecture du fichier de sauvegarde
-                    List<Object> Array1 = read(fileName);
+                    Array1 = new StorageUtils().read(AddActivity.this);
 
 
                     //ajout de l'objet Alarm à la list
                     Array1.add(Alarm1);
                     //ecriture sur le fichier de sauvegarde
-                    write(fileName, Array1);
+                    new StorageUtils().write(Array1, AddActivity.this);
                     setResult(0);
                     finish();
 
@@ -300,72 +304,6 @@ public class AddActivity extends AppCompatActivity {
                 }
             }
         });
-
-    }
-
-
-
-
-
-
-
-    public void write(String fileName, List<Object> tab){
-
-        try {
-            FileOutputStream output = this.openFileOutput(fileName, MODE_PRIVATE);
-            ObjectOutputStream out = new ObjectOutputStream(output);
-            out.writeObject(tab);
-            out.close();
-            output.close();
-        } catch (Exception e) {
-            System.out.println("erreur dans l'écriture");
-        }
-
-    }
-
-    public List<Object> read(String fileName){
-        List<Object> Array1;
-        try {
-            FileInputStream input = this.openFileInput(fileName);
-            ObjectInputStream in = new ObjectInputStream(input);
-            Array1 = (List<Object>) in.readObject();
-            in.close();
-            input.close();
-            return Array1;
-        } catch (Exception e) {
-            System.out.println("erreur dans la lecture");
-        }
-        return null;
-    }
-
-    public int readAndIncId(String fileName){
-        int numberOfId;
-        try {
-            FileInputStream input = this.openFileInput(fileName);
-            ObjectInputStream in = new ObjectInputStream(input);
-            numberOfId = (int) in.readObject();
-
-            in.close();
-            input.close();
-            incId(fileName, numberOfId);
-            return numberOfId;
-        } catch (Exception e) {
-            System.out.println("erreur dans la lecture");
-            return -1;
-        }
-
-    }
-    public void incId(String fileName, int numberOfId){
-
-        try {
-            FileOutputStream output = this.openFileOutput(fileName, MODE_PRIVATE);
-            ObjectOutputStream out = new ObjectOutputStream(output);
-            out.writeObject(numberOfId+1);
-            out.close();
-            output.close();
-        } catch (Exception e) {
-            System.out.println("erreur dans l'écriture");
-        }
 
     }
 }
