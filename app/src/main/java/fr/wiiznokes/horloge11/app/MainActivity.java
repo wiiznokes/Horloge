@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
                         addAlarmText.setVisibility(View.INVISIBLE);
                         //lecture du fichier
-                        Array1 = read(fileName);
+                        Array1 = new StorageUtils().read(fileName, MainActivity.this);
                         MapIdPos = new Trie().MapIdPos(Array1);
                         MapIdDate = new Trie().MapIdDate(Array1);
 
@@ -87,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
                         //maj affichage
                         ConstraintLayout constraintLayout = new Affichage().newConstaintLayout(Alarm.getId(), Alarm, MainActivity.this);
                         ((LinearLayout) findViewById(R.id.linearLayout1)).addView(constraintLayout, ListSortId.indexOf(Alarm.getId()));
+
+                        //switch view
+                        new InteractHelper().switchHelper(((Switch) constraintLayout.getChildAt(2)), Array1, MapIdPos, MapIdDate,
+                                ListActif, ListInactif, ListSortId,
+                                findViewById(R.id.textView4), findViewById(R.id.linearLayout1), findViewById(R.id.textView2));
 
                         //maj nb alarmes actives
                         TextView alarmeActive = findViewById(R.id.textView2);
@@ -100,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
                         else{
                             ((TextView) findViewById(R.id.textView4)).setText(R.string.tempsRestant0alarm);
                         }
+
+
 
 
                     }
@@ -124,14 +131,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         //creation du fichier si il n'existe pas avec un tableau vide
-        if(read(fileName)== null){
+        if(new StorageUtils().read(fileName, this)== null){
 
             List<Alarm> ArrayInit = new ArrayList<Alarm>();
             //ecriture
-            write(fileName, ArrayInit);
+            new StorageUtils().write(fileName, ArrayInit, this);
         }
         //lecture du fichier
-        Array1 = read(fileName);
+        Array1 = new StorageUtils().read(fileName, this);
         MapIdPos = new Trie().MapIdPos(Array1);
         MapIdDate = new Trie().MapIdDate(Array1);
         ListActif = new Trie().ListActifInit(Array1, MapIdDate, MapIdPos);
@@ -170,55 +177,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        //cas du switch qui devient actif
-                        if(switchView.isChecked()){
-                            Array1.get(MapIdPos.get(switchView.getId())).setActive(true);
-                            //enlever L'id switchView.getId() de la liste inactive
-                            ListInactif.remove((Integer) switchView.getId());
-                            //appeler la fonction ajoute l'id au bonne endroit dans la liste active
-                            ListActif = new Trie().ListActifChange(ListActif, switchView.getId(), MapIdDate);
+                        new InteractHelper().switchHelper(switchView, Array1, MapIdPos, MapIdDate,
+                                ListActif, ListInactif, ListSortId,
+                                findViewById(R.id.textView4), findViewById(R.id.linearLayout1), findViewById(R.id.textView2));
 
-                            //si l'alarm devient la première mise a jour temps restant
-                            if(ListActif.get(0) == switchView.getId()){
-                                ((TextView) findViewById(R.id.textView4)).setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(0)))));
-                            }
-
-
-                        }
-                        //cas du switch qui devient inactif
-                        else{
-                            Array1.get(MapIdPos.get(switchView.getId())).setActive(false);
-
-
-                            ListInactif = new Trie().ListInactifChange(ListInactif, switchView.getId(), MapIdDate);
-
-                            //si l'alarme était la première
-                            if(ListActif.get(0) == switchView.getId()){
-                                if(ListActif.size() > 1) {
-                                    ((TextView) findViewById(R.id.textView4)).setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(1)))));
-                                }
-                                else {
-                                    ((TextView) findViewById(R.id.textView4)).setText(R.string.tempsRestant0alarm);
-                                }
-                            }
-                            ListActif.remove((Integer) switchView.getId());
-                        }
-                        //ecriture du fichier
-                        write(fileName, Array1);
-
-                        //changer l'index d'affichage dans le LinearLayout
-                        LinearLayout linearLayout = findViewById(R.id.linearLayout1);
-                        ConstraintLayout constraintLayout = ((ConstraintLayout)(linearLayout.getChildAt(ListSortId.indexOf(switchView.getId()))));
-                        //maj de ListSortId
-                        ListSortId = new Trie().ListSortId(ListActif, ListInactif);
-
-                        //maj de l'affichage
-                        linearLayout.removeView(constraintLayout);
-                        linearLayout.addView(constraintLayout, ListSortId.indexOf(switchView.getId()));
-
-                        //affichage du nombre d'alarmes actives
-                        TextView alarmeActive = findViewById(R.id.textView2);
-                        alarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
                     }
                 });
 
@@ -282,44 +244,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
-
-
-
-
-
-
-    public void write(String fileName, List<Alarm> tab){
-
-        try {
-            FileOutputStream output = this.openFileOutput(fileName, MODE_PRIVATE);
-            ObjectOutputStream out = new ObjectOutputStream(output);
-            out.writeObject(tab);
-            out.close();
-            output.close();
-        } catch (Exception e) {
-            System.out.println("erreur dans l'écriture");
-        }
-
-    }
-
-
-    public List<Alarm> read(String fileName){
-        List<Alarm> Array1;
-        try {
-            FileInputStream input = this.openFileInput(fileName);
-            ObjectInputStream in = new ObjectInputStream(input);
-            Array1 = (List<Alarm>) in.readObject();
-            in.close();
-            input.close();
-            return Array1;
-        } catch (Exception e) {
-            System.out.println("erreur dans la lecture");
-        }
-        return null;
-    }
-
-
 
 
 
