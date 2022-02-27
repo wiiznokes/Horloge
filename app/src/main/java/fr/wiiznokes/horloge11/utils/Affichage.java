@@ -1,5 +1,6 @@
 package fr.wiiznokes.horloge11.utils;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -17,8 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
+import fr.wiiznokes.horloge11.app.MainActivity;
 
-public class Affichage extends AppCompatActivity {
+public class Affichage extends MainActivity {
 
 
     public List<List> afficheAlarmesInit(List<Alarm> Array1, List<Integer> ListSortId, Map<Integer, Integer> MapIdPos){
@@ -33,11 +35,10 @@ public class Affichage extends AppCompatActivity {
         for (int id : ListSortId){
             Alarm Alarme = Array1.get(MapIdPos.get(id));
 
-            //recupération de linear layout
-            LinearLayout linearLayout= findViewById(R.id.linearLayout1);
+
 
             //création du constraint Layout
-            ConstraintLayout constraintLayout = new ConstraintLayout(this);
+            ConstraintLayout constraintLayout = new ConstraintLayout(super.getBaseContext());
             constraintLayout.setId(View.generateViewId());
 
             //objet set pour ajouter des contraintes
@@ -105,8 +106,7 @@ public class Affichage extends AppCompatActivity {
             constraintLayout.addView(switch2);
             constraintLayout.addView(textView3);
 
-            //ajout constraint layout au linear layout
-            linearLayout.addView(constraintLayout);
+
 
             //lien entre set et constraint layout
             set.clone(constraintLayout);
@@ -131,6 +131,12 @@ public class Affichage extends AppCompatActivity {
 
             //application des constraints
             set.applyTo(constraintLayout);
+
+            //recupération de linear layout
+            LinearLayout linearLayout = super.findViewById(R.id.linearLayout1);
+
+            //ajout constraint layout au linear layout
+            linearLayout.addView(constraintLayout);
 
         }
 

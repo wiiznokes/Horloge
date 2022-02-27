@@ -8,25 +8,25 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Trie {
 
-    public Dictionary<Integer, Integer> DicIdPos (List<Object> Array1){
-        Dictionary<Integer, Integer> DicIdPos = new Hashtable<Integer, Integer>();
+    public Map<Integer, Integer> MapIdPos (List<Alarm> Array1){
+        Map<Integer, Integer> MapIdPos = new Hashtable<Integer, Integer>();
         int i = 0;
-        for(Object alarm : Array1){
-            Alarm Alarm = (Alarm) alarm;
-            DicIdPos.put(Alarm.getId(), i);
+        for(Alarm Alarm : Array1){
+            MapIdPos.put(Alarm.getId(), i);
         }
-        return DicIdPos;
+        return MapIdPos;
     }
-    public Dictionary<Integer, Calendar> DicIdDate(List<Object> Array1){
-        Dictionary<Integer, Calendar> DicIdDate = new Hashtable<Integer, Calendar>();
-        for(Object alarm : Array1){
-            Alarm Alarm = (Alarm) alarm;
-            DicIdDate.put(Alarm.getId(), dateProchaineSonnerie(Alarm));
+    public Map<Integer, Calendar> MapIdDate(List<Alarm> Array1){
+        Map<Integer, Calendar> MapIdDate = new Hashtable<Integer, Calendar>();
+        for(Alarm Alarm : Array1){
+            MapIdDate.put(Alarm.getId(), dateProchaineSonnerie(Alarm));
         }
-        return DicIdDate;
+        return MapIdDate;
     }
 
 
@@ -158,6 +158,15 @@ public class Trie {
         }
         return ListInactifInit;
     }
+    public List<Integer> ListSortId(List<Integer> ListActif, List<Integer> ListInactif){
+        return Stream.concat(ListActif.stream(), ListInactif.stream()).collect(Collectors.toList());
+    }
+
+
+
+
+
+
 
     //inserer un id au bon endroit dans la ListTrie des alarmes actives
     public List<Integer> ListActifChange(List<Integer> ListActif, int id, Map<Integer, Calendar> MapIdDate){

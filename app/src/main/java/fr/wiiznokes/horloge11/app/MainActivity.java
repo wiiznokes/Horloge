@@ -79,11 +79,9 @@ public class MainActivity extends AppCompatActivity {
                         //lecture du fichier
                         Array1 = read(fileName);
 
-                        //affichage de l'alarme crée
 
 
-                        //activation de l'alarme crée
-                        onTimeSet((Alarm) Array1.get(Array1.size()-1));
+
 
                     }
                     //bouton retour addActivity
@@ -115,12 +113,25 @@ public class MainActivity extends AppCompatActivity {
         }
         //lecture du fichier
         Array1 = read(fileName);
+        MapIdPos = new Trie().MapIdPos(Array1);
+        MapIdDate = new Trie().MapIdDate(Array1);
+        ListActif = new Trie().ListActifInit(Array1, MapIdDate, MapIdPos);
+        ListInactif = new Trie().ListInactifInit(Array1, MapIdDate, MapIdPos);
+        ListSortId = new Trie().ListSortId(ListActif, ListInactif);
+
+        System.out.println("Hellà");
+        System.out.println(ListSortId.get(0));
+        int pos = MapIdPos.get(ListSortId.get(0));
+        System.out.println(pos);
+        System.out.println(Array1.get(pos).getHoursText());
+
+
 
 
         //affichage des alarmes crées
         List<List> ListViews = new Affichage().afficheAlarmesInit(Array1, ListSortId, MapIdPos);
         //recuperation de la liste des views des switchs
-        List<Switch> switchsView = ListViews.get(0);
+/*        List<Switch> switchsView = ListViews.get(0);
 
         //affichage du nombre d'alarmes actives
         TextView alarmeActive = (TextView) findViewById(R.id.textView2);
@@ -147,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-            }
+            }*/
 
 
 
