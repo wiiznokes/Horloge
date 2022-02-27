@@ -105,7 +105,7 @@ public class Trie {
 
 
     public List<Integer> ListActifInit(List<Alarm> Array1, Map<Integer, Calendar> MapIdDate, Map<Integer, Integer> MapIdPos){
-        Calendar date = Calendar.getInstance();
+
         List<Integer> ListActifInit = new ArrayList<Integer>();
         //boucle sur MapIdDate
         for(Map.Entry<Integer, Calendar> entry : MapIdDate.entrySet()){
@@ -118,13 +118,20 @@ public class Trie {
                     ListActifInit.add(id);
                 } else {
                     int i = 0;
+                    boolean insertionChek = false;
                     //parcourir la ListActifInit
                     for (Integer idListTri : ListActifInit) {
                         //placer l'id de Map avant l'id de List si
                         if (dateAlarm.compareTo(MapIdDate.get(idListTri)) < 0) {
                             ListActifInit.add(i, id);
-                            i = i + 1;
+                            insertionChek = true;
+                            break;
+
                         }
+                        i = i + 1;
+                    }
+                    if(!insertionChek){
+                        ListActifInit.add(id);
                     }
                 }
             }
@@ -132,7 +139,7 @@ public class Trie {
         return ListActifInit;
     }
     public List<Integer> ListInactifInit(List<Alarm> Array1, Map<Integer, Calendar> MapIdDate, Map<Integer, Integer> MapIdPos){
-        Calendar date = Calendar.getInstance();
+
         List<Integer> ListInactifInit = new ArrayList<Integer>();
         //boucle sur MapIdDate
         for(Map.Entry<Integer, Calendar> entry : MapIdDate.entrySet()){
@@ -145,13 +152,20 @@ public class Trie {
                     ListInactifInit.add(id);
                 } else {
                     int i = 0;
+                    boolean insertionChek = false;
                     //parcourir la ListActifInit
                     for (Integer idListTri : ListInactifInit) {
                         //placer l'id de Map avant l'id de List si
                         if (dateAlarm.compareTo(MapIdDate.get(idListTri)) < 0) {
                             ListInactifInit.add(i, id);
-                            i = i + 1;
+                            insertionChek = true;
+                            break;
+
                         }
+                        i = i + 1;
+                    }
+                    if(!insertionChek){
+                        ListInactifInit.add(id);
                     }
                 }
             }

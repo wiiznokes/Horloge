@@ -23,7 +23,7 @@ import fr.wiiznokes.horloge11.app.MainActivity;
 public class Affichage extends MainActivity {
 
 
-    public List<List> afficheAlarmesInit(List<Alarm> Array1, List<Integer> ListSortId, Map<Integer, Integer> MapIdPos){
+    public List<List> afficheAlarmesInit(List<Alarm> Array1, List<Integer> ListSortId, Map<Integer, Integer> MapIdPos, Context context, LinearLayout linearLayout){
 
 
         //creation list pour les view des switchs
@@ -34,109 +34,14 @@ public class Affichage extends MainActivity {
 
         for (int id : ListSortId){
             Alarm Alarme = Array1.get(MapIdPos.get(id));
-
-
-
-            //création du constraint Layout
-            ConstraintLayout constraintLayout = new ConstraintLayout(super.getBaseContext());
-            constraintLayout.setId(View.generateViewId());
-
-            //objet set pour ajouter des contraintes
-            ConstraintSet set = new ConstraintSet();
-
-            //création heure alarme
-            TextView textView = new TextView(this);
-            textView.setText(Alarme.getHoursText());
-            textView.setId(View.generateViewId());
-
-            //création nom alarme
-            TextView textView2 = new TextView(this);
-            textView2.setText(Alarme.getNameAlarm());
-            textView2.setId(View.generateViewId());
-
-            //création switch
-            Switch switch2 = new Switch(this);
-            switch2.setText("");
-            switch2.setChecked(Alarme.isActive());
-            switch2.setId(id);
+            ConstraintLayout constraintLayout = newConstaintLayout(id, Alarme, context);
 
             //ajout de switch a la liste des views
-            switchsView.add(switch2);
-
-
-            //création jour alarme
-            TextView textView3 = new TextView(this);
-            if (Alarme.isWeek()){
-                textView3.setText("Tous les jours");
-            }
-            else{
-                String joursActif = "";
-                if(Alarme.isMonday()){
-                    joursActif = joursActif + "lun ";
-                }
-                if (Alarme.isTuesday()){
-                    joursActif = joursActif + "mar ";
-                }
-                if (Alarme.isWednesday()){
-                    joursActif = joursActif + "mer ";
-                }
-                if (Alarme.isThursday()){
-                    joursActif = joursActif + "jeu ";
-                }
-                if (Alarme.isFriday()){
-                    joursActif = joursActif + "ven ";
-                }
-                if (Alarme.isSaturday()){
-                    joursActif = joursActif + "sam ";
-                }
-                if (Alarme.isSunday()){
-                    joursActif = joursActif + "dim ";
-                }
-                textView3.setText(joursActif);
-            }
-
-            textView3.setId(View.generateViewId());
-
-
-
-
-            //ajout des view au constraint layout
-            constraintLayout.addView(textView);
-            constraintLayout.addView(textView2);
-            constraintLayout.addView(switch2);
-            constraintLayout.addView(textView3);
-
-
-
-            //lien entre set et constraint layout
-            set.clone(constraintLayout);
-
-            //constraint pour l'heure de l'alarme
-            set.connect(textView.getId(), ConstraintSet.LEFT, ((View) textView.getParent()).getId(), ConstraintSet.LEFT);
-
-            //constraint pour le nom de l'alarme
-            set.connect(textView2.getId(), ConstraintSet.LEFT, textView.getId(), ConstraintSet.RIGHT);
-            set.connect(textView2.getId(), ConstraintSet.RIGHT, switch2.getId(), ConstraintSet.LEFT);
-            set.connect(textView2.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.TOP);
-
-            //consraint pour le switch
-            set.connect(switch2.getId(), ConstraintSet.RIGHT, ((View) switch2.getParent()).getId(), ConstraintSet.RIGHT);
-            set.connect(switch2.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.TOP);
-            set.connect(switch2.getId(), ConstraintSet.BOTTOM, textView3.getId(), ConstraintSet.BOTTOM);
-
-            //constraint pour les jours de sonnerie
-            set.connect(textView3.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.BOTTOM);
-            set.connect(textView3.getId(), ConstraintSet.RIGHT, switch2.getId(), ConstraintSet.LEFT);
-            set.connect(textView3.getId(), ConstraintSet.LEFT, textView.getId(), ConstraintSet.LEFT);
-
-            //application des constraints
-            set.applyTo(constraintLayout);
-
-            //recupération de linear layout
-            LinearLayout linearLayout = super.findViewById(R.id.linearLayout1);
+            switchsView.add(((Switch) constraintLayout.getChildAt(2)));
 
             //ajout constraint layout au linear layout
             linearLayout.addView(constraintLayout);
+
 
         }
 
@@ -148,6 +53,159 @@ public class Affichage extends MainActivity {
         return ListViews;
 
     }
+
+
+    public ConstraintLayout newConstaintLayout(int id, Alarm Alarme, Context context){
+
+
+        //création du constraint Layout
+        ConstraintLayout constraintLayout = new ConstraintLayout(context);
+        constraintLayout.setId(View.generateViewId());
+
+        //objet set pour ajouter des contraintes
+        ConstraintSet set = new ConstraintSet();
+
+        //création heure alarme
+        TextView textView = new TextView(context);
+        textView.setText(Alarme.getHoursText());
+        textView.setId(View.generateViewId());
+
+        //création nom alarme
+        TextView textView2 = new TextView(context);
+        textView2.setText(Alarme.getNameAlarm());
+        textView2.setId(View.generateViewId());
+
+        //création switch
+        Switch switch2 = new Switch(context);
+        switch2.setText("");
+        switch2.setChecked(Alarme.isActive());
+        switch2.setId(id);
+
+
+        //création jour alarme
+        TextView textView3 = new TextView(context);
+        if (Alarme.isWeek()){
+            textView3.setText("Tous les jours");
+        }
+        else{
+            String joursActif = "";
+            if(Alarme.isMonday()){
+                joursActif = joursActif + "lun ";
+            }
+            if (Alarme.isTuesday()){
+                joursActif = joursActif + "mar ";
+            }
+            if (Alarme.isWednesday()){
+                joursActif = joursActif + "mer ";
+            }
+            if (Alarme.isThursday()){
+                joursActif = joursActif + "jeu ";
+            }
+            if (Alarme.isFriday()){
+                joursActif = joursActif + "ven ";
+            }
+            if (Alarme.isSaturday()){
+                joursActif = joursActif + "sam ";
+            }
+            if (Alarme.isSunday()){
+                joursActif = joursActif + "dim ";
+            }
+            textView3.setText(joursActif);
+        }
+
+        textView3.setId(View.generateViewId());
+
+
+
+
+        //ajout des view au constraint layout
+        constraintLayout.addView(textView);
+        constraintLayout.addView(textView2);
+        constraintLayout.addView(switch2);
+        constraintLayout.addView(textView3);
+
+
+
+        //lien entre set et constraint layout
+        set.clone(constraintLayout);
+
+        //constraint pour l'heure de l'alarme
+        set.connect(textView.getId(), ConstraintSet.LEFT, ((View) textView.getParent()).getId(), ConstraintSet.LEFT);
+
+        //constraint pour le nom de l'alarme
+        set.connect(textView2.getId(), ConstraintSet.LEFT, textView.getId(), ConstraintSet.RIGHT);
+        set.connect(textView2.getId(), ConstraintSet.RIGHT, switch2.getId(), ConstraintSet.LEFT);
+        set.connect(textView2.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.TOP);
+
+        //consraint pour le switch
+        set.connect(switch2.getId(), ConstraintSet.RIGHT, ((View) switch2.getParent()).getId(), ConstraintSet.RIGHT);
+        set.connect(switch2.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.TOP);
+        set.connect(switch2.getId(), ConstraintSet.BOTTOM, textView3.getId(), ConstraintSet.BOTTOM);
+
+        //constraint pour les jours de sonnerie
+        set.connect(textView3.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.BOTTOM);
+        set.connect(textView3.getId(), ConstraintSet.RIGHT, switch2.getId(), ConstraintSet.LEFT);
+        set.connect(textView3.getId(), ConstraintSet.LEFT, textView.getId(), ConstraintSet.LEFT);
+
+        //application des constraints
+        set.applyTo(constraintLayout);
+
+        return constraintLayout;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public String NombreAlarmsActives (int numberAlarmsActives){
@@ -162,7 +220,7 @@ public class Affichage extends MainActivity {
     }
 
     public String tempsRestant(Alarm Alarme){
-        String tempsRestant;
+        String tempsRestant = "Temps restant : ";
         Calendar dateSonnerie = new Trie().dateProchaineSonnerie(Alarme);
         Calendar date = Calendar.getInstance();
         long diffMiliSec = dateSonnerie.getTimeInMillis() - date.getTimeInMillis();
@@ -186,7 +244,7 @@ public class Affichage extends MainActivity {
         }
         if(jour > 0){
             if(jour == 1) {
-                tempsRestant = "1 jour et ";
+                tempsRestant = tempsRestant+ "1 jour et ";
                 if(heure == 1 || heure == 0){
                     tempsRestant = tempsRestant + Integer.toString(heure) + "heure";
                 }
@@ -203,7 +261,7 @@ public class Affichage extends MainActivity {
         else {
             if(heure > 0){
                 if(heure == 1){
-                    tempsRestant = "1 heure et ";
+                    tempsRestant = tempsRestant + "1 heure et ";
                     if(minute == 1 || minute == 0){
                         tempsRestant = tempsRestant + Integer.toString(minute) + "minute";
                     }
@@ -226,15 +284,15 @@ public class Affichage extends MainActivity {
             }
             else{
                 if(minute == 0){
-                    tempsRestant = "Moins d'une minute";
+                    tempsRestant = tempsRestant + "Moins d'une minute";
                     return tempsRestant;
                 }
                 if(minute == 1){
-                    tempsRestant = "1 minute";
+                    tempsRestant = tempsRestant + "1 minute";
                     return tempsRestant;
                 }
                 else{
-                    tempsRestant = Integer.toString(minute) + " minutes";
+                    tempsRestant = tempsRestant + Integer.toString(minute) + " minutes";
                     return tempsRestant;
                 }
             }

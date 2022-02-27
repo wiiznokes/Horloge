@@ -78,9 +78,28 @@ public class MainActivity extends AppCompatActivity {
                         addAlarmText.setVisibility(View.INVISIBLE);
                         //lecture du fichier
                         Array1 = read(fileName);
+                        MapIdPos = new Trie().MapIdPos(Array1);
+                        MapIdDate = new Trie().MapIdDate(Array1);
 
+                        Alarm Alarm = Array1.get(Array1.size() - 1);
+                        ListActif = new Trie().ListActifChange(ListActif, Alarm.getId(), MapIdDate);
+                        ListSortId = new Trie().ListSortId(ListActif, ListInactif);
+                        //maj affichage
+                        ConstraintLayout constraintLayout = new Affichage().newConstaintLayout(Alarm.getId(), Alarm, MainActivity.this);
+                        ((LinearLayout) findViewById(R.id.linearLayout1)).addView(constraintLayout, ListSortId.indexOf(Alarm.getId()));
 
+                        //maj nb alarmes actives
+                        TextView alarmeActive = findViewById(R.id.textView2);
+                        alarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
 
+                        //maj temps restant
+                        if(ListActif.size() > 0){
+                            ((TextView) findViewById(R.id.textView4)).setText(
+                                    new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(0)))));
+                        }
+                        else{
+                            ((TextView) findViewById(R.id.textView4)).setText(R.string.tempsRestant0alarm);
+                        }
 
 
                     }
@@ -119,23 +138,28 @@ public class MainActivity extends AppCompatActivity {
         ListInactif = new Trie().ListInactifInit(Array1, MapIdDate, MapIdPos);
         ListSortId = new Trie().ListSortId(ListActif, ListInactif);
 
-        System.out.println("Hellà");
-        System.out.println(ListSortId.get(0));
-        int pos = MapIdPos.get(ListSortId.get(0));
-        System.out.println(pos);
-        System.out.println(Array1.get(pos).getHoursText());
-
 
 
 
         //affichage des alarmes crées
-        List<List> ListViews = new Affichage().afficheAlarmesInit(Array1, ListSortId, MapIdPos);
+        List<List> ListViews = new Affichage().afficheAlarmesInit(Array1, ListSortId, MapIdPos, this, findViewById(R.id.linearLayout1));
+
+
+
         //recuperation de la liste des views des switchs
-/*        List<Switch> switchsView = ListViews.get(0);
+        List<Switch> switchsView = ListViews.get(0);
 
         //affichage du nombre d'alarmes actives
-        TextView alarmeActive = (TextView) findViewById(R.id.textView2);
+        TextView alarmeActive = findViewById(R.id.textView2);
         alarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
+        //affichage du temps restant
+        if(ListActif.size() > 0){
+            ((TextView) findViewById(R.id.textView4)).setText(
+                    new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(0)))));
+        }
+        else{
+            ((TextView) findViewById(R.id.textView4)).setText(R.string.tempsRestant0alarm);
+        }
 
 
 
@@ -146,19 +170,59 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
+                        //cas du switch qui devient actif
                         if(switchView.isChecked()){
                             Array1.get(MapIdPos.get(switchView.getId())).setActive(true);
                             //enlever L'id switchView.getId() de la liste inactive
+                            ListInactif.remove((Integer) switchView.getId());
                             //appeler la fonction ajoute l'id au bonne endroit dans la liste active
+                            ListActif = new Trie().ListActifChange(ListActif, switchView.getId(), MapIdDate);
+
+                            //si l'alarm devient la première mise a jour temps restant
+                            if(ListActif.get(0) == switchView.getId()){
+                                ((TextView) findViewById(R.id.textView4)).setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(0)))));
+                            }
+
 
                         }
+                        //cas du switch qui devient inactif
                         else{
                             Array1.get(MapIdPos.get(switchView.getId())).setActive(false);
+
+
+                            ListInactif = new Trie().ListInactifChange(ListInactif, switchView.getId(), MapIdDate);
+
+                            //si l'alarme était la première
+                            if(ListActif.get(0) == switchView.getId()){
+                                if(ListActif.size() > 1) {
+                                    ((TextView) findViewById(R.id.textView4)).setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(1)))));
+                                }
+                                else {
+                                    ((TextView) findViewById(R.id.textView4)).setText(R.string.tempsRestant0alarm);
+                                }
+                            }
+                            ListActif.remove((Integer) switchView.getId());
                         }
+                        //ecriture du fichier
+                        write(fileName, Array1);
+
+                        //changer l'index d'affichage dans le LinearLayout
+                        LinearLayout linearLayout = findViewById(R.id.linearLayout1);
+                        ConstraintLayout constraintLayout = ((ConstraintLayout)(linearLayout.getChildAt(ListSortId.indexOf(switchView.getId()))));
+                        //maj de ListSortId
+                        ListSortId = new Trie().ListSortId(ListActif, ListInactif);
+
+                        //maj de l'affichage
+                        linearLayout.removeView(constraintLayout);
+                        linearLayout.addView(constraintLayout, ListSortId.indexOf(switchView.getId()));
+
+                        //affichage du nombre d'alarmes actives
+                        TextView alarmeActive = findViewById(R.id.textView2);
+                        alarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
                     }
                 });
 
-            }*/
+            }
 
 
 
