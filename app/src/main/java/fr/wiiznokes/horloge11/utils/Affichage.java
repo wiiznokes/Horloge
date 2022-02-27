@@ -25,11 +25,8 @@ public class Affichage extends MainActivity {
 
     public List<List> afficheAlarmesInit(List<Alarm> Array1, List<Integer> ListSortId, Map<Integer, Integer> MapIdPos, Context context, LinearLayout linearLayout){
 
-
         //creation list pour les view des switchs
         List<Switch> switchsView = new ArrayList<>();
-
-
 
 
         for (int id : ListSortId){
@@ -41,14 +38,11 @@ public class Affichage extends MainActivity {
 
             //ajout constraint layout au linear layout
             linearLayout.addView(constraintLayout);
-
-
         }
 
 
         List<List> ListViews = new ArrayList<>();
         ListViews.add(switchsView);
-
 
         return ListViews;
 
@@ -56,7 +50,6 @@ public class Affichage extends MainActivity {
 
 
     public ConstraintLayout newConstaintLayout(int id, Alarm Alarme, Context context){
-
 
         //création du constraint Layout
         ConstraintLayout constraintLayout = new ConstraintLayout(context);
@@ -112,19 +105,13 @@ public class Affichage extends MainActivity {
             }
             textView3.setText(joursActif);
         }
-
         textView3.setId(View.generateViewId());
-
-
-
 
         //ajout des view au constraint layout
         constraintLayout.addView(textView);
         constraintLayout.addView(textView2);
         constraintLayout.addView(switch2);
         constraintLayout.addView(textView3);
-
-
 
         //lien entre set et constraint layout
         set.clone(constraintLayout);
@@ -156,65 +143,13 @@ public class Affichage extends MainActivity {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public String NombreAlarmsActives (int numberAlarmsActives){
         String phrase;
         if (numberAlarmsActives == 0 || numberAlarmsActives == 1){
-            phrase = "Nombre d'alarme active : " + Integer.toString(numberAlarmsActives);
+            phrase = "Nombre d'alarme active : " + numberAlarmsActives;
         }
         else{
-            phrase = "Nombre d'alarmes actives : " + Integer.toString(numberAlarmsActives);
+            phrase = "Nombre d'alarmes actives : " + numberAlarmsActives;
         }
         return phrase;
     }
