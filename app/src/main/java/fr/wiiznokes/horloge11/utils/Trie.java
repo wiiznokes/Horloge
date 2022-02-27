@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 public class Trie {
 
@@ -23,18 +24,11 @@ public class Trie {
         Dictionary<Integer, Calendar> DicIdDate = new Hashtable<Integer, Calendar>();
         for(Object alarm : Array1){
             Alarm Alarm = (Alarm) alarm;
-            DicIdDate.put(Alarm.getId(), getCalendar(Alarm));
+            DicIdDate.put(Alarm.getId(), dateProchaineSonnerie(Alarm));
         }
         return DicIdDate;
     }
 
-    public Calendar getCalendar(Alarm Alarme){
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, Alarme.getHours());
-        c.set(Calendar.MINUTE, Alarme.getMinute());
-        c.set(Calendar.SECOND, 0);
-        return  c;
-    }
 
     public Calendar dateProchaineSonnerie(Alarm Alarme){
         int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
@@ -108,17 +102,103 @@ public class Trie {
         }
 
     }
-/*
-    public List<Integer> ListActifInit(List<Object> Array1, Dictionary<Integer, Calendar> DicIdDate){
-        Calendar date = Calendar.getInstance()
-        List<Integer> ListActifNonTrie = new ArrayList<Integer>();
-        for(Object alarm : Array1){
-            Alarm Alarm = (Alarm) alarm;
-            List
+
+
+    public List<Integer> ListActifInit(List<Alarm> Array1, Map<Integer, Calendar> MapIdDate, Map<Integer, Integer> MapIdPos){
+        Calendar date = Calendar.getInstance();
+        List<Integer> ListActifInit = new ArrayList<Integer>();
+        //boucle sur MapIdDate
+        for(Map.Entry<Integer, Calendar> entry : MapIdDate.entrySet()){
+            Integer id = entry.getKey();
+            //condition pour savoir si l'alarm est active
+            if(Array1.get(MapIdPos.get(id)).isActive()){
+                Calendar dateAlarm = entry.getValue();
+                //si la taille ListActifInit == 0, ajouter la key
+                if (ListActifInit.size() == 0) {
+                    ListActifInit.add(id);
+                } else {
+                    int i = 0;
+                    //parcourir la ListActifInit
+                    for (Integer idListTri : ListActifInit) {
+                        //placer l'id de Map avant l'id de List si
+                        if (dateAlarm.compareTo(MapIdDate.get(idListTri)) < 0) {
+                            ListActifInit.add(i, id);
+                            i = i + 1;
+                        }
+                    }
+                }
+            }
         }
         return ListActifInit;
+    }
+    public List<Integer> ListInactifInit(List<Alarm> Array1, Map<Integer, Calendar> MapIdDate, Map<Integer, Integer> MapIdPos){
+        Calendar date = Calendar.getInstance();
+        List<Integer> ListInactifInit = new ArrayList<Integer>();
+        //boucle sur MapIdDate
+        for(Map.Entry<Integer, Calendar> entry : MapIdDate.entrySet()){
+            Integer id = entry.getKey();
+            //condition pour savoir si l'alarm est inactive
+            if(!Array1.get(MapIdPos.get(id)).isActive()){
+                Calendar dateAlarm = entry.getValue();
+                //si la taille ListActifInit == 0, ajouter la key
+                if (ListInactifInit.size() == 0) {
+                    ListInactifInit.add(id);
+                } else {
+                    int i = 0;
+                    //parcourir la ListActifInit
+                    for (Integer idListTri : ListInactifInit) {
+                        //placer l'id de Map avant l'id de List si
+                        if (dateAlarm.compareTo(MapIdDate.get(idListTri)) < 0) {
+                            ListInactifInit.add(i, id);
+                            i = i + 1;
+                        }
+                    }
+                }
+            }
+        }
+        return ListInactifInit;
+    }
 
-    }*/
+    //inserer un id au bon endroit dans la ListTrie des alarmes actives
+    public List<Integer> ListActifChange(List<Integer> ListActif, int id, Map<Integer, Calendar> MapIdDate){
+        Calendar dateSonnerie = MapIdDate.get(id);
+        //condition pour savoir si ListActif est vide
+        if(ListActif.size() == 0){
+            ListActif.add(id);
+            return ListActif;
+        }
+        else{
+            int i = 0;
+            for(int idListActif : ListActif){
+                if(MapIdDate.get(idListActif).compareTo(dateSonnerie) > 0){
+                    ListActif.add(i, id);
+                    return ListActif;
+                }
+            }
+            ListActif.add(id);
+            return ListActif;
+        }
+    }
+    //inserer un id au bon endroit dans la ListTrie des alarmes Inactives
+    public List<Integer> ListInactifChange(List<Integer> ListInactif, int id, Map<Integer, Calendar> MapIdDate){
+        Calendar dateSonnerie = MapIdDate.get(id);
+        //condition pour savoir si ListInactif est vide
+        if(ListInactif.size() == 0){
+            ListInactif.add(id);
+            return ListInactif;
+        }
+        else{
+            int i = 0;
+            for(int idListActif : ListInactif){
+                if(MapIdDate.get(idListActif).compareTo(dateSonnerie) > 0){
+                    ListInactif.add(i, id);
+                    return ListInactif;
+                }
+            }
+            ListInactif.add(id);
+            return ListInactif;
+        }
+    }
 
 
 

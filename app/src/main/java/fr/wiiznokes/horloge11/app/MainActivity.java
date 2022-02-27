@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.utils.*;
@@ -45,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
     private final static int ADD_ACTIVITY_CALL_ID = 10;
 
     //liste object Alarm
-    private List<Object> Array1;
+    private List<Alarm> Array1;
     //dictionnaire key:id valeur:position dans Array1
-    private Dictionary<Integer, Integer> DicIdPos;
+    private Map<Integer, Integer> MapIdPos;
     //dictionnaire key:id valeur:dateSonnerie
-    private Dictionary<Integer, Calendar> DicIdDate;
+    private Map<Integer, Calendar> MapIdDate;
     //liste id alarm actif triée
     private List<Integer> ListActif;
     //liste id alarm Inactif triée
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         //creation du fichier si il n'existe pas avec un tableau vide
         if(read(fileName)== null){
 
-            List<Object> ArrayInit = new ArrayList<Object>();
+            List<Alarm> ArrayInit = new ArrayList<Alarm>();
             //ecriture
             write(fileName, ArrayInit);
         }
@@ -117,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //affichage des alarmes crées
-        List<List> ListViews = new Affichage().afficheAlarmesInit(Array1, ListSortId, DicIdPos);
+        List<List> ListViews = new Affichage().afficheAlarmesInit(Array1, ListSortId, MapIdPos);
         //recuperation de la liste des views des switchs
         List<Switch> switchsView = ListViews.get(0);
 
@@ -135,12 +136,13 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
 
                         if(switchView.isChecked()){
-                            ((Alarm) Array1.get(DicIdPos.get(switchView.getId()))).setActive(true);
-                            //rajouter la fonction pour changer la liste ListActif
+                            Array1.get(MapIdPos.get(switchView.getId())).setActive(true);
+                            //enlever L'id switchView.getId() de la liste inactive
+                            //appeler la fonction ajoute l'id au bonne endroit dans la liste active
 
                         }
                         else{
-                            ((Alarm) Array1.get(DicIdPos.get(switchView.getId()))).setActive(false);
+                            Array1.get(MapIdPos.get(switchView.getId())).setActive(false);
                         }
                     }
                 });
@@ -212,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void write(String fileName, List<Object> tab){
+    public void write(String fileName, List<Alarm> tab){
 
         try {
             FileOutputStream output = this.openFileOutput(fileName, MODE_PRIVATE);
@@ -227,12 +229,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public List<Object> read(String fileName){
-        List<Object> Array1;
+    public List<Alarm> read(String fileName){
+        List<Alarm> Array1;
         try {
             FileInputStream input = this.openFileInput(fileName);
             ObjectInputStream in = new ObjectInputStream(input);
-            Array1 = (List<Object>) in.readObject();
+            Array1 = (List<Alarm>) in.readObject();
             in.close();
             input.close();
             return Array1;
@@ -251,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
 
     //fonction qui active une alarm
     public void onTimeSet(Alarm Alarme) {
-        Calendar c = new Trie().getCalendar(Alarme);
+        Calendar c = new Trie().dateProchaineSonnerie(Alarme);
         startAlarm(c, Alarme.getId());
     }
     private void startAlarm(Calendar c, int id){

@@ -11,15 +11,17 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
 
 public class Affichage extends AppCompatActivity {
 
 
-    public List<List> afficheAlarmesInit(List<Object> Array1, List<Integer> ListSortId, Dictionary<Integer, Integer> DicIdPos){
+    public List<List> afficheAlarmesInit(List<Alarm> Array1, List<Integer> ListSortId, Map<Integer, Integer> MapIdPos){
 
 
         //creation list pour les view des switchs
@@ -29,7 +31,7 @@ public class Affichage extends AppCompatActivity {
 
 
         for (int id : ListSortId){
-            Alarm Alarme = (Alarm) Array1.get(DicIdPos.get(id));
+            Alarm Alarme = Array1.get(MapIdPos.get(id));
 
             //recupération de linear layout
             LinearLayout linearLayout= findViewById(R.id.linearLayout1);
@@ -151,6 +153,87 @@ public class Affichage extends AppCompatActivity {
             phrase = "Nombre d'alarmes actives : " + Integer.toString(numberAlarmsActives);
         }
         return phrase;
+    }
+
+    public String tempsRestant(Alarm Alarme){
+        String tempsRestant;
+        Calendar dateSonnerie = new Trie().dateProchaineSonnerie(Alarme);
+        Calendar date = Calendar.getInstance();
+        long diffMiliSec = dateSonnerie.getTimeInMillis() - date.getTimeInMillis();
+        int jour = 0;
+        int heure = 0;
+        int minute = 0;
+        long jourEnMili = 1000 * 60 * 60 * 24;
+        long heureEnMili = 1000 * 60 * 60;
+        long minuteEnMili = 1000 * 60;
+        while(diffMiliSec - jourEnMili > 0){
+            diffMiliSec = diffMiliSec - jourEnMili;
+            jour = jour +1;
+        }
+        while(diffMiliSec - heureEnMili > 0){
+            diffMiliSec = diffMiliSec - heureEnMili;
+            heure = heure +1;
+        }
+        while(diffMiliSec - minuteEnMili > 0){
+            diffMiliSec = diffMiliSec - minuteEnMili;
+            minute = minute +1;
+        }
+        if(jour > 0){
+            if(jour == 1) {
+                tempsRestant = "1 jour et ";
+                if(heure == 1 || heure == 0){
+                    tempsRestant = tempsRestant + Integer.toString(heure) + "heure";
+                }
+                else{
+                    tempsRestant = tempsRestant + Integer.toString(heure) + "heures";
+                }
+                return tempsRestant;
+            }
+            else{
+                tempsRestant = Integer.toString(jour) + " jours";
+                return tempsRestant;
+            }
+        }
+        else {
+            if(heure > 0){
+                if(heure == 1){
+                    tempsRestant = "1 heure et ";
+                    if(minute == 1 || minute == 0){
+                        tempsRestant = tempsRestant + Integer.toString(minute) + "minute";
+                    }
+                    else{
+                        tempsRestant = tempsRestant + Integer.toString(minute) + "minutes";
+                    }
+                    return tempsRestant;
+                }
+                else{
+                    tempsRestant = Integer.toString(heure) + " heures et ";
+                    if(minute == 1 || minute == 0){
+                        tempsRestant = tempsRestant + Integer.toString(minute) + " minute";
+                    }
+                    else{
+                        tempsRestant = tempsRestant + Integer.toString(minute) + " minutes";
+                    }
+                    return tempsRestant;
+
+                }
+            }
+            else{
+                if(minute == 0){
+                    tempsRestant = "Moins d'une minute";
+                    return tempsRestant;
+                }
+                if(minute == 1){
+                    tempsRestant = "1 minute";
+                    return tempsRestant;
+                }
+                else{
+                    tempsRestant = Integer.toString(minute) + " minutes";
+                    return tempsRestant;
+                }
+            }
+        }
+
     }
 
 }
