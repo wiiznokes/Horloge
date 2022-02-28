@@ -77,13 +77,11 @@ public class MainActivity extends AppCompatActivity {
 
                         addAlarmText.setVisibility(View.INVISIBLE);
                         //lecture du fichier
-                        Array1 = new StorageUtils().read(MainActivity.this);
-                        MapIdPos = new Trie().MapIdPos(Array1);
-                        MapIdDate = new Trie().MapIdDate(Array1);
+                        init();
+
 
                         Alarm Alarme = Array1.get(Array1.size() - 1);
-                        ListActif = new Trie().ListActifChange(ListActif, Alarme.getId(), MapIdDate);
-                        ListSortId = new Trie().ListSortId(ListActif, ListInactif);
+
 
                         //maj affichage
                         ConstraintLayout constraintLayout = new Affichage().newConstaintLayout(Alarme.getId(), Alarme, MainActivity.this);
@@ -93,29 +91,19 @@ public class MainActivity extends AppCompatActivity {
                         SwitchMaterial switchView = (SwitchMaterial) constraintLayout.getChildAt(2);
                         switchView.setOnClickListener(v -> {
 
-                            System.out.println("Hellà");
-                            System.out.println(ListActif.size());
-
                             new InteractHelper().switchHelper(switchView, Array1, MapIdPos, MapIdDate,
                                     ListActif, ListInactif, ListSortId,
                                     findViewById(R.id.textView4), findViewById(R.id.linearLayout1), findViewById(R.id.textView2));
-
-                            System.out.println(ListActif.size());
+                            //ecriture du fichier
+                            new StorageUtils().write(Array1, MainActivity.this);
                         });
 
 
                         //maj nb alarmes actives
-                        TextView alarmeActive = findViewById(R.id.textView2);
-                        alarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
+                        ((TextView) findViewById(R.id.textView2)).setText(new Affichage().NombreAlarmsActives(ListActif.size()));
 
                         //maj temps restant
-                        if(ListActif.size() > 0){
-                            ((TextView) findViewById(R.id.textView4)).setText(
-                                    new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(0)))));
-                        }
-                        else{
-                            ((TextView) findViewById(R.id.textView4)).setText(R.string.tempsRestant0alarm);
-                        }
+                        ((TextView) findViewById(R.id.textView4)).setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(0)))));
 
                     }
                     //bouton retour addActivity
@@ -145,13 +133,9 @@ public class MainActivity extends AppCompatActivity {
             //ecriture
             new StorageUtils().write(ArrayInit, this);
         }
-        //lecture du fichier
-        Array1 = new StorageUtils().read(this);
-        MapIdPos = new Trie().MapIdPos(Array1);
-        MapIdDate = new Trie().MapIdDate(Array1);
-        ListActif = new Trie().ListActifInit(Array1, MapIdDate, MapIdPos);
-        ListInactif = new Trie().ListInactifInit(Array1, MapIdDate, MapIdPos);
-        ListSortId = new Trie().ListSortId(ListActif, ListInactif);
+
+        //creation de tous les objets
+        init();
 
 
 
@@ -179,20 +163,15 @@ public class MainActivity extends AppCompatActivity {
 
 
         //boucle qui recuperer les views des switchs
-
         for(SwitchMaterial switchView : switchsView){
-
-
+            
             switchView.setOnClickListener(v -> {
-
-                System.out.println("Hellà");
-                System.out.println(ListActif.size());
-
                 new InteractHelper().switchHelper(switchView, Array1, MapIdPos, MapIdDate,
                         ListActif, ListInactif, ListSortId,
                         findViewById(R.id.textView4), findViewById(R.id.linearLayout1), findViewById(R.id.textView2));
+                //ecriture du fichier
+                new StorageUtils().write(Array1, MainActivity.this);
 
-                System.out.println(ListActif.size());
             });
             }
 
@@ -254,6 +233,15 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+    }
+
+    private void init(){
+        Array1 = new StorageUtils().read(this);
+        MapIdPos = new Trie().MapIdPos(Array1);
+        MapIdDate = new Trie().MapIdDate(Array1);
+        ListActif = new Trie().ListActifInit(Array1, MapIdDate, MapIdPos);
+        ListInactif = new Trie().ListInactifInit(Array1, MapIdDate, MapIdPos);
+        ListSortId = new Trie().ListSortId(ListActif, ListInactif);
     }
 
 
