@@ -38,8 +38,11 @@ public class InteractHelper extends MainActivity {
                 textview4.setText(new Affichage().tempsRestant(Alarme));
 
                 //test
+                System.out.println("hellà");
                 System.out.println(new Trie().dateProchaineSonnerie(Alarme).getTime());
-                System.out.println(Calendar.getInstance().getTime());
+
+
+
             }
 
 

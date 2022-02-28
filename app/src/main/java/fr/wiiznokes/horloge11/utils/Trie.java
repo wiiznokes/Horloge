@@ -31,19 +31,23 @@ public class Trie {
 
 
     public Calendar dateProchaineSonnerie(Alarm Alarme){
+        //def heuure actuelle
+        Calendar heureSysteme = Calendar.getInstance();
+        long heureSys = System.currentTimeMillis();
+        heureSysteme.setTimeInMillis(heureSys);
+
         Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(heureSys);
         c.set(Calendar.HOUR_OF_DAY, Alarme.getHours());
         c.set(Calendar.MINUTE, Alarme.getMinute());
         c.set(Calendar.SECOND, 0);
 
         if (Alarme.isWeek()){
-            if(Calendar.getInstance().compareTo(c) < 0){
+            //si alarm est avant heure actuelle
+            if(heureSysteme.compareTo(c) > 0){
                 c.add(Calendar.DATE, 1);
-                return c;
             }
-            else {
-                return c;
-            }
+            return c;
         }
         else{
             List<Integer>daysActifs = new ArrayList<Integer>();
@@ -68,12 +72,13 @@ public class Trie {
             if(Alarme.isSaturday()){
                 daysActifs.add(7);
             }
-            int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+            int dayOfWeek = heureSysteme.get(Calendar.DAY_OF_WEEK);
             int jourSonnerie = 9;
             for(int jour : daysActifs){
                 //si le jour est ajd
                 if(jour == dayOfWeek){
-                    if (Calendar.getInstance().compareTo(c) > 0){
+                    //si c est apres
+                    if (heureSysteme.compareTo(c) < 0){
                         return c;
                     }
                 }

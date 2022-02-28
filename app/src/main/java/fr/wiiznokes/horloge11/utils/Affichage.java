@@ -159,8 +159,9 @@ public class Affichage extends MainActivity {
     public String tempsRestant(Alarm Alarme){
 
         Calendar dateSonnerie = new Trie().dateProchaineSonnerie(Alarme);
-        Calendar date = Calendar.getInstance();
-        long diffMiliSec = dateSonnerie.getTimeInMillis() - date.getTimeInMillis();
+        long heureSys = System.currentTimeMillis();
+
+        long diffMiliSec = dateSonnerie.getTimeInMillis() - heureSys;
         int jour = 0;
         int heure = 0;
         int minute = 0;
