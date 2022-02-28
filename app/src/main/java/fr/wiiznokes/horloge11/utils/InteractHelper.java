@@ -31,7 +31,7 @@ public class InteractHelper extends MainActivity {
             //enlever l'id de la liste inactive
             ListInactif.remove(Alarme.getId());
             //appeler la fonction ajoute l'id au bonne endroit dans la liste active
-            ListActif = new Trie().ListActifChange(ListActif, Alarme.getId(), MapIdDate);
+            new Trie().ListActifChange(ListActif, Alarme.getId(), MapIdDate);
 
             //si l'alarm devient la première, mise a jour temps restant
             if(ListActif.get(0) == Alarme.getId()){
@@ -44,7 +44,7 @@ public class InteractHelper extends MainActivity {
         else{
             Alarme.setActive(false);
 
-            ListInactif = new Trie().ListInactifChange(ListInactif, Alarme.getId(), MapIdDate);
+            new Trie().ListInactifChange(ListInactif, Alarme.getId(), MapIdDate);
 
             //si l'alarme était la première
             if(ListActif.get(0) == Alarme.getId()){

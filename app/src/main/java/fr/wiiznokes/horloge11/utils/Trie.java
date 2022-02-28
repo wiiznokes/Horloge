@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 public class Trie {
 
     public Map<Integer, Integer> MapIdPos (List<Alarm> Array1){
-        Map<Integer, Integer> MapIdPos = new Hashtable<Integer, Integer>();
+        Map<Integer, Integer> MapIdPos = new Hashtable<>();
         int i = 0;
         for(Alarm Alarm : Array1){
             MapIdPos.put(Alarm.getId(), i);
@@ -22,7 +22,7 @@ public class Trie {
         return MapIdPos;
     }
     public Map<Integer, Calendar> MapIdDate(List<Alarm> Array1){
-        Map<Integer, Calendar> MapIdDate = new Hashtable<Integer, Calendar>();
+        Map<Integer, Calendar> MapIdDate = new Hashtable<>();
         for(Alarm Alarm : Array1){
             MapIdDate.put(Alarm.getId(), dateProchaineSonnerie(Alarm));
         }
@@ -50,7 +50,7 @@ public class Trie {
             return c;
         }
         else{
-            List<Integer>daysActifs = new ArrayList<Integer>();
+            List<Integer>daysActifs = new ArrayList<>();
             if(Alarme.isSunday()){
                 daysActifs.add(1);
             }
@@ -93,81 +93,84 @@ public class Trie {
                     }
                 }
 
+
             }
-            c.add(Calendar.DATE, 7 - dayOfWeek + jourSonnerie);
+            if(jourSonnerie == dayOfWeek){
+                c.add(Calendar.DATE, 7);
+            }
+            if(jourSonnerie > dayOfWeek){
+                c.add(Calendar.DATE, jourSonnerie - dayOfWeek);
+
+            }
+            if(jourSonnerie < dayOfWeek){
+                c.add(Calendar.DATE, dayOfWeek - jourSonnerie);
+            }
             return c;
+
         }
     }
 
 
-    public List<Integer> ListActifInit(List<Alarm> Array1, Map<Integer, Calendar> MapIdDate, Map<Integer, Integer> MapIdPos){
+    public List<Integer> ListActifInit(List<Alarm> Array1, Map<Integer, Calendar> MapIdDate){
 
-        List<Integer> ListActifInit = new ArrayList<Integer>();
-        //boucle sur MapIdDate
-        for(Map.Entry<Integer, Calendar> entry : MapIdDate.entrySet()){
-            Integer id = entry.getKey();
-            //condition pour savoir si l'alarm est active
-            if(Array1.get(MapIdPos.get(id)).isActive()){
-                Calendar dateAlarm = entry.getValue();
-                //si la taille ListActifInit == 0, ajouter la key
-                if (ListActifInit.size() == 0) {
-                    ListActifInit.add(id);
-                } else {
+        List<Integer> ListActifInit = new ArrayList<>();
+
+        for (Alarm Alarme : Array1){
+            if(Alarme.isActive()){
+                Calendar dateAlarm = MapIdDate.get(Alarme.getId());
+                if(ListActifInit.size() == 0){
+                    ListActifInit.add(Alarme.getId());
+                }
+                else{
                     int i = 0;
-                    boolean insertionChek = false;
-                    //parcourir la ListActifInit
-                    for (Integer idListTri : ListActifInit) {
-                        //placer l'id de Map avant l'id de List si
-                        if (dateAlarm.compareTo(MapIdDate.get(idListTri)) < 0) {
-                            ListActifInit.add(i, id);
-                            insertionChek = true;
-                            break;
-
+                    boolean insertionChek = true;
+                    while (i < ListActifInit.size() && insertionChek){
+                        if(dateAlarm.compareTo(MapIdDate.get(ListActifInit.get(i))) > 0){
+                            ListActifInit.add(i, Alarme.getId());
+                            insertionChek = false;
                         }
                         i = i + 1;
                     }
-                    if(!insertionChek){
-                        ListActifInit.add(id);
+                    if(insertionChek) {
+                        ListActifInit.add(Alarme.getId());
                     }
                 }
             }
         }
         return ListActifInit;
     }
-    public List<Integer> ListInactifInit(List<Alarm> Array1, Map<Integer, Calendar> MapIdDate, Map<Integer, Integer> MapIdPos){
 
-        List<Integer> ListInactifInit = new ArrayList<Integer>();
-        //boucle sur MapIdDate
-        for(Map.Entry<Integer, Calendar> entry : MapIdDate.entrySet()){
-            Integer id = entry.getKey();
-            //condition pour savoir si l'alarm est inactive
-            if(!Array1.get(MapIdPos.get(id)).isActive()){
-                Calendar dateAlarm = entry.getValue();
-                //si la taille ListActifInit == 0, ajouter la key
-                if (ListInactifInit.size() == 0) {
-                    ListInactifInit.add(id);
-                } else {
+    public List<Integer> ListInactifInit(List<Alarm> Array1, Map<Integer, Calendar> MapIdDate){
+
+        List<Integer> ListInactifInit = new ArrayList<>();
+
+        for (Alarm Alarme : Array1){
+            if(!Alarme.isActive()){
+                Calendar dateAlarm = MapIdDate.get(Alarme.getId());
+                if(ListInactifInit.size() == 0){
+                    ListInactifInit.add(Alarme.getId());
+                }
+                else{
                     int i = 0;
-                    boolean insertionChek = false;
-                    //parcourir la ListActifInit
-                    for (Integer idListTri : ListInactifInit) {
-                        //placer l'id de Map avant l'id de List si
-                        if (dateAlarm.compareTo(MapIdDate.get(idListTri)) < 0) {
-                            ListInactifInit.add(i, id);
-                            insertionChek = true;
-                            break;
-
+                    boolean insertionChek = true;
+                    while (i < ListInactifInit.size() && insertionChek){
+                        if(dateAlarm.compareTo(MapIdDate.get(ListInactifInit.get(i))) > 0){
+                            ListInactifInit.add(i, Alarme.getId());
+                            insertionChek = false;
                         }
                         i = i + 1;
                     }
-                    if(!insertionChek){
-                        ListInactifInit.add(id);
+                    if(insertionChek) {
+                        ListInactifInit.add(Alarme.getId());
                     }
                 }
             }
         }
         return ListInactifInit;
     }
+
+
+
     public List<Integer> ListSortId(List<Integer> ListActif, List<Integer> ListInactif){
         return Stream.concat(ListActif.stream(), ListInactif.stream()).collect(Collectors.toList());
     }
@@ -179,43 +182,47 @@ public class Trie {
 
 
     //inserer un id au bon endroit dans la ListTrie des alarmes actives
-    public List<Integer> ListActifChange(List<Integer> ListActif, int id, Map<Integer, Calendar> MapIdDate){
+    public void ListActifChange(List<Integer> ListActif, int id, Map<Integer, Calendar> MapIdDate){
         Calendar dateSonnerie = MapIdDate.get(id);
         //condition pour savoir si ListActif est vide
         if(ListActif.size() == 0){
             ListActif.add(id);
-            return ListActif;
         }
         else{
             int i = 0;
-            for(int idListActif : ListActif){
-                if(MapIdDate.get(idListActif).compareTo(dateSonnerie) > 0){
+            boolean insertionChek = true;
+            while (i < ListActif.size() && insertionChek){
+                if(dateSonnerie.compareTo(MapIdDate.get(ListActif.get(i))) > 0){
                     ListActif.add(i, id);
-                    return ListActif;
+                    insertionChek = false;
                 }
+                i = i + 1;
             }
-            ListActif.add(id);
-            return ListActif;
+            if(insertionChek) {
+                ListActif.add(id);
+            }
         }
     }
     //inserer un id au bon endroit dans la ListTrie des alarmes Inactives
-    public List<Integer> ListInactifChange(List<Integer> ListInactif, int id, Map<Integer, Calendar> MapIdDate){
+    public void ListInactifChange(List<Integer> ListInactif, int id, Map<Integer, Calendar> MapIdDate){
         Calendar dateSonnerie = MapIdDate.get(id);
         //condition pour savoir si ListInactif est vide
         if(ListInactif.size() == 0){
             ListInactif.add(id);
-            return ListInactif;
         }
         else{
             int i = 0;
-            for(int idListActif : ListInactif){
-                if(MapIdDate.get(idListActif).compareTo(dateSonnerie) > 0){
+            boolean insertionChek = true;
+            while (i < ListInactif.size() && insertionChek){
+                if(dateSonnerie.compareTo(MapIdDate.get(ListInactif.get(i))) > 0){
                     ListInactif.add(i, id);
-                    return ListInactif;
+                    insertionChek = false;
                 }
+                i = i + 1;
             }
-            ListInactif.add(id);
-            return ListInactif;
+            if(insertionChek) {
+                ListInactif.add(id);
+            }
         }
     }
 

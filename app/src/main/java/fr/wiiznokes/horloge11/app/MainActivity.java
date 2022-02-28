@@ -126,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
         //creation du fichier si il n'existe pas avec un tableau vide
         if(new StorageUtils().read(this)== null){
 
@@ -136,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
 
         //creation de tous les objets
         init();
+
+
 
 
 
@@ -164,13 +168,16 @@ public class MainActivity extends AppCompatActivity {
 
         //boucle qui recuperer les views des switchs
         for(SwitchMaterial switchView : switchsView){
-            
+
             switchView.setOnClickListener(v -> {
                 new InteractHelper().switchHelper(switchView, Array1, MapIdPos, MapIdDate,
                         ListActif, ListInactif, ListSortId,
                         findViewById(R.id.textView4), findViewById(R.id.linearLayout1), findViewById(R.id.textView2));
                 //ecriture du fichier
                 new StorageUtils().write(Array1, MainActivity.this);
+
+                System.out.println("hellà");
+                System.out.println(Array1.get(MapIdPos.get(switchView.getId())).isActive());
 
             });
             }
@@ -239,8 +246,8 @@ public class MainActivity extends AppCompatActivity {
         Array1 = new StorageUtils().read(this);
         MapIdPos = new Trie().MapIdPos(Array1);
         MapIdDate = new Trie().MapIdDate(Array1);
-        ListActif = new Trie().ListActifInit(Array1, MapIdDate, MapIdPos);
-        ListInactif = new Trie().ListInactifInit(Array1, MapIdDate, MapIdPos);
+        ListActif = new Trie().ListActifInit(Array1, MapIdDate);
+        ListInactif = new Trie().ListInactifInit(Array1, MapIdDate);
         ListSortId = new Trie().ListSortId(ListActif, ListInactif);
     }
 
