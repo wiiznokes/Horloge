@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageButton addAlarm;
     private EditText addAlarmText;
-    private final static int ADD_ACTIVITY_CALL_ID = 10;
 
     //liste object Alarm
     private List<Alarm> Array1;

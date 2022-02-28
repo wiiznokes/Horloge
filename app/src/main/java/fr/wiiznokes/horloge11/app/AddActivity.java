@@ -165,143 +165,113 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
-        monday = (RadioButton) findViewById(R.id.radioButton);
+        monday = findViewById(R.id.radioButton);
         monday.setChecked(false);
-        monday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mondayState = !mondayState;
-                monday.setChecked(mondayState);
-            }
+        monday.setOnClickListener(v -> {
+            mondayState = !mondayState;
+            monday.setChecked(mondayState);
         });
 
-        tuesday = (RadioButton) findViewById(R.id.radioButton2);
+        tuesday = findViewById(R.id.radioButton2);
         tuesday.setChecked(false);
-        tuesday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tuesdayState = !tuesdayState;
-                tuesday.setChecked(tuesdayState);
-            }
+        tuesday.setOnClickListener(v -> {
+            tuesdayState = !tuesdayState;
+            tuesday.setChecked(tuesdayState);
         });
 
-        wednesday = (RadioButton) findViewById(R.id.radioButton3);
+        wednesday = findViewById(R.id.radioButton3);
         wednesday.setChecked(false);
-        wednesday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                wednesdayState = !wednesdayState;
-                wednesday.setChecked(wednesdayState);
-            }
+        wednesday.setOnClickListener(v -> {
+            wednesdayState = !wednesdayState;
+            wednesday.setChecked(wednesdayState);
         });
 
-        thursday = (RadioButton) findViewById(R.id.radioButton4);
+        thursday = findViewById(R.id.radioButton4);
         thursday.setChecked(false);
-        thursday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                thursdayState = !thursdayState;
-                thursday.setChecked(thursdayState);
-            }
+        thursday.setOnClickListener(v -> {
+            thursdayState = !thursdayState;
+            thursday.setChecked(thursdayState);
         });
 
-        friday = (RadioButton) findViewById(R.id.radioButton5);
+        friday = findViewById(R.id.radioButton5);
         friday.setChecked(false);
-        friday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fridayState = !fridayState;
-                friday.setChecked(fridayState);
-            }
+        friday.setOnClickListener(v -> {
+            fridayState = !fridayState;
+            friday.setChecked(fridayState);
         });
 
-        saturday = (RadioButton) findViewById(R.id.radioButton6);
+        saturday = findViewById(R.id.radioButton6);
         saturday.setChecked(false);
-        saturday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saturdayState = !saturdayState;
-                saturday.setChecked(saturdayState);
-            }
+        saturday.setOnClickListener(v -> {
+            saturdayState = !saturdayState;
+            saturday.setChecked(saturdayState);
         });
 
-        sunday = (RadioButton) findViewById(R.id.radioButton7);
+        sunday = findViewById(R.id.radioButton7);
         sunday.setChecked(false);
-        sunday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sundayState = !sundayState;
-                sunday.setChecked(sundayState);
-            }
+        sunday.setOnClickListener(v -> {
+            sundayState = !sundayState;
+            sunday.setChecked(sundayState);
         });
 
-        this.sonnerieName = (EditText) findViewById(R.id.editText29);
-        save = (ImageButton) findViewById(R.id.floatingActionButton);
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        this.sonnerieName = findViewById(R.id.editText29);
+        save = findViewById(R.id.floatingActionButton);
+        save.setOnClickListener(v -> {
 
-                //si l'alarm a un nom et une date
-                if(alarmName.length() != 0 && alarmHours.length() == 5) {
+            //si l'alarm a un nom et une date
+            if(alarmName.length() != 0 && alarmHours.length() == 5) {
 
-                    //creation de l'object alarm
-                    Alarm Alarm1 = new Alarm();
+                //creation de l'object alarm
+                Alarm Alarm1 = new Alarm();
 
-                    Alarm1.setNameAlarm(alarmName.getText().toString());
+                Alarm1.setNameAlarm(alarmName.getText().toString());
 
-                    Alarm1.setActive(true);
+                Alarm1.setActive(true);
 
-                    Alarm1.setHoursText(alarmHours.getText().toString());
-                    Alarm1.setHours(Integer.parseInt(alarmHours.getText().toString().substring(0, 2)));
-                    Alarm1.setMinute(Integer.parseInt(alarmHours.getText().toString().substring(3, 5)));
+                Alarm1.setHoursText(alarmHours.getText().toString());
+                Alarm1.setHours(Integer.parseInt(alarmHours.getText().toString().substring(0, 2)));
+                Alarm1.setMinute(Integer.parseInt(alarmHours.getText().toString().substring(3, 5)));
 
-                    if (mondayState || tuesdayState || wednesdayState || thursdayState || fridayState || saturdayState || sundayState) {
-                        Alarm1.setMonday(mondayState);
-                        Alarm1.setTuesday(tuesdayState);
-                        Alarm1.setWednesday(wednesdayState);
-                        Alarm1.setThursday(thursdayState);
-                        Alarm1.setFriday(fridayState);
-                        Alarm1.setSaturday(saturdayState);
-                        Alarm1.setSunday(sundayState);
-                        Alarm1.setWeek(false);
-                    } else {
-                        Alarm1.setMonday(mondayState);
-                        Alarm1.setTuesday(tuesdayState);
-                        Alarm1.setWednesday(wednesdayState);
-                        Alarm1.setThursday(thursdayState);
-                        Alarm1.setFriday(fridayState);
-                        Alarm1.setSaturday(saturdayState);
-                        Alarm1.setSunday(sundayState);
-                        Alarm1.setWeek(true);
-                    }
-
-                    Alarm1.setSonnerie(sonnerieName.getText().toString());
-
-                    //set de l'id de l'alarm
-                    //verif si le fichier existe et sinon le crée avec un int=0
-                    int numberOfId = new StorageUtils().readAndIncId(AddActivity.this);
-                    if (numberOfId == -1){
-                        new StorageUtils().incId(0, AddActivity.this);
-                        Alarm1.setId(0);
-                    }
-                    else{
-                        Alarm1.setId(numberOfId);
-                    }
-
-
-                    //lecture du fichier de sauvegarde
-                    Array1 = new StorageUtils().read(AddActivity.this);
-
-
-                    //ajout de l'objet Alarm à la list
-                    Array1.add(Alarm1);
-                    //ecriture sur le fichier de sauvegarde
-                    new StorageUtils().write(Array1, AddActivity.this);
-                    setResult(0);
-                    finish();
-
-
+                if ((mondayState && tuesdayState && wednesdayState && thursdayState && fridayState && saturdayState && sundayState) ||
+                        (!mondayState && !tuesdayState && !wednesdayState && !thursdayState && !fridayState && !saturdayState && !sundayState)){
+                    Alarm1.setWeek(true);
+                } else {
+                    Alarm1.setMonday(mondayState);
+                    Alarm1.setTuesday(tuesdayState);
+                    Alarm1.setWednesday(wednesdayState);
+                    Alarm1.setThursday(thursdayState);
+                    Alarm1.setFriday(fridayState);
+                    Alarm1.setSaturday(saturdayState);
+                    Alarm1.setSunday(sundayState);
+                    Alarm1.setWeek(false);
                 }
+
+                Alarm1.setSonnerie(sonnerieName.getText().toString());
+
+                //set de l'id de l'alarm
+                //verif si le fichier existe et sinon le crée avec un int=0
+                int numberOfId = new StorageUtils().readAndIncId(AddActivity.this);
+                if (numberOfId == -1){
+                    new StorageUtils().incId(0, AddActivity.this);
+                    Alarm1.setId(0);
+                }
+                else{
+                    Alarm1.setId(numberOfId);
+                }
+
+
+                //lecture du fichier de sauvegarde
+                Array1 = new StorageUtils().read(AddActivity.this);
+
+
+                //ajout de l'objet Alarm à la list
+                Array1.add(Alarm1);
+                //ecriture sur le fichier de sauvegarde
+                new StorageUtils().write(Array1, AddActivity.this);
+                setResult(0);
+                finish();
+
+
             }
         });
 
