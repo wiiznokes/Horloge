@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.google.android.material.switchmaterial.SwitchMaterial;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -26,7 +28,7 @@ public class Affichage extends MainActivity {
     public List<List> afficheAlarmesInit(List<Alarm> Array1, List<Integer> ListSortId, Map<Integer, Integer> MapIdPos, Context context, LinearLayout linearLayout){
 
         //creation list pour les view des switchs
-        List<Switch> switchsView = new ArrayList<>();
+        List<SwitchMaterial> switchsView = new ArrayList<>();
 
 
         for (int id : ListSortId){
@@ -34,7 +36,7 @@ public class Affichage extends MainActivity {
             ConstraintLayout constraintLayout = newConstaintLayout(id, Alarme, context);
 
             //ajout de switch a la liste des views
-            switchsView.add(((Switch) constraintLayout.getChildAt(2)));
+            switchsView.add(((SwitchMaterial) constraintLayout.getChildAt(2)));
 
             //ajout constraint layout au linear layout
             linearLayout.addView(constraintLayout);
@@ -69,7 +71,7 @@ public class Affichage extends MainActivity {
         textView2.setId(View.generateViewId());
 
         //création switch
-        Switch switch2 = new Switch(context);
+        SwitchMaterial switch2 = new SwitchMaterial(context);
         switch2.setText("");
         switch2.setChecked(Alarme.isActive());
         switch2.setId(id);
@@ -155,7 +157,7 @@ public class Affichage extends MainActivity {
     }
 
     public String tempsRestant(Alarm Alarme){
-        String tempsRestant = "Temps restant : ";
+
         Calendar dateSonnerie = new Trie().dateProchaineSonnerie(Alarme);
         Calendar date = Calendar.getInstance();
         long diffMiliSec = dateSonnerie.getTimeInMillis() - date.getTimeInMillis();
@@ -177,61 +179,56 @@ public class Affichage extends MainActivity {
             diffMiliSec = diffMiliSec - minuteEnMili;
             minute = minute +1;
         }
+
+        String tempsRestant;
         if(jour > 0){
             if(jour == 1) {
-                tempsRestant = tempsRestant+ "1 jour et ";
                 if(heure == 1 || heure == 0){
-                    tempsRestant = tempsRestant + Integer.toString(heure) + "heure";
+                    tempsRestant = "Temps restant : " + jour + " jour et " + heure + "heure";
                 }
                 else{
-                    tempsRestant = tempsRestant + Integer.toString(heure) + "heures";
+                    tempsRestant = "Temps restant : " + jour + " jour et " + heure + "heures";
                 }
-                return tempsRestant;
             }
             else{
-                tempsRestant = Integer.toString(jour) + " jours";
-                return tempsRestant;
+                tempsRestant = "Temps restant : " + jour + " jours";
             }
         }
+        //jour == 0
         else {
             if(heure > 0){
                 if(heure == 1){
-                    tempsRestant = tempsRestant + "1 heure et ";
                     if(minute == 1 || minute == 0){
-                        tempsRestant = tempsRestant + Integer.toString(minute) + "minute";
+                        tempsRestant = "Temps restant : " + heure + " heure et " + minute + "minute";
                     }
                     else{
-                        tempsRestant = tempsRestant + Integer.toString(minute) + "minutes";
+                        tempsRestant = "Temps restant : " + heure + " heure et " + minute + "minutes";
                     }
-                    return tempsRestant;
                 }
                 else{
-                    tempsRestant = Integer.toString(heure) + " heures et ";
                     if(minute == 1 || minute == 0){
-                        tempsRestant = tempsRestant + Integer.toString(minute) + " minute";
+                        tempsRestant = "Temps restant : " + heure + " heures et " + minute + "minute";
                     }
                     else{
-                        tempsRestant = tempsRestant + Integer.toString(minute) + " minutes";
+                        tempsRestant = "Temps restant : " + heure + " heures et " + minute + "minutes";
                     }
-                    return tempsRestant;
 
                 }
             }
+            //heure == 0
             else{
                 if(minute == 0){
-                    tempsRestant = tempsRestant + "Moins d'une minute";
-                    return tempsRestant;
+                    tempsRestant = "Temps restant : Moins d'une minute";
                 }
-                if(minute == 1){
-                    tempsRestant = tempsRestant + "1 minute";
-                    return tempsRestant;
+                else if(minute == 1){
+                    tempsRestant = "Temps restant : " + minute + " minute";
                 }
                 else{
-                    tempsRestant = tempsRestant + Integer.toString(minute) + " minutes";
-                    return tempsRestant;
+                    tempsRestant = "Temps restant : " + minute + " minutes";
                 }
             }
         }
+        return tempsRestant;
 
     }
 

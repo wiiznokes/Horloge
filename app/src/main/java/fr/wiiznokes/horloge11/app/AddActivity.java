@@ -71,12 +71,9 @@ public class AddActivity extends AppCompatActivity {
 
         //bouton retour
         this.boutonRetour = findViewById(R.id.imageButton4);
-        boutonRetour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(11);
-                finish();
-            }
+        boutonRetour.setOnClickListener(v -> {
+            setResult(11);
+            finish();
         });
 
         //nom de l'alarme

@@ -23,6 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.android.material.switchmaterial.SwitchMaterial;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -79,17 +81,28 @@ public class MainActivity extends AppCompatActivity {
                         MapIdPos = new Trie().MapIdPos(Array1);
                         MapIdDate = new Trie().MapIdDate(Array1);
 
-                        Alarm Alarm = Array1.get(Array1.size() - 1);
-                        ListActif = new Trie().ListActifChange(ListActif, Alarm.getId(), MapIdDate);
+                        Alarm Alarme = Array1.get(Array1.size() - 1);
+                        ListActif = new Trie().ListActifChange(ListActif, Alarme.getId(), MapIdDate);
                         ListSortId = new Trie().ListSortId(ListActif, ListInactif);
+
                         //maj affichage
-                        ConstraintLayout constraintLayout = new Affichage().newConstaintLayout(Alarm.getId(), Alarm, MainActivity.this);
-                        ((LinearLayout) findViewById(R.id.linearLayout1)).addView(constraintLayout, ListSortId.indexOf(Alarm.getId()));
+                        ConstraintLayout constraintLayout = new Affichage().newConstaintLayout(Alarme.getId(), Alarme, MainActivity.this);
+                        ((LinearLayout) findViewById(R.id.linearLayout1)).addView(constraintLayout, ListSortId.indexOf(Alarme.getId()));
 
                         //switch view
-                        new InteractHelper().switchHelper(((Switch) constraintLayout.getChildAt(2)), Array1, MapIdPos, MapIdDate,
-                                ListActif, ListInactif, ListSortId,
-                                findViewById(R.id.textView4), findViewById(R.id.linearLayout1), findViewById(R.id.textView2));
+                        SwitchMaterial switchView = (SwitchMaterial) constraintLayout.getChildAt(2);
+                        switchView.setOnClickListener(v -> {
+
+                            System.out.println("Hellà");
+                            System.out.println(ListActif.size());
+
+                            new InteractHelper().switchHelper(switchView, Array1, MapIdPos, MapIdDate,
+                                    ListActif, ListInactif, ListSortId,
+                                    findViewById(R.id.textView4), findViewById(R.id.linearLayout1), findViewById(R.id.textView2));
+
+                            System.out.println(ListActif.size());
+                        });
+
 
                         //maj nb alarmes actives
                         TextView alarmeActive = findViewById(R.id.textView2);
@@ -103,9 +116,6 @@ public class MainActivity extends AppCompatActivity {
                         else{
                             ((TextView) findViewById(R.id.textView4)).setText(R.string.tempsRestant0alarm);
                         }
-
-
-
 
                     }
                     //bouton retour addActivity
@@ -152,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //recuperation de la liste des views des switchs
-        List<Switch> switchsView = ListViews.get(0);
+        List<SwitchMaterial> switchsView = ListViews.get(0);
 
         //affichage du nombre d'alarmes actives
         TextView alarmeActive = findViewById(R.id.textView2);
@@ -170,19 +180,22 @@ public class MainActivity extends AppCompatActivity {
 
         //boucle qui recuperer les views des switchs
 
-        for(Switch switchView : switchsView){
-                switchView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        for(SwitchMaterial switchView : switchsView){
 
-                        new InteractHelper().switchHelper(switchView, Array1, MapIdPos, MapIdDate,
-                                ListActif, ListInactif, ListSortId,
-                                findViewById(R.id.textView4), findViewById(R.id.linearLayout1), findViewById(R.id.textView2));
 
-                    }
-                });
+            switchView.setOnClickListener(v -> {
 
+                System.out.println("Hellà");
+                System.out.println(ListActif.size());
+
+                new InteractHelper().switchHelper(switchView, Array1, MapIdPos, MapIdDate,
+                        ListActif, ListInactif, ListSortId,
+                        findViewById(R.id.textView4), findViewById(R.id.linearLayout1), findViewById(R.id.textView2));
+
+                System.out.println(ListActif.size());
+            });
             }
+
 
 
 

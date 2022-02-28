@@ -57,7 +57,7 @@ public class StorageUtils {
             incId(numberOfId, context);
             return numberOfId;
         } catch (Exception e) {
-            System.out.println("erreur dans la lecture");
+            //fichier Id introuvable
             return -1;
         }
 
@@ -71,7 +71,7 @@ public class StorageUtils {
             out.close();
             output.close();
         } catch (Exception e) {
-            System.out.println("erreur dans l'écriture");
+            System.out.println("erreur dans l'écriture de IntId");
         }
 
     }

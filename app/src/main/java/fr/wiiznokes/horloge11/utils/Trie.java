@@ -31,17 +31,17 @@ public class Trie {
 
 
     public Calendar dateProchaineSonnerie(Alarm Alarme){
-        int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, Alarme.getHours());
+        c.set(Calendar.MINUTE, Alarme.getMinute());
+        c.set(Calendar.SECOND, 0);
+
         if (Alarme.isWeek()){
-            Calendar c = Calendar.getInstance();
-            c.set(Calendar.HOUR_OF_DAY, Alarme.getHours());
-            c.set(Calendar.MINUTE, Alarme.getMinute());
-            c.set(Calendar.SECOND, 0);
             if(Calendar.getInstance().compareTo(c) < 0){
+                c.add(Calendar.DATE, 1);
                 return c;
             }
             else {
-                c.add(Calendar.DATE, 1);
                 return c;
             }
         }
@@ -68,39 +68,30 @@ public class Trie {
             if(Alarme.isSaturday()){
                 daysActifs.add(7);
             }
+            int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
             int jourSonnerie = 9;
             for(int jour : daysActifs){
+                //si le jour est ajd
                 if(jour == dayOfWeek){
-                    Calendar c = Calendar.getInstance();
-                    c.set(Calendar.HOUR_OF_DAY, Alarme.getHours());
-                    c.set(Calendar.MINUTE, Alarme.getMinute());
-                    c.set(Calendar.SECOND, 0);
-                    if (Calendar.getInstance().compareTo(c) < 0){
+                    if (Calendar.getInstance().compareTo(c) > 0){
                         return c;
                     }
                 }
-                if(jour > dayOfWeek && jour < jourSonnerie){
+                else if(jour > dayOfWeek && jour < jourSonnerie){
                     jourSonnerie = jour;
                 }
             }
             if(jourSonnerie == 9){
                 for(int jour : daysActifs){
-                    if(jour < dayOfWeek && jour < jourSonnerie){
+                    if(jour <= dayOfWeek && jour < jourSonnerie){
                         jourSonnerie = jour;
                     }
                 }
 
             }
-            Calendar c = Calendar.getInstance();
-            c.set(Calendar.HOUR_OF_DAY, Alarme.getHours());
-            c.set(Calendar.MINUTE, Alarme.getMinute());
-            c.set(Calendar.SECOND, 0);
             c.add(Calendar.DATE, 7 - dayOfWeek + jourSonnerie);
-
             return c;
-
         }
-
     }
 
 
