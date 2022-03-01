@@ -246,8 +246,8 @@ public class AddActivity extends AppCompatActivity {
                 Alarm1.setSonnerie(sonnerieName.getText().toString());
 
                 //set de l'id de l'alarm
-                //verif si le fichier existe et sinon le crée avec un int=0
                 int numberOfId = new StorageUtils().readAndIncId(AddActivity.this);
+                //verif si le fichier existe et sinon le crée avec un int=0
                 if (numberOfId == -1){
                     new StorageUtils().incId(0, AddActivity.this);
                     Alarm1.setId(0);

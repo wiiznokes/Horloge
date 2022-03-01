@@ -3,23 +3,18 @@ package fr.wiiznokes.horloge11.utils;
 import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Dictionary;
 import java.util.List;
 import java.util.Map;
 
-import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.app.MainActivity;
 
 public class Affichage extends MainActivity {
@@ -33,7 +28,7 @@ public class Affichage extends MainActivity {
 
         for (int id : ListSortId){
             Alarm Alarme = Array1.get(MapIdPos.get(id));
-            ConstraintLayout constraintLayout = newConstaintLayout(id, Alarme, context);
+            ConstraintLayout constraintLayout = newConstaintLayout(Alarme, context);
 
             //ajout de switch a la liste des views
             switchsView.add(((SwitchMaterial) constraintLayout.getChildAt(2)));
@@ -51,7 +46,7 @@ public class Affichage extends MainActivity {
     }
 
 
-    public ConstraintLayout newConstaintLayout(int id, Alarm Alarme, Context context){
+    public ConstraintLayout newConstaintLayout(Alarm Alarme, Context context){
 
         //création du constraint Layout
         ConstraintLayout constraintLayout = new ConstraintLayout(context);
@@ -74,7 +69,7 @@ public class Affichage extends MainActivity {
         SwitchMaterial switch2 = new SwitchMaterial(context);
         switch2.setText("");
         switch2.setChecked(Alarme.isActive());
-        switch2.setId(id);
+        switch2.setId(Alarme.getId());
 
 
         //création jour alarme

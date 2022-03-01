@@ -21,7 +21,7 @@ public class InteractHelper extends MainActivity {
     public void switchHelper(SwitchMaterial switchView, List<Alarm> Array1,
                              Map<Integer, Integer> MapIdPos, Map<Integer, Calendar> MapIdDate,
                              List<Integer> ListActif, List<Integer> ListInactif, List<Integer> ListSortId,
-                             TextView textview4, LinearLayout linearLayout1, TextView textView2){
+                             TextView textViewTempsRestant, LinearLayout linearLayout1, TextView textViewAlarmeActive){
 
         Alarm Alarme = Array1.get(MapIdPos.get(switchView.getId()));
 
@@ -35,7 +35,7 @@ public class InteractHelper extends MainActivity {
 
             //si l'alarm devient la première, mise a jour temps restant
             if(ListActif.get(0) == Alarme.getId()){
-                textview4.setText(new Affichage().tempsRestant(Alarme));
+                textViewTempsRestant.setText(new Affichage().tempsRestant(Alarme));
             }
 
 
@@ -49,10 +49,10 @@ public class InteractHelper extends MainActivity {
             //si l'alarme était la première
             if(ListActif.get(0) == Alarme.getId()){
                 try{
-                    textview4.setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(1)))));
+                    textViewTempsRestant.setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(1)))));
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException){
-                    textview4.setText(R.string.tempsRestant0alarm);
+                    textViewTempsRestant.setText(R.string.tempsRestant0alarm);
                 }
             }
             ListActif.remove((Object) Alarme.getId());
@@ -68,12 +68,13 @@ public class InteractHelper extends MainActivity {
         if(ListSortId.indexOf(Alarme.getId()) != indexOfPosBefore) {
             ConstraintLayout constraintLayout = ((ConstraintLayout) (linearLayout1.getChildAt(indexOfPosBefore)));
             //maj de l'affichage
-            linearLayout1.removeView(constraintLayout);
-            linearLayout1.addView(constraintLayout, ListSortId.indexOf(Alarme.getId()));
+            //linearLayout1.removeView(constraintLayout);
+            //linearLayout1.addView(constraintLayout, ListSortId.indexOf(Alarme.getId()));
+
         }
 
         //affichage du nombre d'alarmes actives
-        textView2.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
+        textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
 
 
         //ajout Alarm modifié a la liste
