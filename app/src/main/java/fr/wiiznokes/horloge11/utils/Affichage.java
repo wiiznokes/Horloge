@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.app.MainActivity;
 
 public class Affichage extends MainActivity {
@@ -143,10 +144,10 @@ public class Affichage extends MainActivity {
     public String NombreAlarmsActives (int numberAlarmsActives){
         String phrase;
         if (numberAlarmsActives == 0 || numberAlarmsActives == 1){
-            phrase = "Nombre d'alarme active : " + numberAlarmsActives;
+            phrase = "Alarme active : " + numberAlarmsActives;
         }
         else{
-            phrase = "Nombre d'alarmes actives : " + numberAlarmsActives;
+            phrase = "Alarmes actives : " + numberAlarmsActives;
         }
         return phrase;
     }
