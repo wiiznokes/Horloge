@@ -1,22 +1,15 @@
 package fr.wiiznokes.horloge11.app;
 
 import android.annotation.SuppressLint;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.List;
 
 import fr.wiiznokes.horloge11.R;

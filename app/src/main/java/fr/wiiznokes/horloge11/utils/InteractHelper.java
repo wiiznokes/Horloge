@@ -1,7 +1,6 @@
 package fr.wiiznokes.horloge11.utils;
 
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
-import fr.wiiznokes.horloge11.app.MainActivity;
 
 public class InteractHelper {
 
