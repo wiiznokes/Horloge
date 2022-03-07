@@ -83,58 +83,35 @@ public class MainActivity extends AppCompatActivity {
                     if(result.getResultCode() == 0){
 
                         addAlarmText.setVisibility(View.INVISIBLE);
-                        //lecture du fichier
+
+                        //creation de tous les objets
                         init();
 
-
+                        //recuperation de l'objet Alarm
                         Alarm Alarme = Array1.get(Array1.size() - 1);
 
-
-                        //maj affichage
+                        //creation de l'affichage de l'alarme
                         ConstraintLayout constraintLayout = new Affichage().newConstaintLayout(Alarme, MainActivity.this);
-                        linearLayout1.removeAllViews();
-                        //affichage des alarmes crées
-                        List<List> ListViews = new Affichage().afficheAlarmesInit(Array1, ListSortId, MapIdPos, MainActivity.this, linearLayout1);
 
-                        //recuperation de la liste des views des switchs
-                        List<SwitchMaterial> switchsView = ListViews.get(0);
+                        //ajout de l'affichage de l'alarme
+                        linearLayout1.addView(constraintLayout, ListSortId.indexOf(Alarme.getId()));
 
-                        //boucle qui recuperer les views des switchs
-                        for(SwitchMaterial switchView : switchsView){
-                            switchView.setOnClickListener(v -> {
-                                new InteractHelper().switchHelper(switchView, Array1, MapIdPos, MapIdDate,
-                                        ListActif, ListInactif, ListSortId,
-                                        textViewTempsRestant, linearLayout1, textViewAlarmeActive);
-                                //ecriture du fichier
-                                new StorageUtils().write(Array1, MainActivity.this);
-
-                                System.out.println("hellà");
-                                System.out.println(Array1.get(MapIdPos.get(switchView.getId())).isActive());
-
-                            });
-                        }
-                        /*linearLayout1.addView(constraintLayout, ListSortId.indexOf(Alarme.getId()));
-
-                        //switch view
+                        //recuperation du switch
                         SwitchMaterial switchView = (SwitchMaterial) constraintLayout.getChildAt(2);
                         switchView.setOnClickListener(v -> {
-
                             new InteractHelper().switchHelper(switchView, Array1, MapIdPos, MapIdDate,
                                     ListActif, ListInactif, ListSortId,
                                     textViewTempsRestant, linearLayout1, textViewAlarmeActive);
                             //ecriture du fichier
                             new StorageUtils().write(Array1, MainActivity.this);
-                        });
-                        */
 
+                        });
 
                         //maj nb alarmes actives
                         textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
 
                         //maj temps restant
                         textViewTempsRestant.setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(0)))));
-
-
 
                     }
                     //bouton retour addActivity
@@ -169,15 +146,12 @@ public class MainActivity extends AppCompatActivity {
             //ecriture
             new StorageUtils().write(ArrayInit, this);
         }
+
+
         //creation de tous les objets
         init();
-
-        test(Array1);
-
-
         //affichage du nombre d'alarmes actives
         textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
-
         //affichage du temps restant
         if(ListActif.size() > 0){
             textViewTempsRestant.setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(0)))));
@@ -185,10 +159,8 @@ public class MainActivity extends AppCompatActivity {
         else{
             textViewTempsRestant.setText(R.string.tempsRestant0alarm);
         }
-
         //affichage des alarmes crées
         List<List> ListViews = new Affichage().afficheAlarmesInit(Array1, ListSortId, MapIdPos, this, linearLayout1);
-
         //recuperation de la liste des views des switchs
         List<SwitchMaterial> switchsView = ListViews.get(0);
 
@@ -200,10 +172,6 @@ public class MainActivity extends AppCompatActivity {
                         textViewTempsRestant, linearLayout1, textViewAlarmeActive);
                 //ecriture du fichier
                 new StorageUtils().write(Array1, MainActivity.this);
-
-                System.out.println("hellà");
-                test(Array1);
-
             });
         }
 
@@ -297,9 +265,29 @@ public class MainActivity extends AppCompatActivity {
     private void test(List<Alarm> Array1){
 
         for(Alarm alarm : Array1){
-            System.out.println(alarm.getHoursText());
-            System.out.println(alarm.isActive());
+            System.out.println("L'alarme d'ID " + alarm.getId() + " : " + alarm.getHoursText());
+            System.out.println("Active : " + alarm.isActive());
         }
+        System.out.println("\n");
+    }
+
+    private void testActif(List<Integer> ListActif){
+        System.out.println("La taille de ListActif est de " + ListActif.size());
+        for(Integer i : ListActif){
+            System.out.println(i);
+        }
+        System.out.println("\n");
+    }
+    private void testInactif(List<Integer> ListInactif){
+        System.out.println("La taille de ListInactif est de " + ListInactif.size());
+        for(Integer i : ListInactif){
+            System.out.println(i);
+        }
+        System.out.println("\n");
+    }
+
+    private void testMapIdPos(Map<Integer, Integer> MapIdPos){
+        System.out.println("MapIdPos :");
     }
 
 

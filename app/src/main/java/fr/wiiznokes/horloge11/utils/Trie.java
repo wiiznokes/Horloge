@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -14,15 +15,16 @@ import java.util.stream.Stream;
 public class Trie {
 
     public Map<Integer, Integer> MapIdPos (List<Alarm> Array1){
-        Map<Integer, Integer> MapIdPos = new Hashtable<>();
+        Map<Integer, Integer> MapIdPos = new HashMap<>();
         int i = 0;
         for(Alarm Alarm : Array1){
             MapIdPos.put(Alarm.getId(), i);
+            i = i + 1;
         }
         return MapIdPos;
     }
     public Map<Integer, Calendar> MapIdDate(List<Alarm> Array1){
-        Map<Integer, Calendar> MapIdDate = new Hashtable<>();
+        Map<Integer, Calendar> MapIdDate = new HashMap<>();
         for(Alarm Alarm : Array1){
             MapIdDate.put(Alarm.getId(), dateProchaineSonnerie(Alarm));
         }

@@ -15,7 +15,7 @@ import java.util.Map;
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.app.MainActivity;
 
-public class InteractHelper extends MainActivity {
+public class InteractHelper {
 
 
     public void switchHelper(SwitchMaterial switchView, List<Alarm> Array1,
@@ -25,11 +25,12 @@ public class InteractHelper extends MainActivity {
 
         Alarm Alarme = Array1.get(MapIdPos.get(switchView.getId()));
 
+
         //cas du switch qui devient actif
         if(switchView.isChecked()){
             Alarme.setActive(true);
             //enlever l'id de la liste inactive
-            ListInactif.remove(Alarme.getId());
+            ListInactif.remove((Object) Alarme.getId());
             //appeler la fonction ajoute l'id au bonne endroit dans la liste active
             new Trie().ListActifChange(ListActif, Alarme.getId(), MapIdDate);
 
