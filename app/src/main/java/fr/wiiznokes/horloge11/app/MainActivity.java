@@ -172,6 +172,8 @@ public class MainActivity extends AppCompatActivity {
         //creation de tous les objets
         init();
 
+        test(Array1);
+
 
         //affichage du nombre d'alarmes actives
         textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
@@ -200,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 new StorageUtils().write(Array1, MainActivity.this);
 
                 System.out.println("hellà");
-                System.out.println(Array1.get(MapIdPos.get(switchView.getId())).isActive());
+                test(Array1);
 
             });
         }
@@ -290,6 +292,14 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         alarmManager.cancel(pendingIntent);
+    }
+
+    private void test(List<Alarm> Array1){
+
+        for(Alarm alarm : Array1){
+            System.out.println(alarm.getHoursText());
+            System.out.println(alarm.isActive());
+        }
     }
 
 
