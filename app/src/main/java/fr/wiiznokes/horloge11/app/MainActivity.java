@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                         linearLayout1.addView(constraintLayout, ListSortId.indexOf(Alarme.getId()));
 
                         //switch
-                        SwitchMaterial switchView = (SwitchMaterial) constraintLayout.getChildAt(2);
+                        SwitchMaterial switchView = (SwitchMaterial) constraintLayout.getChildAt(1);
                         switchView.setOnClickListener(v -> {
                             new InteractHelper().switchHelper(switchView, Array1, MapIdPos, MapIdDate,
                                     ListActif, ListInactif, ListSortId,
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint({"ClickableViewAccessibility", "ResourceType"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,7 +195,12 @@ public class MainActivity extends AppCompatActivity {
         for (ConstraintLayout constraintLayout : constraintLayoutViews){
             //suppression alarm
             constraintLayout.setOnLongClickListener(v -> {
+
                 AlertDialog.Builder popUp = new AlertDialog.Builder(MainActivity.this);
+
+                //test
+                popUp.setMessage(Array1.get(MapIdPos.get(constraintLayout.getId()-10000)).getNameAlarm());
+
                 popUp.setNegativeButton("EFFACER", (dialog, which) -> {
                     Toast.makeText(MainActivity.this, "effacé", Toast.LENGTH_SHORT).show();
                     new InteractHelper().effacer(constraintLayout, Array1, MapIdPos, MapIdDate,

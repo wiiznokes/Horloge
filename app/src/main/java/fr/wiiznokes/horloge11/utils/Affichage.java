@@ -32,7 +32,7 @@ public class Affichage extends MainActivity {
             ConstraintLayout constraintLayout = newConstaintLayout(Alarme, context);
 
             //ajout de switch a la liste des views
-            switchsViews.add(((SwitchMaterial) constraintLayout.getChildAt(2)));
+            switchsViews.add(((SwitchMaterial) constraintLayout.getChildAt(1)));
             //ajout du constraint layout a la liste des views
             constraintLayoutViews.add(constraintLayout);
 
@@ -110,33 +110,34 @@ public class Affichage extends MainActivity {
 
         //ajout des view au constraint layout
         constraintLayout.addView(textView);
-        constraintLayout.addView(textView2);
         constraintLayout.addView(switch2);
+        constraintLayout.addView(textView2);
         constraintLayout.addView(textView3);
 
         //lien entre set et constraint layout
         set.clone(constraintLayout);
 
         //constraint pour l'heure de l'alarme
-        set.connect(textView.getId(), ConstraintSet.LEFT, ((View) textView.getParent()).getId(), ConstraintSet.LEFT);
+        set.connect(textView.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT);
+        set.connect(textView.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
+
+        //consraint pour le switch
+        set.connect(switch2.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.RIGHT);
+        set.connect(switch2.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
+        set.connect(switch2.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
 
         //constraint pour le nom de l'alarme
         set.connect(textView2.getId(), ConstraintSet.LEFT, textView.getId(), ConstraintSet.RIGHT);
         set.connect(textView2.getId(), ConstraintSet.RIGHT, switch2.getId(), ConstraintSet.LEFT);
-        set.connect(textView2.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.TOP);
-
-        //consraint pour le switch
-        set.connect(switch2.getId(), ConstraintSet.RIGHT, ((View) switch2.getParent()).getId(), ConstraintSet.RIGHT);
-        set.connect(switch2.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.TOP);
-        set.connect(switch2.getId(), ConstraintSet.BOTTOM, textView3.getId(), ConstraintSet.BOTTOM);
+        set.connect(textView2.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
 
         //constraint pour les jours de sonnerie
-        set.connect(textView3.getId(), ConstraintSet.TOP, textView.getId(), ConstraintSet.BOTTOM);
+        set.connect(textView3.getId(), ConstraintSet.LEFT, textView.getId(), ConstraintSet.RIGHT);
         set.connect(textView3.getId(), ConstraintSet.RIGHT, switch2.getId(), ConstraintSet.LEFT);
-        set.connect(textView3.getId(), ConstraintSet.LEFT, textView.getId(), ConstraintSet.LEFT);
+        set.connect(textView3.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
 
         //application des constraints
-        set.applyTo(constraintLayout);
+        constraintLayout.setConstraintSet(set);
 
         return constraintLayout;
 
