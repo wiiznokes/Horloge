@@ -124,7 +124,7 @@ public class Trie {
                     int i = 0;
                     boolean insertionChek = true;
                     while (i < ListActifInit.size() && insertionChek){
-                        if(dateAlarm.compareTo(MapIdDate.get(ListActifInit.get(i))) > 0){
+                        if(dateAlarm.compareTo(MapIdDate.get(ListActifInit.get(i))) < 0){
                             ListActifInit.add(i, Alarme.getId());
                             insertionChek = false;
                         }
@@ -153,7 +153,7 @@ public class Trie {
                     int i = 0;
                     boolean insertionChek = true;
                     while (i < ListInactifInit.size() && insertionChek){
-                        if(dateAlarm.compareTo(MapIdDate.get(ListInactifInit.get(i))) > 0){
+                        if(dateAlarm.compareTo(MapIdDate.get(ListInactifInit.get(i))) < 0){
                             ListInactifInit.add(i, Alarme.getId());
                             insertionChek = false;
                         }

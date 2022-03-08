@@ -68,8 +68,8 @@ public class InteractHelper {
         if(ListSortId.indexOf(Alarme.getId()) != indexOfPosBefore) {
             ConstraintLayout constraintLayout = ((ConstraintLayout) (linearLayout1.getChildAt(indexOfPosBefore)));
             //maj de l'affichage
-            //linearLayout1.removeView(constraintLayout);
-            //linearLayout1.addView(constraintLayout, ListSortId.indexOf(Alarme.getId()));
+            linearLayout1.removeView(constraintLayout);
+            linearLayout1.addView(constraintLayout, ListSortId.indexOf(Alarme.getId()));
 
         }
 
