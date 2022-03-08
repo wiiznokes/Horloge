@@ -1,8 +1,11 @@
 package fr.wiiznokes.horloge11.app;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import androidx.activity.result.ActivityResult;
@@ -12,12 +15,14 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
@@ -67,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
+                @SuppressLint("ClickableViewAccessibility")
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
@@ -87,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                         //ajout de l'affichage de l'alarme
                         linearLayout1.addView(constraintLayout, ListSortId.indexOf(Alarme.getId()));
 
-                        //recuperation du switch
+                        //switch
                         SwitchMaterial switchView = (SwitchMaterial) constraintLayout.getChildAt(2);
                         switchView.setOnClickListener(v -> {
                             new InteractHelper().switchHelper(switchView, Array1, MapIdPos, MapIdDate,
@@ -96,6 +102,23 @@ public class MainActivity extends AppCompatActivity {
                             //ecriture du fichier
                             new StorageUtils().write(Array1, MainActivity.this);
 
+                        });
+
+                        //suppression alarm
+                        constraintLayout.setOnLongClickListener(v -> {
+                            AlertDialog.Builder popUp = new AlertDialog.Builder(MainActivity.this);
+                            popUp.setNegativeButton("EFFACER", (dialog, which) -> {
+                                Toast.makeText(MainActivity.this, "effacé", Toast.LENGTH_SHORT).show();
+                                new InteractHelper().effacer(constraintLayout, Array1, MapIdPos, MapIdDate,
+                                        ListActif, ListInactif, ListSortId,
+                                        textViewTempsRestant, linearLayout1, textViewAlarmeActive);
+                                //ecriture du fichier
+                                new StorageUtils().write(Array1, MainActivity.this);
+
+                            });
+                            popUp.setPositiveButton("MODIFIER", (dialog, which) -> Toast.makeText(MainActivity.this, "modifié", Toast.LENGTH_SHORT).show());
+                            popUp.show();
+                            return false;
                         });
 
                         //maj nb alarmes actives
@@ -118,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,7 +190,26 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        //recuperation de la liste des views des constaintLayout
+        List<ConstraintLayout> constraintLayoutViews = ListViews.get(1);
+        for (ConstraintLayout constraintLayout : constraintLayoutViews){
+            //suppression alarm
+            constraintLayout.setOnLongClickListener(v -> {
+                AlertDialog.Builder popUp = new AlertDialog.Builder(MainActivity.this);
+                popUp.setNegativeButton("EFFACER", (dialog, which) -> {
+                    Toast.makeText(MainActivity.this, "effacé", Toast.LENGTH_SHORT).show();
+                    new InteractHelper().effacer(constraintLayout, Array1, MapIdPos, MapIdDate,
+                            ListActif, ListInactif, ListSortId,
+                            textViewTempsRestant, linearLayout1, textViewAlarmeActive);
+                    //ecriture du fichier
+                    new StorageUtils().write(Array1, MainActivity.this);
 
+                });
+                popUp.setPositiveButton("MODIFIER", (dialog, which) -> Toast.makeText(MainActivity.this, "modifié", Toast.LENGTH_SHORT).show());
+                popUp.show();
+                return false;
+            });
+        }
 
 
 

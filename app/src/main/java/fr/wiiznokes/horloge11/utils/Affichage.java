@@ -24,15 +24,17 @@ public class Affichage extends MainActivity {
     public List<List> afficheAlarmesInit(List<Alarm> Array1, List<Integer> ListSortId, Map<Integer, Integer> MapIdPos, Context context, LinearLayout linearLayout){
 
         //creation list pour les view des switchs
-        List<SwitchMaterial> switchsView = new ArrayList<>();
-
+        List<SwitchMaterial> switchsViews = new ArrayList<>();
+        List<ConstraintLayout> constraintLayoutViews = new ArrayList<>();
 
         for (int id : ListSortId){
             Alarm Alarme = Array1.get(MapIdPos.get(id));
             ConstraintLayout constraintLayout = newConstaintLayout(Alarme, context);
 
             //ajout de switch a la liste des views
-            switchsView.add(((SwitchMaterial) constraintLayout.getChildAt(2)));
+            switchsViews.add(((SwitchMaterial) constraintLayout.getChildAt(2)));
+            //ajout du constraint layout a la liste des views
+            constraintLayoutViews.add(constraintLayout);
 
             //ajout constraint layout au linear layout
             linearLayout.addView(constraintLayout);
@@ -40,7 +42,8 @@ public class Affichage extends MainActivity {
 
 
         List<List> ListViews = new ArrayList<>();
-        ListViews.add(switchsView);
+        ListViews.add(switchsViews);
+        ListViews.add(constraintLayoutViews);
 
         return ListViews;
 
@@ -51,7 +54,7 @@ public class Affichage extends MainActivity {
 
         //création du constraint Layout
         ConstraintLayout constraintLayout = new ConstraintLayout(context);
-        constraintLayout.setId(View.generateViewId());
+        constraintLayout.setId(Alarme.getId()+10000);
 
         //objet set pour ajouter des contraintes
         ConstraintSet set = new ConstraintSet();

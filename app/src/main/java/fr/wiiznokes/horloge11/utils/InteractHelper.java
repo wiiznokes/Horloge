@@ -1,5 +1,6 @@
 package fr.wiiznokes.horloge11.utils;
 
+import android.annotation.SuppressLint;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -81,5 +82,42 @@ public class InteractHelper {
 
 
     }
+
+    public void effacer(ConstraintLayout constraintLayout, List<Alarm> Array1,
+                        Map<Integer, Integer> MapIdPos, Map<Integer, Calendar> MapIdDate,
+                        List<Integer> ListActif, List<Integer> ListInactif, List<Integer> ListSortId,
+                        TextView textViewTempsRestant, LinearLayout linearLayout1, TextView textViewAlarmeActive){
+        @SuppressLint("ResourceType") int id = constraintLayout.getId()-10000;
+
+        //affichage temps restant
+        if(ListActif.size() > 0 && id == ListActif.get(0)){
+            try{
+                textViewTempsRestant.setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(1)))));
+            }
+            catch (IndexOutOfBoundsException indexOutOfBoundsException){
+                textViewTempsRestant.setText(R.string.tempsRestant0alarm);
+            }
+        }
+
+        Alarm Alarme = Array1.get(MapIdPos.get(id));
+        if(Alarme.isActive()){
+            ListActif.remove(MapIdPos.get(id));
+        }
+        else{
+            ListInactif.remove(MapIdPos.get(id));
+        }
+        Array1.remove(Alarme);
+        MapIdPos.remove(MapIdPos.get(id));
+        MapIdDate.remove(MapIdPos.get(id));
+        new Trie().ListSortId(ListActif, ListInactif);
+
+        //affichage du nombre d'alarmes actives
+        textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
+
+        linearLayout1.removeView(constraintLayout);
+
+
+    }
+
 
 }
