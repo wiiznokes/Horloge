@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
+import fr.wiiznokes.horloge11.app.MainActivity;
 
 public class InteractHelper {
 
 
-    public void switchHelper(SwitchMaterial switchView, List<Alarm> Array1,
-                             Map<Integer, Integer> MapIdPos, Map<Integer, Calendar> MapIdDate,
+    public void switchHelper(SwitchMaterial switchView, List<Alarm> Array1, Map<Integer, Integer> MapIdPos, Map<Integer, Calendar> MapIdDate,
                              List<Integer> ListActif, List<Integer> ListInactif, List<Integer> ListSortId,
-                             TextView textViewTempsRestant, LinearLayout linearLayout1, TextView textViewAlarmeActive){
+                             LinearLayout linearLayout, TextView textViewTempsRestant, TextView textViewAlarmeActive){
 
         Alarm Alarme = Array1.get(MapIdPos.get(switchView.getId()));
 
@@ -66,10 +66,10 @@ public class InteractHelper {
 
         //changer l'index d'affichage dans le LinearLayout si necessaire
         if(ListSortId.indexOf(Alarme.getId()) != indexOfPosBefore) {
-            ConstraintLayout constraintLayout = ((ConstraintLayout) (linearLayout1.getChildAt(indexOfPosBefore)));
+            ConstraintLayout constraintLayout = ((ConstraintLayout) (linearLayout.getChildAt(indexOfPosBefore)));
             //maj de l'affichage
-            linearLayout1.removeView(constraintLayout);
-            linearLayout1.addView(constraintLayout, ListSortId.indexOf(Alarme.getId()));
+            linearLayout.removeView(constraintLayout);
+            linearLayout.addView(constraintLayout, ListSortId.indexOf(Alarme.getId()));
 
         }
 
@@ -83,10 +83,9 @@ public class InteractHelper {
 
     }
 
-    public void effacer(ConstraintLayout constraintLayout, List<Alarm> Array1,
-                        Map<Integer, Integer> MapIdPos, Map<Integer, Calendar> MapIdDate,
-                        List<Integer> ListActif, List<Integer> ListInactif, List<Integer> ListSortId,
-                        TextView textViewTempsRestant, LinearLayout linearLayout1, TextView textViewAlarmeActive){
+    public void effacer(ConstraintLayout constraintLayout, List<Alarm> Array1, Map<Integer, Integer> MapIdPos, Map<Integer, Calendar> MapIdDate,
+                        List<Integer> ListActif, List<Integer> ListInactif,
+                        LinearLayout linearLayout, TextView textViewTempsRestant, TextView textViewAlarmeActive){
         @SuppressLint("ResourceType") int id = constraintLayout.getId()-10000;
 
         //affichage temps restant
@@ -114,7 +113,7 @@ public class InteractHelper {
         //affichage du nombre d'alarmes actives
         textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
 
-        linearLayout1.removeView(constraintLayout);
+        linearLayout.removeView(constraintLayout);
 
 
     }

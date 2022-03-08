@@ -2,62 +2,22 @@ package fr.wiiznokes.horloge11.utils;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
 
-import fr.wiiznokes.horloge11.R;
-import fr.wiiznokes.horloge11.app.MainActivity;
+public class Affichage extends AppCompatActivity {
 
-public class Affichage extends MainActivity {
-
-
-    public List<List> afficheAlarmesInit(List<Alarm> Array1, List<Integer> ListSortId, Map<Integer, Integer> MapIdPos, Context context, LinearLayout linearLayout){
-
-        //creation list pour les view des switchs
-        List<SwitchMaterial> switchsViews = new ArrayList<>();
-        List<ConstraintLayout> constraintLayoutViews = new ArrayList<>();
-
-        for (int id : ListSortId){
-            Alarm Alarme = Array1.get(MapIdPos.get(id));
-            ConstraintLayout constraintLayout = newConstaintLayout(Alarme, context);
-
-            //ajout de switch a la liste des views
-            switchsViews.add(((SwitchMaterial) constraintLayout.getChildAt(1)));
-            //ajout du constraint layout a la liste des views
-            constraintLayoutViews.add(constraintLayout);
-
-            //ajout constraint layout au linear layout
-            linearLayout.addView(constraintLayout);
-        }
-
-
-        List<List> ListViews = new ArrayList<>();
-        ListViews.add(switchsViews);
-        ListViews.add(constraintLayoutViews);
-
-        return ListViews;
-
-    }
 
 
     public ConstraintLayout newConstaintLayout(Alarm Alarme, Context context){
 
-        //création du constraint Layout
-        ConstraintLayout constraintLayout = new ConstraintLayout(context);
-        constraintLayout.setId(Alarme.getId()+10000);
-
-        //objet set pour ajouter des contraintes
-        ConstraintSet set = new ConstraintSet();
 
         //création heure alarme
         TextView textView = new TextView(context);
@@ -108,18 +68,26 @@ public class Affichage extends MainActivity {
         }
         textView3.setId(View.generateViewId());
 
-        //ajout des view au constraint layout
+        //création du constraint Layout
+        ConstraintLayout constraintLayout = new ConstraintLayout(context);
+        constraintLayout.setId(Alarme.getId()+10000);
+
+        //ajout de la vue
         constraintLayout.addView(textView);
         constraintLayout.addView(switch2);
         constraintLayout.addView(textView2);
         constraintLayout.addView(textView3);
 
-        //lien entre set et constraint layout
+        //création set
+        ConstraintSet set = new ConstraintSet();
         set.clone(constraintLayout);
+        set.constrainWidth(constraintLayout.getId(), ConstraintLayout.LayoutParams.MATCH_PARENT);
+        set.constrainHeight(constraintLayout.getId(), ConstraintLayout.LayoutParams.WRAP_CONTENT);
 
         //constraint pour l'heure de l'alarme
         set.connect(textView.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT);
         set.connect(textView.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
+
 
         //consraint pour le switch
         set.connect(switch2.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.RIGHT);
@@ -136,8 +104,7 @@ public class Affichage extends MainActivity {
         set.connect(textView3.getId(), ConstraintSet.RIGHT, switch2.getId(), ConstraintSet.LEFT);
         set.connect(textView3.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
 
-        //application des constraints
-        constraintLayout.setConstraintSet(set);
+        set.applyTo(constraintLayout);
 
         return constraintLayout;
 
