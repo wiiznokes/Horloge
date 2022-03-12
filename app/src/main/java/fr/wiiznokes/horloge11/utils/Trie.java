@@ -11,18 +11,10 @@ import java.util.stream.Stream;
 
 public class Trie {
 
-    public Map<Integer, Integer> MapIdPos (List<Alarm> Array1){
-        Map<Integer, Integer> MapIdPos = new HashMap<>();
-        int i = 0;
-        for(Alarm Alarm : Array1){
-            MapIdPos.put(Alarm.getId(), i);
-            i = i + 1;
-        }
-        return MapIdPos;
-    }
-    public Map<Integer, Calendar> MapIdDate(List<Alarm> Array1){
+
+    public Map<Integer, Calendar> MapIdDate(Map<Integer, Alarm> MapIdAlarm){
         Map<Integer, Calendar> MapIdDate = new HashMap<>();
-        for(Alarm Alarm : Array1){
+        for(Alarm Alarm : MapIdAlarm.values()){
             MapIdDate.put(Alarm.getId(), dateProchaineSonnerie(Alarm));
         }
         return MapIdDate;
@@ -110,11 +102,11 @@ public class Trie {
     }
 
 
-    public List<Integer> ListActifInit(List<Alarm> Array1, Map<Integer, Calendar> MapIdDate){
+    public List<Integer> ListActifInit(Map<Integer, Alarm> MapIdAlarm, Map<Integer, Calendar> MapIdDate){
 
         List<Integer> ListActifInit = new ArrayList<>();
 
-        for (Alarm Alarme : Array1){
+        for (Alarm Alarme : MapIdAlarm.values()){
             if(Alarme.isActive()){
                 Calendar dateAlarm = MapIdDate.get(Alarme.getId());
                 if(ListActifInit.size() == 0){
@@ -139,11 +131,11 @@ public class Trie {
         return ListActifInit;
     }
 
-    public List<Integer> ListInactifInit(List<Alarm> Array1, Map<Integer, Calendar> MapIdDate){
+    public List<Integer> ListInactifInit(Map<Integer, Alarm> MapIdAlarm, Map<Integer, Calendar> MapIdDate){
 
         List<Integer> ListInactifInit = new ArrayList<>();
 
-        for (Alarm Alarme : Array1){
+        for (Alarm Alarme : MapIdAlarm.values()){
             if(!Alarme.isActive()){
                 Calendar dateAlarm = MapIdDate.get(Alarme.getId());
                 if(ListInactifInit.size() == 0){

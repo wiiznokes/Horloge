@@ -16,7 +16,7 @@ public class Affichage extends AppCompatActivity {
 
 
 
-    public ConstraintLayout newConstaintLayout(Alarm Alarme, Context context){
+    public ConstraintLayout newConstaintLayout(Alarmv Alarme, Context context){
 
 
         //création heure alarme
@@ -38,6 +38,10 @@ public class Affichage extends AppCompatActivity {
 
         //création jour alarme
         TextView textView3 = new TextView(context);
+
+
+
+
         if (Alarme.isWeek()){
             textView3.setText("Tous les jours");
         }

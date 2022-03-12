@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,11 +34,11 @@ import fr.wiiznokes.horloge11.utils.*;
 
 public class MainActivity extends AppCompatActivity {
 
+    public List<ModelAlarme> modelAlarmesList = new ArrayList<>();
 
-    //liste object Alarm
-    public List<Alarm> Array1;
+
     //dictionnaire key:id valeur:position dans Array1
-    public Map<Integer, Integer> MapIdPos;
+    public Map<Integer, Alarm> MapIdAlarm;
     //dictionnaire key:id valeur:dateSonnerie
     public Map<Integer, Calendar> MapIdDate;
     //liste id alarm actif triée
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     public LinearLayout linearLayout;
     public TextView textViewTempsRestant;
     public TextView textViewAlarmeActive;
+
+    public ListView listView;
 
 
 
@@ -134,13 +138,12 @@ public class MainActivity extends AppCompatActivity {
 
         initApp();
 
-
-
         //affichage des alarmes crées
-        List<List> ListViews = afficheAlarmesInit(this);
-        //recuperation de la liste des views des switchs
-        List<SwitchMaterial> switchsView = ListViews.get(0);
+        afficheAlarmesInit(this);
 
+
+
+/*
         //boucle qui recuperer les views des switchs
         for(SwitchMaterial switchView : switchsView){
             switchView.setOnClickListener(v -> {
@@ -173,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             });
         }
-
+*/
 
 
         addAlarm.setOnClickListener(view -> {
@@ -188,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
                     );
                     //ajout d'information dans l'intention
                     intent.putExtra("alarmName", addAlarmText.getText().toString());
+
+                    intent.putExtra("test", MapIdAlarm)
                     //lancement de addActivity avec un id de lancement
                     activityResultLauncher.launch(intent);
                 }
@@ -215,11 +220,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init(){
-        Array1 = new StorageUtils().read(this);
-        MapIdPos = new Trie().MapIdPos(Array1);
-        MapIdDate = new Trie().MapIdDate(Array1);
-        ListActif = new Trie().ListActifInit(Array1, MapIdDate);
-        ListInactif = new Trie().ListInactifInit(Array1, MapIdDate);
+        MapIdAlarm = new StorageUtils().read(this);
+        MapIdDate = new Trie().MapIdDate(MapIdAlarm);
+        ListActif = new Trie().ListActifInit(MapIdAlarm, MapIdDate);
+        ListInactif = new Trie().ListInactifInit(MapIdAlarm, MapIdDate);
         ListSortId = new Trie().ListSortId(ListActif, ListInactif);
     }
     private void initApp(){
@@ -229,20 +233,20 @@ public class MainActivity extends AppCompatActivity {
         this.linearLayout = findViewById(R.id.linearLayout1);
         this.textViewTempsRestant = findViewById(R.id.textView4);
         this.textViewAlarmeActive = findViewById(R.id.textView2);
-
-        init();
+        this.listView = findViewById(R.id.list_view1);
 
         //creation du fichier si il n'existe pas avec un tableau vide
         if(new StorageUtils().read(this)== null) {
-            List<Alarm> ArrayInit = new ArrayList<>();
+            Map<Integer, Alarm> MapIdAlarmInit = new HashMap<>();
             //ecriture
-            new StorageUtils().write(ArrayInit, this);
+            new StorageUtils().write(MapIdAlarmInit, this);
         }
+        init();
         //affichage du nombre d'alarmes actives
         textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
         //affichage du temps restant
         if(ListActif.size() > 0){
-            textViewTempsRestant.setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(0)))));
+            textViewTempsRestant.setText(new Affichage().tempsRestant(MapIdAlarm.get(ListActif.get(0))));
         }
         else{
             textViewTempsRestant.setText(R.string.tempsRestant0alarm);
@@ -250,36 +254,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private List<List> afficheAlarmesInit(Context context){
+    private void afficheAlarmesInit(Context context){
 
 
+        for(Alarm Alarme : MapIdAlarm.values()){
+            ModelAlarme ModelAlarme = new ModelAlarme();
+            ModelAlarme.init(Alarme);
+            modelAlarmesList.add(ModelAlarme);
 
-        //reinitialisation LinearLayout
-        linearLayout.removeAllViews();
-
-        //creation list pour les view des switchs et des constraintLayout
-        List<SwitchMaterial> switchsViews = new ArrayList<>();
-        List<ConstraintLayout> constraintLayoutViews = new ArrayList<>();
-
-        for (int id : ListSortId){
-            Alarm Alarme = Array1.get(MapIdPos.get(id));
-            ConstraintLayout constraintLayout = new Affichage().newConstaintLayout(Alarme, context);
-
-            //ajout de switch a la liste des views
-            switchsViews.add(((SwitchMaterial) constraintLayout.getChildAt(1)));
-            //ajout du constraint layout a la liste des views
-            constraintLayoutViews.add(constraintLayout);
-
-            //ajout constraint layout au linear layout
-            linearLayout.addView(constraintLayout);
         }
-
-
-        List<List> ListViews = new ArrayList<>();
-        ListViews.add(switchsViews);
-        ListViews.add(constraintLayoutViews);
-
-        return ListViews;
-
+        listView.setAdapter(new ModelAlarmeAdapter(context, modelAlarmesList));
     }
 }

@@ -11,6 +11,8 @@ import android.widget.RadioButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
+import java.util.Map;
+
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.utils.Alarm;
@@ -49,8 +51,6 @@ public class AddActivity extends AppCompatActivity {
 
     private ImageButton save;
 
-    //liste object Alarm
-    private List<Alarm> Array1;
 
 
 
@@ -222,19 +222,30 @@ public class AddActivity extends AppCompatActivity {
                 Alarm1.setHours(Integer.parseInt(alarmHours.getText().toString().substring(0, 2)));
                 Alarm1.setMinute(Integer.parseInt(alarmHours.getText().toString().substring(3, 5)));
 
+                String joursActif = "";
                 if ((mondayState && tuesdayState && wednesdayState && thursdayState && fridayState && saturdayState && sundayState) ||
                         (!mondayState && !tuesdayState && !wednesdayState && !thursdayState && !fridayState && !saturdayState && !sundayState)){
                     Alarm1.setWeek(true);
+                    joursActif = "Tous les jours";
                 } else {
                     Alarm1.setMonday(mondayState);
+                    joursActif = joursActif + "lun ";
                     Alarm1.setTuesday(tuesdayState);
+                    joursActif = joursActif + "mar ";
                     Alarm1.setWednesday(wednesdayState);
+                    joursActif = joursActif + "mer ";
                     Alarm1.setThursday(thursdayState);
+                    joursActif = joursActif + "jeu ";
                     Alarm1.setFriday(fridayState);
+                    joursActif = joursActif + "ven ";
                     Alarm1.setSaturday(saturdayState);
+                    joursActif = joursActif + "sam ";
                     Alarm1.setSunday(sundayState);
+                    joursActif = joursActif + "dim ";
                     Alarm1.setWeek(false);
                 }
+                Alarm1.setJourSonnerieText(joursActif);
+
 
                 Alarm1.setSonnerie(sonnerieName.getText().toString());
 
@@ -250,12 +261,9 @@ public class AddActivity extends AppCompatActivity {
                 }
 
 
-                //lecture du fichier de sauvegarde
-                Array1 = new StorageUtils().read(AddActivity.this);
-
 
                 //ajout de l'objet Alarm à la list
-                Array1.add(Alarm1);
+                MapIdAlarm.add(Alarm1);
                 //ecriture sur le fichier de sauvegarde
                 new StorageUtils().write(Array1, AddActivity.this);
                 setResult(0);

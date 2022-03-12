@@ -23,13 +23,7 @@ public class Alarm implements Serializable {
 
 
 
-    private String hoursText;
-    public String getHoursText() {
-        return hoursText;
-    }
-    public void setHoursText(String hoursText) {
-        this.hoursText = hoursText;
-    }
+
 
     private int hours;
     public int getHours() {
@@ -144,6 +138,27 @@ public class Alarm implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+
+    private String hoursText;
+    public String getHoursText() {
+        return hoursText;
+    }
+    public void setHoursText(String hoursText) {
+        this.hoursText = hoursText;
+    }
+
+    private String jourSonnerieText;
+    public String getJourSonnerieText() {
+        return jourSonnerieText;
+    }
+
+    public void setJourSonnerieText(String jourSonnerieText) {
+        this.jourSonnerieText = jourSonnerieText;
+    }
+
+
+
+
 
 
 
