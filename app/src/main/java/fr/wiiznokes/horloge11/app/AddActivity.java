@@ -1,6 +1,7 @@
 package fr.wiiznokes.horloge11.app;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 import java.util.Map;
 
+
+import javax.xml.transform.Result;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.utils.Alarm;
@@ -260,16 +263,10 @@ public class AddActivity extends AppCompatActivity {
                     Alarm1.setId(numberOfId);
                 }
 
-
-
-                //ajout de l'objet Alarm à la list
-                MapIdAlarm.add(Alarm1);
-                //ecriture sur le fichier de sauvegarde
-                new StorageUtils().write(Array1, AddActivity.this);
-                setResult(0);
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("AlarmeAdd", Alarm1);
+                setResult(0, resultIntent);
                 finish();
-
-
             }
         });
 

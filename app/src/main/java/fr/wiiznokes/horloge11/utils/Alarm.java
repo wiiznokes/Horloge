@@ -1,8 +1,11 @@
 package fr.wiiznokes.horloge11.utils;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
-public class Alarm implements Serializable {
+public class Alarm implements Serializable{
 
     public Alarm() {
 
@@ -13,6 +16,8 @@ public class Alarm implements Serializable {
 
 
     private String nameAlarm;
+
+
     public String getNameAlarm() {
         return nameAlarm;
     }
@@ -155,12 +160,5 @@ public class Alarm implements Serializable {
     public void setJourSonnerieText(String jourSonnerieText) {
         this.jourSonnerieText = jourSonnerieText;
     }
-
-
-
-
-
-
-
 
 }

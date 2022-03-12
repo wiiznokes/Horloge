@@ -1,6 +1,7 @@
 package fr.wiiznokes.horloge11.utils;
 
 import android.content.Context;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,35 +13,46 @@ import fr.wiiznokes.horloge11.R;
 
 public class ModelAlarmeAdapter extends BaseAdapter {
 
-    private Context context;
-    private List<ModelAlarme> modelAlarmeList;
-    private LayoutInflater inflater;
+    private Map<Id>
+    public List<Alarm> getAlarmList() {
+        return AlarmList;
+    }
+    public void setAlarmList(List<Alarm> alarmList) {
+        AlarmList = alarmList;
+    }
 
-    public ModelAlarmeAdapter(Context context, List<ModelAlarme> modelAlarmeList){
+    private Context context;
+    private LayoutInflater inflater;
+    private int cheminLayout = R.layout.alarme_affichage;
+
+    public ModelAlarmeAdapter(Context context, List<Alarm> AlarmList){
         this.context = context;
-        this.modelAlarmeList = modelAlarmeList;
+        this.AlarmList = AlarmList;
         this.inflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount() {
-        return modelAlarmeList.size();
+        return AlarmList.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        return modelAlarmeList.get(position);
+    public Alarm getItem(int position) {
+        return AlarmList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return AlarmList.get(position).getId();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            //We must create a View:
+            convertView = inflater.inflate(cheminLayout, parent, false);
+        }
 
-        convertView = inflater.inflate(R.layout.alarme_affichage, null);
 
         return convertView;
     }

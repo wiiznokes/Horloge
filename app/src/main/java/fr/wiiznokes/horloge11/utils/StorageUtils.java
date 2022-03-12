@@ -80,20 +80,4 @@ public class StorageUtils {
         }
 
     }
-
-    public static <K extends Parcelable, V extends Parcelable> void writeHashMap(
-            Map<K, V> map, Parcel out, int flags) {
-        if (map != null) {
-            out.writeInt(map.size());
-
-            for (Entry<K, V> entry : map.entrySet()) {
-                out.writeParcelable(entry.getKey(), flags);
-                out.writeParcelable(entry.getValue(), flags);
-            }
-        } else {
-            out.writeInt(-1);
-        }
-    }
-
-
 }

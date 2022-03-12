@@ -34,7 +34,7 @@ import fr.wiiznokes.horloge11.utils.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    public List<ModelAlarme> modelAlarmesList = new ArrayList<>();
+
 
 
     //dictionnaire key:id valeur:position dans Array1
@@ -74,18 +74,20 @@ public class MainActivity extends AppCompatActivity {
 
                         addAlarmText.setVisibility(View.INVISIBLE);
 
-                        //creation de tous les objets
-                        init();
-
                         //recuperation de l'objet Alarm
-                        Alarm Alarme = Array1.get(Array1.size() - 1);
+                        Alarm Alarme = (Alarm) result.getData().getSerializableExtra("AlarmeAdd");
 
-                        //creation de l'affichage de l'alarme
-                        ConstraintLayout constraintLayout = new Affichage().newConstaintLayout(Alarme, MainActivity.this);
+                        //creation de tous les objets
+                        initAjout(Alarme);
+
+                        new StorageUtils().write(MapIdAlarm, MainActivity.this);
+
+
+
 
                         //ajout de l'affichage de l'alarme
-                        linearLayout.addView(constraintLayout, ListSortId.indexOf(Alarme.getId()));
 
+                        /*
                         //switch
                         SwitchMaterial switchView = (SwitchMaterial) constraintLayout.getChildAt(1);
                         switchView.setOnClickListener(v -> {
@@ -115,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
 
                         //maj temps restant
                         textViewTempsRestant.setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(0)))));
+
+                         */
 
                     }
                     //bouton retour addActivity
@@ -192,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
                     //ajout d'information dans l'intention
                     intent.putExtra("alarmName", addAlarmText.getText().toString());
 
-                    intent.putExtra("test", MapIdAlarm)
                     //lancement de addActivity avec un id de lancement
                     activityResultLauncher.launch(intent);
                 }
@@ -219,6 +222,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void initAjout(Alarm Alarme){
+        MapIdAlarm.put(Alarme.getId(), Alarme);
+        MapIdDate.put(Alarme.getId(), new Trie().dateProchaineSonnerie(Alarme));
+        new Trie().ListActifChange(ListActif, Alarme.getId(), MapIdDate);
+        new Trie().ListInactifChange(ListInactif, Alarme.getId(), MapIdDate);
+        new Trie().ListSortId(ListActif, ListInactif);
+    }
+
+
+
+
+
     private void init(){
         MapIdAlarm = new StorageUtils().read(this);
         MapIdDate = new Trie().MapIdDate(MapIdAlarm);
@@ -230,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
         //recuperation des vues pour affichage
         this.addAlarm = findViewById(R.id.floatingActionButton4);
         this.addAlarmText = findViewById(R.id.editTextTextPersonName);
-        this.linearLayout = findViewById(R.id.linearLayout1);
         this.textViewTempsRestant = findViewById(R.id.textView4);
         this.textViewAlarmeActive = findViewById(R.id.textView2);
         this.listView = findViewById(R.id.list_view1);
@@ -256,13 +270,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void afficheAlarmesInit(Context context){
 
+        List<Alarm> AlarmList = new ArrayList<>();
+        AlarmList.addAll(MapIdAlarm.values());
+        //ajout des data au inflate
+        ModelAlarmeAdapter modelAlarmeAdapter = new ModelAlarmeAdapter(context, AlarmList);
 
-        for(Alarm Alarme : MapIdAlarm.values()){
-            ModelAlarme ModelAlarme = new ModelAlarme();
-            ModelAlarme.init(Alarme);
-            modelAlarmesList.add(ModelAlarme);
+        listView.setAdapter(modelAlarmeAdapter);
 
-        }
-        listView.setAdapter(new ModelAlarmeAdapter(context, modelAlarmesList));
+
+
     }
 }
