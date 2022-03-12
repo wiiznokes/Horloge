@@ -173,50 +173,64 @@ public class Trie {
 
 
     //inserer un id au bon endroit dans la ListTrie des alarmes actives
-    public void ListActifChange(List<Integer> ListActif, int id, Map<Integer, Calendar> MapIdDate){
+    public int ListActifChange(List<Integer> ListActif, int id, Map<Integer, Calendar> MapIdDate){
         Calendar dateSonnerie = MapIdDate.get(id);
+        int i = 0;
         //condition pour savoir si ListActif est vide
         if(ListActif.size() == 0){
             ListActif.add(id);
         }
         else{
-            int i = 0;
-            boolean insertionChek = true;
-            while (i < ListActif.size() && insertionChek){
+            boolean insertionChek = false;
+            while (i < ListActif.size() && !insertionChek){
+                i = i + 1;
                 if(dateSonnerie.compareTo(MapIdDate.get(ListActif.get(i))) > 0){
                     ListActif.add(i, id);
-                    insertionChek = false;
+                    insertionChek = true;
                 }
-                i = i + 1;
             }
             if(insertionChek) {
                 ListActif.add(id);
             }
         }
+        return i;
     }
     //inserer un id au bon endroit dans la ListTrie des alarmes Inactives
-    public void ListInactifChange(List<Integer> ListInactif, int id, Map<Integer, Calendar> MapIdDate){
+    public int ListInactifChange(List<Integer> ListInactif, int id, Map<Integer, Calendar> MapIdDate){
         Calendar dateSonnerie = MapIdDate.get(id);
+        int i = 0;
         //condition pour savoir si ListInactif est vide
         if(ListInactif.size() == 0){
             ListInactif.add(id);
         }
         else{
-            int i = 0;
-            boolean insertionChek = true;
-            while (i < ListInactif.size() && insertionChek){
+            boolean insertionChek = false;
+            while (i < ListInactif.size() && !insertionChek){
+                i = i + 1;
                 if(dateSonnerie.compareTo(MapIdDate.get(ListInactif.get(i))) > 0){
                     ListInactif.add(i, id);
-                    insertionChek = false;
+                    insertionChek = true;
                 }
-                i = i + 1;
+
             }
             if(insertionChek) {
                 ListInactif.add(id);
             }
         }
+        return i;
     }
 
 
+    public List<Alarm> ListSortAlarm(List<Integer> ListSortId, Map<Integer, Alarm> MapIdAlarm){
 
+        List<Alarm> ListSortAlarm = new ArrayList<>();
+        for(Integer id : ListSortId){
+            ListSortAlarm.add(MapIdAlarm.get(id));
+        }
+
+        return ListSortAlarm;
+    }
+    public void ListSortAlarmChange(int index, List<Alarm> ListSortAlarm, Alarm alarme){
+        ListSortAlarm.add(index, alarme);
+    }
 }

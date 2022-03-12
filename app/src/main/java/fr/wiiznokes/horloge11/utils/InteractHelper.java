@@ -1,7 +1,10 @@
 package fr.wiiznokes.horloge11.utils;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -17,10 +20,22 @@ import fr.wiiznokes.horloge11.app.MainActivity;
 
 public class InteractHelper {
 
+    private TextView textViewTempsRestant;
+    private TextView textViewAlarmeActive;
+
+
+
+
+
+    public InteractHelper(){
+        this.textViewTempsRestant = textViewTempsRestant;
+        this.textViewAlarmeActive = textViewAlarmeActive;
+
+    }
+
 
     public void switchHelper(SwitchMaterial switchView, List<Alarm> Array1, Map<Integer, Integer> MapIdPos, Map<Integer, Calendar> MapIdDate,
-                             List<Integer> ListActif, List<Integer> ListInactif, List<Integer> ListSortId,
-                             LinearLayout linearLayout, TextView textViewTempsRestant, TextView textViewAlarmeActive){
+                             List<Integer> ListActif, List<Integer> ListInactif, List<Integer> ListSortId){
 
         Alarm Alarme = Array1.get(MapIdPos.get(switchView.getId()));
 
@@ -83,37 +98,10 @@ public class InteractHelper {
 
     }
 
-    public void effacer(ConstraintLayout constraintLayout, List<Alarm> Array1, Map<Integer, Integer> MapIdPos, Map<Integer, Calendar> MapIdDate,
-                        List<Integer> ListActif, List<Integer> ListInactif,
-                        LinearLayout linearLayout, TextView textViewTempsRestant, TextView textViewAlarmeActive){
-        @SuppressLint("ResourceType") int id = constraintLayout.getId()-10000;
 
-        //affichage temps restant
-        if(ListActif.size() > 0 && id == ListActif.get(0)){
-            try{
-                textViewTempsRestant.setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(1)))));
-            }
-            catch (IndexOutOfBoundsException indexOutOfBoundsException){
-                textViewTempsRestant.setText(R.string.tempsRestant0alarm);
-            }
-        }
+    public void effacer(){
 
-        Alarm Alarme = Array1.get(MapIdPos.get(id));
-        if(Alarme.isActive()){
-            ListActif.remove((Object) id);
-        }
-        else{
-            ListInactif.remove((Object) id);
-        }
-        Array1.remove(Alarme);
-        MapIdPos.remove(id);
-        MapIdDate.remove(id);
-        new Trie().ListSortId(ListActif, ListInactif);
 
-        //affichage du nombre d'alarmes actives
-        textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
-
-        linearLayout.removeView(constraintLayout);
 
 
     }
