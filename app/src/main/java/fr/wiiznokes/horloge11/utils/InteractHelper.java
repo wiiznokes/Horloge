@@ -100,14 +100,14 @@ public class InteractHelper {
 
         Alarm Alarme = Array1.get(MapIdPos.get(id));
         if(Alarme.isActive()){
-            ListActif.remove(MapIdPos.get(id));
+            ListActif.remove((Object) id);
         }
         else{
-            ListInactif.remove(MapIdPos.get(id));
+            ListInactif.remove((Object) id);
         }
         Array1.remove(Alarme);
-        MapIdPos.remove(MapIdPos.get(id));
-        MapIdDate.remove(MapIdPos.get(id));
+        MapIdPos.remove(id);
+        MapIdDate.remove(id);
         new Trie().ListSortId(ListActif, ListInactif);
 
         //affichage du nombre d'alarmes actives

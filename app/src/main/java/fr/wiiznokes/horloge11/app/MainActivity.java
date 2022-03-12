@@ -33,11 +33,6 @@ import fr.wiiznokes.horloge11.utils.*;
 public class MainActivity extends AppCompatActivity {
 
 
-
-
-    ImageButton addAlarm;
-    EditText addAlarmText;
-
     //liste object Alarm
     public List<Alarm> Array1;
     //dictionnaire key:id valeur:position dans Array1
@@ -53,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     //element utiles pour la maj d'affichage
+    public ImageButton addAlarm;
+    public EditText addAlarmText;
+
     public LinearLayout linearLayout;
     public TextView textViewTempsRestant;
     public TextView textViewAlarmeActive;
@@ -134,33 +132,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //recuperation des vues pour affichage
-        this.addAlarm = findViewById(R.id.floatingActionButton4);
-        this.addAlarmText = findViewById(R.id.editTextTextPersonName);
-        this.linearLayout = findViewById(R.id.linearLayout1);
-        this.textViewTempsRestant = findViewById(R.id.textView4);
-        this.textViewAlarmeActive = findViewById(R.id.textView2);
+        initApp();
 
 
-        //creation du fichier si il n'existe pas avec un tableau vide
-        if(new StorageUtils().read(this)== null){
-            List<Alarm> ArrayInit = new ArrayList<Alarm>();
-            //ecriture
-            new StorageUtils().write(ArrayInit, this);
-        }
 
-
-        //creation de tous les objets
-        init();
-        //affichage du nombre d'alarmes actives
-        textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
-        //affichage du temps restant
-        if(ListActif.size() > 0){
-            textViewTempsRestant.setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(0)))));
-        }
-        else{
-            textViewTempsRestant.setText(R.string.tempsRestant0alarm);
-        }
         //affichage des alarmes crées
         List<List> ListViews = afficheAlarmesInit(this);
         //recuperation de la liste des views des switchs
@@ -246,6 +221,32 @@ public class MainActivity extends AppCompatActivity {
         ListActif = new Trie().ListActifInit(Array1, MapIdDate);
         ListInactif = new Trie().ListInactifInit(Array1, MapIdDate);
         ListSortId = new Trie().ListSortId(ListActif, ListInactif);
+    }
+    private void initApp(){
+        //recuperation des vues pour affichage
+        this.addAlarm = findViewById(R.id.floatingActionButton4);
+        this.addAlarmText = findViewById(R.id.editTextTextPersonName);
+        this.linearLayout = findViewById(R.id.linearLayout1);
+        this.textViewTempsRestant = findViewById(R.id.textView4);
+        this.textViewAlarmeActive = findViewById(R.id.textView2);
+
+        init();
+
+        //creation du fichier si il n'existe pas avec un tableau vide
+        if(new StorageUtils().read(this)== null) {
+            List<Alarm> ArrayInit = new ArrayList<>();
+            //ecriture
+            new StorageUtils().write(ArrayInit, this);
+        }
+        //affichage du nombre d'alarmes actives
+        textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
+        //affichage du temps restant
+        if(ListActif.size() > 0){
+            textViewTempsRestant.setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(0)))));
+        }
+        else{
+            textViewTempsRestant.setText(R.string.tempsRestant0alarm);
+        }
     }
 
 
