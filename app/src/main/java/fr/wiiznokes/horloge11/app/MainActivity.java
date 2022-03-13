@@ -36,45 +36,26 @@ import fr.wiiznokes.horloge11.utils.*;
 public class MainActivity extends AppCompatActivity {
 
 
-    //getter and setter List et Map
-    public Map<Integer, Alarm> getMapIdAlarm() {
-        return MapIdAlarm;
-    }
     public void setMapIdAlarm(Map<Integer, Alarm> mapIdAlarm) {
         MapIdAlarm = mapIdAlarm;
     }
 
-    public Map<Integer, Calendar> getMapIdDate() {
-        return MapIdDate;
-    }
     public void setMapIdDate(Map<Integer, Calendar> mapIdDate) {
         MapIdDate = mapIdDate;
     }
 
-    public List<Integer> getListActif() {
-        return ListActif;
-    }
     public void setListActif(List<Integer> listActif) {
         ListActif = listActif;
     }
 
-    public List<Integer> getListInactif() {
-        return ListInactif;
-    }
     public void setListInactif(List<Integer> listInactif) {
         ListInactif = listInactif;
     }
 
-    public List<Integer> getListSortId() {
-        return ListSortId;
-    }
     public void setListSortId(List<Integer> listSortId) {
         ListSortId = listSortId;
     }
 
-    public List<Alarm> getListSortAlarm() {
-        return ListSortAlarm;
-    }
     public void setListSortAlarm(List<Alarm> listSortAlarm) {
         ListSortAlarm = listSortAlarm;
     }
@@ -93,24 +74,16 @@ public class MainActivity extends AppCompatActivity {
     public List<Alarm> ListSortAlarm;
 
 
-    //element utiles pour la maj d'affichage
+    //ajout alarme
     public ImageButton addAlarm;
     public EditText addAlarmText;
 
-    public TextView getTextViewTempsRestant() {
-        return textViewTempsRestant;
-    }
-    public TextView getTextViewAlarmeActive() {
-        return textViewAlarmeActive;
-    }
-    public ListView getListView() {
-        return listView;
-    }
+    //element interactif
     public TextView textViewTempsRestant;
     public TextView textViewAlarmeActive;
     public ListView listView;
 
-    private ModelAlarmeAdapter modelAlarmeAdapter;
+    public ModelAlarmeAdapter modelAlarmeAdapter;
 
 
 
@@ -220,18 +193,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void initAjout(Alarm currentAlarm) {
         MapIdAlarm.put(currentAlarm.getId(), currentAlarm);
+        modelAlarmeAdapter.setMapIdAlarm(MapIdAlarm);
         MapIdDate.put(currentAlarm.getId(), new Trie().dateProchaineSonnerie(currentAlarm));
-        int index;
-        if(currentAlarm.isActive()){
-            index = new Trie().ListActifChange(ListActif, currentAlarm.getId(), MapIdDate);
-        }
-        else {
-            index = new Trie().ListInactifChange(ListInactif, currentAlarm.getId(), MapIdDate);
-            index = ListActif.size() + index;
-        }
+        modelAlarmeAdapter.setMapIdDate(MapIdDate);
+
+        int index = new Trie().ListActifChange(ListActif, currentAlarm.getId(), MapIdDate);
+        modelAlarmeAdapter.setListActif(ListActif);
+
         ListSortId = new Trie().ListSortId(ListActif, ListInactif);
+        modelAlarmeAdapter.setListSortId(ListSortId);
         new Trie().ListSortAlarmChange(index, ListSortAlarm, currentAlarm);
+        modelAlarmeAdapter.setListSortAlarm(ListSortAlarm);
     }
+
 
 
 
@@ -274,7 +248,10 @@ public class MainActivity extends AppCompatActivity {
     private void afficheAlarmesInit(Context context){
 
         //ajout des data au inflate
-        modelAlarmeAdapter = new ModelAlarmeAdapter(context, ListSortAlarm);
+        modelAlarmeAdapter = new ModelAlarmeAdapter(context, listView, ListSortAlarm,
+                MapIdAlarm, MapIdDate,
+                ListActif, ListInactif, ListSortId,
+                textViewTempsRestant, textViewAlarmeActive);
 
         listView.setAdapter(modelAlarmeAdapter);
 
