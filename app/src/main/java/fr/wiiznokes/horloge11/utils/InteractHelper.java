@@ -46,6 +46,11 @@ public class InteractHelper {
 
         int index = mainActivity.ListSortId.indexOf(id);
 
+        System.out.println("helaaaaaaaaaaaaaaaaa");
+        for(Alarm alarm: mainActivity.ListSortAlarm){
+            System.out.println(alarm.getNameAlarm());
+        }
+
         //si alarm et la premiere
         if(mainActivity.ListActif.size() > 0){
             if(mainActivity.ListActif.get(0) == id){

@@ -126,9 +126,13 @@ public class MainActivity extends AppCompatActivity {
 
         //ajout des data au inflate
         modelAlarmeAdapter = new ModelAlarmeAdapter(this);
-
         //affichage des alarmes crées
         listView.setAdapter(modelAlarmeAdapter);
+
+
+        for(Alarm alarm: ListSortAlarm){
+            System.out.println(alarm.getNameAlarm());
+        }
 
 
 
@@ -194,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
         }
         init();
 
+        affichage = new Affichage();
         //affichage du nombre d'alarmes actives
         textViewAlarmeActive.setText(affichage.NombreAlarmsActives(ListActif.size()));
         //affichage du temps restant
@@ -205,6 +210,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void init(){
+        storageUtils = new StorageUtils();
+        trie = new Trie();
         this.MapIdAlarm = storageUtils.read(MainActivity.this);
         this.MapIdDate = trie.MapIdDate(MapIdAlarm);
         this.ListActif = trie.ListActifInit(MapIdAlarm, MapIdDate);

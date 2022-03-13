@@ -53,13 +53,13 @@ public class ModelAlarmeAdapter extends BaseAdapter {
     }
 
     @Override
-    public Alarm getItem(int position) {
-        return ListSortAlarm.get(position);
+    public Alarm getItem(int id) {
+        return ListSortAlarm.get(mainActivity.ListSortId.indexOf(id));
     }
 
     @Override
-    public long getItemId(int position) {
-        return ListSortAlarm.get(position).getId();
+    public long getItemId(int index) {
+        return ListSortAlarm.get(index).getId();
     }
 
 
