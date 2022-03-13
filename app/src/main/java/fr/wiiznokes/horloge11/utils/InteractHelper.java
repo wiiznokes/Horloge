@@ -42,18 +42,16 @@ public class InteractHelper {
     }
 
 
-    public void effacer(int id, Context context, List<Alarm> ListSortAlarm, ListView listView, View convertView,
-                        Map<Integer, Alarm> MapIdAlarm, Map<Integer, Calendar> MapIdDate,
-                        List<Integer> ListActif, List<Integer> ListInactif, List<Integer> ListSortId){
+    public void effacer(int id, MainActivity mainActivity){
 
-        int index = ListSortId.indexOf(id);
+        int index = mainActivity.ListSortId.indexOf(id);
 
         //si alarm et la premiere
-        if(ListActif.size() > 0){
-            if(ListActif.get(0) == id){
+        if(mainActivity.ListActif.size() > 0){
+            if(mainActivity.ListActif.get(0) == id){
                 try {
-                    ListActif.get(1);
-                    textViewTempsRestant.setText(new Affichage().tempsRestant(ListSortAlarm.get(1)));
+                    mainActivity.ListActif.get(1);
+                    textViewTempsRestant.setText(new Affichage().tempsRestant(mainActivity.ListSortAlarm.get(1)));
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException){
                     textViewTempsRestant.setText(R.string.tempsRestant0alarm);
@@ -61,25 +59,24 @@ public class InteractHelper {
 
             }
         }
-        ListSortAlarm.remove(index);
-        listView.removeView(convertView);
-        MapIdAlarm.remove(id);
-        MapIdDate.remove(id);
+        mainActivity.ListSortAlarm.remove(index);
+        mainActivity.MapIdAlarm.remove(id);
+        mainActivity.MapIdDate.remove(id);
 
-        if(ListActif.contains(id)){
-            ListActif.remove((Object) id);
+        if(mainActivity.ListActif.contains(id)){
+            mainActivity.ListActif.remove((Object) id);
         }
         else{
-            ListInactif.remove((Object) id);
+            mainActivity.ListInactif.remove((Object) id);
         }
-        ListSortId = new Trie().ListSortId(ListActif, ListInactif);
+        mainActivity.ListSortId = new Trie().ListSortId(mainActivity.ListActif, mainActivity.ListInactif);
 
 
         //maj nb alarm active
-        textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
+        textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(mainActivity.ListActif.size()));
 
         //ecriture
-        new StorageUtils().write(MapIdAlarm, context);
+        new StorageUtils().write(mainActivity.MapIdAlarm, mainActivity);
 
     }
 

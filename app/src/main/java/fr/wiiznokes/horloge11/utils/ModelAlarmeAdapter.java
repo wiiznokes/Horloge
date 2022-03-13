@@ -22,74 +22,27 @@ import fr.wiiznokes.horloge11.app.MainActivity;
 
 public class ModelAlarmeAdapter extends BaseAdapter {
 
-    //dictionnaire key:id valeur:Alarm
-    private Map<Integer, Alarm> MapIdAlarm;
-    //dictionnaire key:id valeur:dateSonnerie
-    private Map<Integer, Calendar> MapIdDate;
-    //liste id alarm actif triée
-    private List<Integer> ListActif;
-    //liste id alarm Inactif triée
-    private List<Integer> ListInactif;
-    //liste somme de ListActif et Listinactif
-    private List<Integer> ListSortId;
-    //liste des alarmes triée
-    private List<Alarm> ListSortAlarm;
-    //element interactif
-    private TextView textViewTempsRestant;
-    private TextView textViewAlarmeActive;
-    private ListView listView;
 
 
 
-    private Context context;
+
+    private MainActivity mainActivity;
     private LayoutInflater inflater;
     private int cheminLayout = R.layout.alarme_affichage;
     private InteractHelper interactHelper;
 
-
-    public void setMapIdAlarm(Map<Integer, Alarm> mapIdAlarm) {
-        MapIdAlarm = mapIdAlarm;
-    }
-
-    public void setMapIdDate(Map<Integer, Calendar> mapIdDate) {
-        MapIdDate = mapIdDate;
-    }
-
-    public void setListActif(List<Integer> listActif) {
-        ListActif = listActif;
-    }
-
-    public void setListInactif(List<Integer> listInactif) {
-        ListInactif = listInactif;
-    }
-
-    public void setListSortId(List<Integer> listSortId) {
-        ListSortId = listSortId;
-    }
-
-    public void setListSortAlarm(List<Alarm> listSortAlarm) {
-        ListSortAlarm = listSortAlarm;
-    }
+    public List<Alarm> ListSortAlarm;
 
 
-    public ModelAlarmeAdapter(Context context, ListView listView, List<Alarm> ListSortAlarm,
-                              Map<Integer, Alarm> MapIdAlarm, Map<Integer, Calendar> MapIdDate,
-                              List<Integer> ListActif, List<Integer> ListInactif, List<Integer> ListSortId,
-                              TextView textViewTempsRestant, TextView textViewAlarmeActive){
-        this.context = context;
+
+
+
+    public ModelAlarmeAdapter(Context context){
+        this.mainActivity = (MainActivity) context;
         this.inflater = LayoutInflater.from(context);
+        this.ListSortAlarm = mainActivity.ListSortAlarm;
 
-        this.MapIdAlarm = MapIdAlarm;
-        this.MapIdDate = MapIdDate;
-        this.ListActif = ListActif;
-        this.ListInactif = ListInactif;
-        this.ListSortId = ListSortId;
-        this.ListSortAlarm = ListSortAlarm;
-        this.textViewTempsRestant = textViewTempsRestant;
-        this.textViewAlarmeActive = textViewAlarmeActive;
-        this.listView = listView;
-
-        this.interactHelper = new InteractHelper(textViewTempsRestant, textViewAlarmeActive);
+        this.interactHelper = new InteractHelper(mainActivity.textViewTempsRestant, mainActivity.textViewAlarmeActive);
 
 
     }
@@ -138,45 +91,23 @@ public class ModelAlarmeAdapter extends BaseAdapter {
             });
 
             //item Listener
-            View finalConvertView = convertView;
-            convertView.setOnLongClickListener(v -> {
-                AlertDialog.Builder popUp = new AlertDialog.Builder(context);
-                popUp.setNegativeButton("EFFACER", (dialog, which) -> {
+            convertView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    AlertDialog.Builder popUp = new AlertDialog.Builder(mainActivity);
+                    popUp.setNegativeButton("EFFACER", (dialog, which) -> {
 
-                    interactHelper.effacer(id, context, ListSortAlarm, listView, finalConvertView,
-                            MapIdAlarm, MapIdDate,
-                            ListActif, ListInactif, ListSortId);
-                    Toast.makeText(context, "effacé", Toast.LENGTH_SHORT).show();
+                        interactHelper.effacer(id, mainActivity);
+                        Toast.makeText(mainActivity, "effacé", Toast.LENGTH_SHORT).show();
+                        notifyDataSetChanged();
 
-
-                });
-                setListMain();
-                MainActivity main;
-                main = (MainActivity) context;
-                listView.setAdapter(main.modelAlarmeAdapter);
-                popUp.setPositiveButton("MODIFIER", (dialog, which) -> Toast.makeText(context, "modifié", Toast.LENGTH_SHORT).show());
-                popUp.show();
-                return false;
+                    });
+                    popUp.show();
+                    return true;
+                }
             });
-
         }
-
-
-
-
-
         return convertView;
     }
-    private void setListMain(){
-        MainActivity main;
-        main = (MainActivity) context;
-        main.MapIdAlarm = MapIdAlarm;
-        main.setMapIdDate(MapIdDate);
-        main.setListActif(ListActif);
-        main.setListInactif(ListInactif);
-        main.setListSortId(ListSortId);
-        main.ListSortAlarm = ListSortAlarm;
-        main.listView = listView;
 
-    }
 }

@@ -230,7 +230,4 @@ public class Trie {
 
         return ListSortAlarm;
     }
-    public void ListSortAlarmChange(int index, List<Alarm> ListSortAlarm, Alarm alarme){
-        ListSortAlarm.add(index, alarme);
-    }
 }
