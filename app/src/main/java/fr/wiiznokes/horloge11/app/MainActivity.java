@@ -92,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
                         //ajout de l'affichage de l'alarme
 
                         modelAlarmeAdapter.ListSortAlarm = ListSortAlarm;
-                        //listView.setAdapter(modelAlarmeAdapter);
 
                         modelAlarmeAdapter.notifyDataSetChanged();
 
