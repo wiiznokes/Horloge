@@ -1,19 +1,7 @@
 package fr.wiiznokes.horloge11.utils;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ListView;
+
 import android.widget.TextView;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import com.google.android.material.switchmaterial.SwitchMaterial;
-
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.app.MainActivity;
@@ -33,10 +21,53 @@ public class InteractHelper {
 
     }
 
+    public void switchHelper(long id, MainActivity mainActivity){
+        Alarm currentAlarm = mainActivity.MapIdAlarm.get(id);
+
+        int index;
+
+        if(currentAlarm.isActive()){
+            currentAlarm.setActive(false);
+            mainActivity.MapIdDate.put(currentAlarm.getId(), mainActivity.trie.dateProchaineSonnerie(currentAlarm));
+
+            //si l'alarm etait la première, affichage temps restant modifié
+            if (currentAlarm.getId() == mainActivity.ListActif.get(0)){
+                if(mainActivity.ListActif.size() >= 2){
+                    textViewTempsRestant.setText(mainActivity.affichage.tempsRestant(mainActivity.MapIdAlarm.get(mainActivity.ListActif.get(1))));
+                }
+                else{
+                    textViewTempsRestant.setText(R.string.tempsRestant0alarm);
+                }
+            }
+            mainActivity.ListActif.remove(currentAlarm.getId());
+
+
+            index = mainActivity.trie.ListInactifChange(mainActivity.ListInactif, currentAlarm.getId(), mainActivity.MapIdDate);
+            index = mainActivity.ListActif.size() + index;
+        }
+        else {
+            currentAlarm.setActive(true);
+            mainActivity.MapIdDate.put(currentAlarm.getId(), mainActivity.trie.dateProchaineSonnerie(currentAlarm));
+
+            mainActivity.ListInactif.remove(currentAlarm.getId());
+            index = mainActivity.trie.ListActifChange(mainActivity.ListActif, currentAlarm.getId(), mainActivity.MapIdDate);
+            //si l'alarm devient la première, affichage temps restant modifié
+            if (currentAlarm.getId() == mainActivity.ListActif.get(0)){
+                textViewTempsRestant.setText(mainActivity.affichage.tempsRestant(mainActivity.MapIdAlarm.get(mainActivity.ListActif.get(0))));
+            }
+        }
+
+        mainActivity.MapIdAlarm.put(currentAlarm.getId(), currentAlarm);
+        mainActivity.ListSortId = mainActivity.trie.ListSortId(mainActivity.ListActif, mainActivity.ListInactif);
+        mainActivity.ListSortAlarm.add(index, currentAlarm);
+
+        textViewAlarmeActive.setText(mainActivity.affichage.NombreAlarmsActives(mainActivity.ListActif.size()));
+    }
 
 
 
-    public void effacer(int id, MainActivity mainActivity){
+
+    public void effacer(long id, MainActivity mainActivity){
 
         int index = mainActivity.ListSortId.indexOf(id);
 

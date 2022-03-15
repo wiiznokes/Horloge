@@ -1,15 +1,8 @@
 package fr.wiiznokes.horloge11.utils;
 
-import android.content.Context;
-import android.view.View;
-import android.widget.TextView;
+
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-
-import com.google.android.material.switchmaterial.SwitchMaterial;
-
 import java.util.Calendar;
 
 public class Affichage extends AppCompatActivity {

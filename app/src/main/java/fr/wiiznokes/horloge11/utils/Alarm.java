@@ -1,7 +1,5 @@
 package fr.wiiznokes.horloge11.utils;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import java.io.Serializable;
 

@@ -11,16 +11,12 @@ import android.widget.RadioButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 
-import javax.xml.transform.Result;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.utils.Alarm;
-import fr.wiiznokes.horloge11.utils.StorageUtils;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -254,11 +250,7 @@ public class AddActivity extends AppCompatActivity {
                 Alarm1.setSonnerie(sonnerieName.getText().toString());
 
                 //set de l'id de l'alarm
-                long id = new Random().nextLong();
-                if (id < 0){
-                    id = id * -1;
-                }
-                Alarm1.setId(id);
+                Alarm1.setId(new Random().nextLong());
 
 
                 Intent resultIntent = new Intent();

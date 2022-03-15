@@ -2,20 +2,16 @@ package fr.wiiznokes.horloge11.utils;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.app.MainActivity;
@@ -67,6 +63,9 @@ public class ModelAlarmeAdapter extends BaseAdapter {
     public View getView(int id, View convertView, ViewGroup parent) {
         if (convertView == null) {
             //We must create a View:
+
+
+
             convertView = inflater.inflate(cheminLayout, parent, false);
 
             Alarm currentAlarm = getItem(id);
@@ -82,29 +81,31 @@ public class ModelAlarmeAdapter extends BaseAdapter {
 
             convertView.setId(id);
 
-            //switch listener
-            switchMaterial.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            long idAlarm = getItemId(id);
 
-                }
+            //switch listener
+            switchMaterial.setOnClickListener(v -> {
+                interactHelper.switchHelper(idAlarm, mainActivity);
             });
 
             //item Listener
-            convertView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    AlertDialog.Builder popUp = new AlertDialog.Builder(mainActivity);
-                    popUp.setNegativeButton("EFFACER", (dialog, which) -> {
+            convertView.setOnLongClickListener(v -> {
+                AlertDialog.Builder popUp = new AlertDialog.Builder(mainActivity);
 
-                        interactHelper.effacer(id, mainActivity);
-                        Toast.makeText(mainActivity, "effacé", Toast.LENGTH_SHORT).show();
-                        notifyDataSetChanged();
+                popUp.setPositiveButton("MODIFIER", ((dialog, which) -> {
+                    Toast.makeText(mainActivity, "modifié", Toast.LENGTH_SHORT).show();
+                }));
 
-                    });
-                    popUp.show();
-                    return true;
-                }
+
+                popUp.setNegativeButton("EFFACER", (dialog, which) -> {
+
+                    interactHelper.effacer(idAlarm, mainActivity);
+                    Toast.makeText(mainActivity, "effacé", Toast.LENGTH_SHORT).show();
+                    notifyDataSetChanged();
+                });
+
+                popUp.show();
+                return true;
             });
         }
         return convertView;

@@ -4,21 +4,15 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
 import java.util.Map;
-import java.util.Map.Entry;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.List;
-import java.util.Map;
 
 
 public class StorageUtils {
 
-    private final String fileNameId = "saveIdNumber.txt";
     private final String fileName = "save.txt";
 
     public void write(Map<Long, Alarm> MapIdAlarm, Context context){
