@@ -29,6 +29,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.utils.*;
@@ -38,15 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     //dictionnaire key:id valeur:Alarm
-    public Map<Integer, Alarm> MapIdAlarm;
+    public Map<Long, Alarm> MapIdAlarm;
     //dictionnaire key:id valeur:dateSonnerie
-    public Map<Integer, Calendar> MapIdDate;
+    public Map<Long, Calendar> MapIdDate;
     //liste id alarm actif triée
-    public List<Integer> ListActif;
+    public List<Long> ListActif;
     //liste id alarm Inactif triée
-    public List<Integer> ListInactif;
+    public List<Long> ListInactif;
     //liste somme de ListActif et Listinactif
-    public List<Integer> ListSortId;
+    public List<Long> ListSortId;
     //liste des alarmes triée
     public List<Alarm> ListSortAlarm;
 
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
     private void initStorage(){
         //creation du fichier si il n'existe pas avec un tableau vide
         if(new StorageUtils().read(this)== null) {
-            Map<Integer, Alarm> MapIdAlarmInit = new HashMap<>();
+            Map<Long, Alarm> MapIdAlarmInit = new HashMap<>();
             //ecriture
             new StorageUtils().write(MapIdAlarmInit, this);
         }

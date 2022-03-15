@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 
 import javax.xml.transform.Result;
@@ -253,15 +254,12 @@ public class AddActivity extends AppCompatActivity {
                 Alarm1.setSonnerie(sonnerieName.getText().toString());
 
                 //set de l'id de l'alarm
-                int numberOfId = new StorageUtils().readAndIncId(AddActivity.this);
-                //verif si le fichier existe et sinon le crée avec un int=0
-                if (numberOfId == -1){
-                    new StorageUtils().incId(0, AddActivity.this);
-                    Alarm1.setId(0);
+                long id = new Random().nextLong();
+                if (id < 0){
+                    id = id * -1;
                 }
-                else{
-                    Alarm1.setId(numberOfId);
-                }
+                Alarm1.setId(id);
+
 
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("AlarmeAdd", Alarm1);

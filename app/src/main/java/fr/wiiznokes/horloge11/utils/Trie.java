@@ -12,8 +12,8 @@ import java.util.stream.Stream;
 public class Trie {
 
 
-    public Map<Integer, Calendar> MapIdDate(Map<Integer, Alarm> MapIdAlarm){
-        Map<Integer, Calendar> MapIdDate = new HashMap<>();
+    public Map<Long, Calendar> MapIdDate(Map<Long, Alarm> MapIdAlarm){
+        Map<Long, Calendar> MapIdDate = new HashMap<>();
         for(Alarm Alarm : MapIdAlarm.values()){
             MapIdDate.put(Alarm.getId(), dateProchaineSonnerie(Alarm));
         }
@@ -102,9 +102,9 @@ public class Trie {
     }
 
 
-    public List<Integer> ListActifInit(Map<Integer, Alarm> MapIdAlarm, Map<Integer, Calendar> MapIdDate){
+    public List<Long> ListActifInit(Map<Long, Alarm> MapIdAlarm, Map<Long, Calendar> MapIdDate){
 
-        List<Integer> ListActifInit = new ArrayList<>();
+        List<Long> ListActifInit = new ArrayList<>();
 
         for (Alarm Alarme : MapIdAlarm.values()){
             if(Alarme.isActive()){
@@ -131,9 +131,9 @@ public class Trie {
         return ListActifInit;
     }
 
-    public List<Integer> ListInactifInit(Map<Integer, Alarm> MapIdAlarm, Map<Integer, Calendar> MapIdDate){
+    public List<Long> ListInactifInit(Map<Long, Alarm> MapIdAlarm, Map<Long, Calendar> MapIdDate){
 
-        List<Integer> ListInactifInit = new ArrayList<>();
+        List<Long> ListInactifInit = new ArrayList<>();
 
         for (Alarm Alarme : MapIdAlarm.values()){
             if(!Alarme.isActive()){
@@ -162,7 +162,7 @@ public class Trie {
 
 
 
-    public List<Integer> ListSortId(List<Integer> ListActif, List<Integer> ListInactif){
+    public List<Long> ListSortId(List<Long> ListActif, List<Long> ListInactif){
         return Stream.concat(ListActif.stream(), ListInactif.stream()).collect(Collectors.toList());
     }
 
@@ -173,7 +173,7 @@ public class Trie {
 
 
     //inserer un id au bon endroit dans la ListTrie des alarmes actives
-    public int ListActifChange(List<Integer> ListActif, int id, Map<Integer, Calendar> MapIdDate){
+    public int ListActifChange(List<Long> ListActif, Long id, Map<Long, Calendar> MapIdDate){
         Calendar dateSonnerie = MapIdDate.get(id);
         int i = 0;
         //condition pour savoir si ListActif est vide
@@ -202,7 +202,7 @@ public class Trie {
         return i;
     }
     //inserer un id au bon endroit dans la ListTrie des alarmes Inactives
-    public int ListInactifChange(List<Integer> ListInactif, int id, Map<Integer, Calendar> MapIdDate){
+    public int ListInactifChange(List<Long> ListInactif, Long id, Map<Long, Calendar> MapIdDate){
         Calendar dateSonnerie = MapIdDate.get(id);
         int i = 0;
         //condition pour savoir si ListInactif est vide
@@ -228,10 +228,10 @@ public class Trie {
     }
 
 
-    public List<Alarm> ListSortAlarm(List<Integer> ListSortId, Map<Integer, Alarm> MapIdAlarm){
+    public List<Alarm> ListSortAlarm(List<Long> ListSortId, Map<Long, Alarm> MapIdAlarm){
 
         List<Alarm> ListSortAlarm = new ArrayList<>();
-        for(Integer id : ListSortId){
+        for(Long id : ListSortId){
             ListSortAlarm.add(MapIdAlarm.get(id));
         }
 
