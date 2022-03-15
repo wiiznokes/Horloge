@@ -79,13 +79,13 @@ public class ModelAlarmeAdapter extends BaseAdapter {
             alarmName.setText(currentAlarm.getNameAlarm());
             jourSonnerie.setText(currentAlarm.getJourSonnerieText());
 
-            convertView.setId(id);
 
             long idAlarm = getItemId(id);
 
             //switch listener
             switchMaterial.setOnClickListener(v -> {
                 interactHelper.switchHelper(idAlarm, mainActivity);
+                notifyDataSetChanged();
             });
 
             //item Listener
