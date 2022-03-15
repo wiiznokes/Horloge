@@ -183,13 +183,19 @@ public class Trie {
         else{
             boolean insertionChek = false;
             while (i < ListActif.size() && !insertionChek){
-                i = i + 1;
-                if(dateSonnerie.compareTo(MapIdDate.get(ListActif.get(i))) > 0){
+                //si la date de sonnerie de l'alarme est avant la date de sonnerie de l'alarm à l'index i de ListActif
+                //-> ajouter id de l'alarme à l'index i dans ListActif
+                if(dateSonnerie.compareTo(MapIdDate.get(ListActif.get(i))) < 0){
                     ListActif.add(i, id);
                     insertionChek = true;
                 }
+                else{
+                    i = i + 1;
+                }
+
             }
-            if(insertionChek) {
+            //ajouter à la fin de ListActif si l'insertion n'a pas pu se faire
+            if(!insertionChek) {
                 ListActif.add(id);
             }
         }
@@ -206,14 +212,15 @@ public class Trie {
         else{
             boolean insertionChek = false;
             while (i < ListInactif.size() && !insertionChek){
-                i = i + 1;
-                if(dateSonnerie.compareTo(MapIdDate.get(ListInactif.get(i))) > 0){
+                if(dateSonnerie.compareTo(MapIdDate.get(ListInactif.get(i))) < 0){
                     ListInactif.add(i, id);
                     insertionChek = true;
                 }
-
+                else {
+                    i = i + 1;
+                }
             }
-            if(insertionChek) {
+            if(!insertionChek) {
                 ListInactif.add(id);
             }
         }

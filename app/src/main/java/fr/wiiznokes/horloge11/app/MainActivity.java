@@ -92,14 +92,21 @@ public class MainActivity extends AppCompatActivity {
                         //ajout de l'affichage de l'alarme
 
                         modelAlarmeAdapter.ListSortAlarm = ListSortAlarm;
-                        listView.setAdapter(modelAlarmeAdapter);
+                        //listView.setAdapter(modelAlarmeAdapter);
+
+                        modelAlarmeAdapter.notifyDataSetChanged();
 
 
                         //maj nb alarmes actives
-                        textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
-
+                        textViewAlarmeActive.setText(affichage.NombreAlarmsActives(ListActif.size()));
                         //maj temps restant
-                        textViewTempsRestant.setText(new Affichage().tempsRestant(ListSortAlarm.get(0)));
+                        textViewTempsRestant.setText(affichage.tempsRestant(ListSortAlarm.get(0)));
+
+
+                        System.out.println("helaaaaaaaaaaaaaaaaa");
+                        for(Alarm alarm: ListSortAlarm){
+                            System.out.println(alarm.getNameAlarm());
+                        }
 
                     }
                     //bouton retour addActivity
@@ -121,7 +128,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initApp();
+        initStorage();
+
+        initAffichage();
 
 
         //ajout des data au inflate
@@ -130,9 +139,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(modelAlarmeAdapter);
 
 
-        for(Alarm alarm: ListSortAlarm){
-            System.out.println(alarm.getNameAlarm());
-        }
+
 
 
 
@@ -178,25 +185,32 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-    private void initApp(){
-        //recuperation des vues pour affichage
-        this.addAlarm = findViewById(R.id.floatingActionButton4);
-        this.addAlarmText = findViewById(R.id.editTextTextPersonName);
-        this.textViewTempsRestant = findViewById(R.id.textView4);
-        this.textViewAlarmeActive = findViewById(R.id.textView2);
-        this.listView = findViewById(R.id.list_view1);
-
+    private void initStorage(){
         //creation du fichier si il n'existe pas avec un tableau vide
         if(new StorageUtils().read(this)== null) {
             Map<Integer, Alarm> MapIdAlarmInit = new HashMap<>();
             //ecriture
             new StorageUtils().write(MapIdAlarmInit, this);
         }
-        init();
+
+        storageUtils = new StorageUtils();
+        trie = new Trie();
+
+        this.MapIdAlarm = storageUtils.read(MainActivity.this);
+        this.MapIdDate = trie.MapIdDate(MapIdAlarm);
+        this.ListActif = trie.ListActifInit(MapIdAlarm, MapIdDate);
+        this.ListInactif = trie.ListInactifInit(MapIdAlarm, MapIdDate);
+        this.ListSortId = trie.ListSortId(ListActif, ListInactif);
+        this.ListSortAlarm = trie.ListSortAlarm(ListSortId, MapIdAlarm);
+    }
+
+    private void initAffichage(){
+        //recuperation des vues pour affichage
+        this.addAlarm = findViewById(R.id.floatingActionButton4);
+        this.addAlarmText = findViewById(R.id.editTextTextPersonName);
+        this.textViewTempsRestant = findViewById(R.id.textView4);
+        this.textViewAlarmeActive = findViewById(R.id.textView2);
+        this.listView = findViewById(R.id.list_view1);
 
         affichage = new Affichage();
         //affichage du nombre d'alarmes actives
@@ -208,16 +222,6 @@ public class MainActivity extends AppCompatActivity {
         else{
             textViewTempsRestant.setText(R.string.tempsRestant0alarm);
         }
-    }
-    private void init(){
-        storageUtils = new StorageUtils();
-        trie = new Trie();
-        this.MapIdAlarm = storageUtils.read(MainActivity.this);
-        this.MapIdDate = trie.MapIdDate(MapIdAlarm);
-        this.ListActif = trie.ListActifInit(MapIdAlarm, MapIdDate);
-        this.ListInactif = trie.ListInactifInit(MapIdAlarm, MapIdDate);
-        this.ListSortId = trie.ListSortId(ListActif, ListInactif);
-        this.ListSortAlarm = trie.ListSortAlarm(ListSortId, MapIdAlarm);
     }
 
     private void initAjout(Alarm currentAlarm) {

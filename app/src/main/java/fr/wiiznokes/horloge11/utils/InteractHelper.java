@@ -34,22 +34,13 @@ public class InteractHelper {
     }
 
 
-    public void switchHelper(SwitchMaterial switchView, List<Alarm> Array1, Map<Integer, Integer> MapIdPos, Map<Integer, Calendar> MapIdDate,
-                             List<Integer> ListActif, List<Integer> ListInactif, List<Integer> ListSortId){
-
-
-
-    }
 
 
     public void effacer(int id, MainActivity mainActivity){
 
         int index = mainActivity.ListSortId.indexOf(id);
 
-        System.out.println("helaaaaaaaaaaaaaaaaa");
-        for(Alarm alarm: mainActivity.ListSortAlarm){
-            System.out.println(alarm.getNameAlarm());
-        }
+
 
         //si alarm et la premiere
         if(mainActivity.ListActif.size() > 0){
