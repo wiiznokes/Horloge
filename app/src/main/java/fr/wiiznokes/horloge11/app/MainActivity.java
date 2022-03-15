@@ -103,11 +103,6 @@ public class MainActivity extends AppCompatActivity {
                         textViewTempsRestant.setText(affichage.tempsRestant(ListSortAlarm.get(0)));
 
 
-                        System.out.println("helaaaaaaaaaaaaaaaaa");
-                        for(Alarm alarm: ListSortAlarm){
-                            System.out.println(alarm.getNameAlarm());
-                        }
-
                     }
                     //bouton retour addActivity
                     if(result.getResultCode() == 11){

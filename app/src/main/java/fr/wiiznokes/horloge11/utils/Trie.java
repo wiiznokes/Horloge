@@ -108,21 +108,21 @@ public class Trie {
 
         for (Alarm Alarme : MapIdAlarm.values()){
             if(Alarme.isActive()){
-                Calendar dateAlarm = MapIdDate.get(Alarme.getId());
+                Calendar dateSonnerie = MapIdDate.get(Alarme.getId());
                 if(ListActifInit.size() == 0){
                     ListActifInit.add(Alarme.getId());
                 }
                 else{
                     int i = 0;
-                    boolean insertionChek = true;
-                    while (i < ListActifInit.size() && insertionChek){
-                        if(dateAlarm.compareTo(MapIdDate.get(ListActifInit.get(i))) < 0){
+                    boolean insertionChek = false;
+                    while (i < ListActifInit.size() && !insertionChek){
+                        if(dateSonnerie.compareTo(MapIdDate.get(ListActifInit.get(i))) < 0){
                             ListActifInit.add(i, Alarme.getId());
-                            insertionChek = false;
+                            insertionChek = true;
                         }
                         i = i + 1;
                     }
-                    if(insertionChek) {
+                    if(!insertionChek) {
                         ListActifInit.add(Alarme.getId());
                     }
                 }
@@ -137,21 +137,21 @@ public class Trie {
 
         for (Alarm Alarme : MapIdAlarm.values()){
             if(!Alarme.isActive()){
-                Calendar dateAlarm = MapIdDate.get(Alarme.getId());
+                Calendar dateSonnerie = MapIdDate.get(Alarme.getId());
                 if(ListInactifInit.size() == 0){
                     ListInactifInit.add(Alarme.getId());
                 }
                 else{
                     int i = 0;
-                    boolean insertionChek = true;
-                    while (i < ListInactifInit.size() && insertionChek){
-                        if(dateAlarm.compareTo(MapIdDate.get(ListInactifInit.get(i))) < 0){
+                    boolean insertionChek = false;
+                    while (i < ListInactifInit.size() && !insertionChek){
+                        if(dateSonnerie.compareTo(MapIdDate.get(ListInactifInit.get(i))) < 0){
                             ListInactifInit.add(i, Alarme.getId());
-                            insertionChek = false;
+                            insertionChek = true;
                         }
                         i = i + 1;
                     }
-                    if(insertionChek) {
+                    if(!insertionChek) {
                         ListInactifInit.add(Alarme.getId());
                     }
                 }
