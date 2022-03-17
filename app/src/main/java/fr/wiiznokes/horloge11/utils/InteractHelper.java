@@ -24,12 +24,9 @@ public class InteractHelper {
     public void switchHelper(long id, MainActivity mainActivity){
         Alarm currentAlarm = mainActivity.MapIdAlarm.get(id);
 
-        mainActivity.ListSortAlarm.remove(mainActivity.ListSortId.indexOf(id));
-
 
         if(currentAlarm.isActive()){
             currentAlarm.setActive(false);
-            mainActivity.MapIdDate.put(currentAlarm.getId(), mainActivity.trie.dateProchaineSonnerie(currentAlarm));
 
             //si l'alarm etait la première, affichage temps restant modifié
             if (currentAlarm.getId() == mainActivity.ListActif.get(0)){
@@ -41,16 +38,14 @@ public class InteractHelper {
                 }
             }
             mainActivity.ListActif.remove(currentAlarm.getId());
-
-
             mainActivity.trie.ListInactifChange(mainActivity.ListInactif, currentAlarm.getId(), mainActivity.MapIdDate);
         }
         else {
             currentAlarm.setActive(true);
-            mainActivity.MapIdDate.put(currentAlarm.getId(), mainActivity.trie.dateProchaineSonnerie(currentAlarm));
 
             mainActivity.ListInactif.remove(currentAlarm.getId());
             mainActivity.trie.ListActifChange(mainActivity.ListActif, currentAlarm.getId(), mainActivity.MapIdDate);
+
             //si l'alarm devient la première, affichage temps restant modifié
             if (currentAlarm.getId() == mainActivity.ListActif.get(0)){
                 textViewTempsRestant.setText(mainActivity.affichage.tempsRestant(mainActivity.MapIdAlarm.get(mainActivity.ListActif.get(0))));
@@ -59,7 +54,6 @@ public class InteractHelper {
 
         mainActivity.MapIdAlarm.put(currentAlarm.getId(), currentAlarm);
         mainActivity.ListSortId = mainActivity.trie.ListSortId(mainActivity.ListActif, mainActivity.ListInactif);
-        mainActivity.ListSortAlarm.add(mainActivity.ListSortId.indexOf(id), currentAlarm);
         textViewAlarmeActive.setText(mainActivity.affichage.NombreAlarmsActives(mainActivity.ListActif.size()));
 
         //ecriture
@@ -73,9 +67,7 @@ public class InteractHelper {
 
         int index = mainActivity.ListSortId.indexOf(id);
 
-
-
-        //si alarm et la premiere
+        //si alarm est la premiere
         if(mainActivity.ListActif.size() > 0){
             if(mainActivity.ListActif.get(0) == id){
                 try {
@@ -98,7 +90,7 @@ public class InteractHelper {
         else{
             mainActivity.ListInactif.remove((Object) id);
         }
-        mainActivity.ListSortId = new Trie().ListSortId(mainActivity.ListActif, mainActivity.ListInactif);
+        mainActivity.ListSortId = mainActivity.trie.ListSortId(mainActivity.ListActif, mainActivity.ListInactif);
 
 
         //maj nb alarm active
