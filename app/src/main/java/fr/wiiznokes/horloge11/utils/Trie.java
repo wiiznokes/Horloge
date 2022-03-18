@@ -173,7 +173,7 @@ public class Trie {
 
 
     //inserer un id au bon endroit dans la ListTrie des alarmes actives
-    public int ListActifChange(List<Long> ListActif, Long id, Map<Long, Calendar> MapIdDate){
+    public void ListActifChange(List<Long> ListActif, Long id, Map<Long, Calendar> MapIdDate){
         Calendar dateSonnerie = MapIdDate.get(id);
         int i = 0;
         //condition pour savoir si ListActif est vide
@@ -199,10 +199,9 @@ public class Trie {
                 ListActif.add(id);
             }
         }
-        return i;
     }
     //inserer un id au bon endroit dans la ListTrie des alarmes Inactives
-    public int ListInactifChange(List<Long> ListInactif, Long id, Map<Long, Calendar> MapIdDate){
+    public void ListInactifChange(List<Long> ListInactif, Long id, Map<Long, Calendar> MapIdDate){
         Calendar dateSonnerie = MapIdDate.get(id);
         int i = 0;
         //condition pour savoir si ListInactif est vide
@@ -224,7 +223,6 @@ public class Trie {
                 ListInactif.add(id);
             }
         }
-        return i;
     }
 
 

@@ -84,7 +84,10 @@ public class MainActivity extends AppCompatActivity {
 
                         modelAlarmeAdapter.ListSortAlarm = ListSortAlarm;
 
-                        modelAlarmeAdapter.notifyDataSetChanged();
+                        adapter=new ArrayAdapter<String>(this,
+                                android.R.layout.simple_list_item_1,
+                                listItems);
+                        setListAdapter(adapter);
 
 
                         //maj nb alarmes actives
@@ -211,11 +214,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void initAjout(Alarm currentAlarm) {
         MapIdAlarm.put(currentAlarm.getId(), currentAlarm);
-        MapIdDate.put(currentAlarm.getId(), new Trie().dateProchaineSonnerie(currentAlarm));
+        MapIdDate.put(currentAlarm.getId(), trie.dateProchaineSonnerie(currentAlarm));
 
-        int index = trie.ListActifChange(ListActif, currentAlarm.getId(), MapIdDate);
+        trie.ListActifChange(ListActif, currentAlarm.getId(), MapIdDate);
 
         ListSortId = trie.ListSortId(ListActif, ListInactif);
-        ListSortAlarm.add(index, currentAlarm);
+        ListSortAlarm.add(ListSortId.indexOf(currentAlarm.getId()), currentAlarm);
     }
 }
