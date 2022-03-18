@@ -72,7 +72,7 @@ public class InteractHelper {
             if(mainActivity.ListActif.get(0) == id){
                 try {
                     mainActivity.ListActif.get(1);
-                    textViewTempsRestant.setText(new Affichage().tempsRestant(mainActivity.ListSortAlarm.get(1)));
+                    textViewTempsRestant.setText(new Affichage().tempsRestant(mainActivity.modelAlarmeAdapter.ListSortAlarm.get(1)));
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException){
                     textViewTempsRestant.setText(R.string.tempsRestant0alarm);
@@ -80,7 +80,7 @@ public class InteractHelper {
 
             }
         }
-        mainActivity.ListSortAlarm.remove(index);
+        mainActivity.modelAlarmeAdapter.ListSortAlarm.remove(index);
         mainActivity.MapIdAlarm.remove(id);
         mainActivity.MapIdDate.remove(id);
 

@@ -36,8 +36,7 @@ public class ModelAlarmeAdapter extends BaseAdapter {
     public ModelAlarmeAdapter(Context context){
         this.mainActivity = (MainActivity) context;
         this.inflater = LayoutInflater.from(context);
-        this.ListSortAlarm = mainActivity.ListSortAlarm;
-
+        this.ListSortAlarm = mainActivity.trie.ListSortAlarm(mainActivity.ListSortId, mainActivity.MapIdAlarm);
         this.interactHelper = new InteractHelper(mainActivity.textViewTempsRestant, mainActivity.textViewAlarmeActive);
 
 
