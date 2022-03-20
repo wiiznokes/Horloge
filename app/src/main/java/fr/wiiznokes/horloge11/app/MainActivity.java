@@ -77,9 +77,9 @@ public class MainActivity extends AppCompatActivity {
 
                         storageUtils.write(MapIdAlarm, MainActivity.this);
 
-                        listView
 
-                        //modelAlarmeAdapter.notifyDataSetChanged();
+
+                        modelAlarmeAdapter.notifyDataSetChanged();
 
 
                         //maj nb alarmes actives
