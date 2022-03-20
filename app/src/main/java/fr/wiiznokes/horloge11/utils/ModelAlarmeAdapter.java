@@ -3,11 +3,13 @@ package fr.wiiznokes.horloge11.utils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.media.midi.MidiManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.app.MainActivity;
@@ -32,16 +35,20 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 
     public ArrayList<Alarm> list;
 
+    public ListView listView;
 
 
 
 
-    public ModelAlarmeAdapter(Context context, ArrayList<Alarm> items, TextView textViewTempsRestant, TextView textViewAlarmeActive){
+
+    public ModelAlarmeAdapter(Context context, ArrayList<Alarm> items, TextView textViewTempsRestant, TextView textViewAlarmeActive, ListView listView){
 
         super(context, R.layout.alarme_affichage, items);
 
         this.context = context;
         this.list = items;
+
+        this.listView = listView;
 
         this.interactHelper = new InteractHelper(textViewTempsRestant, textViewAlarmeActive, context);
 
@@ -88,8 +95,9 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
             //switch listener
             switch1.setOnClickListener(v -> {
                 interactHelper.switchHelper(currentAlarm);
+
                 MainActivity.items = Trie.ListItems(MainActivity.ListSortId, MainActivity.MapIdAlarm);
-                MainActivity.listView.setAdapter(MainActivity.adapter);
+                this.notifyDataSetChanged();
 
 
             });
@@ -108,7 +116,7 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
                     interactHelper.effacer(currentAlarm);
 
                     MainActivity.items = Trie.ListItems(MainActivity.ListSortId, MainActivity.MapIdAlarm);
-                    MainActivity.listView.setAdapter(MainActivity.adapter);
+                    this.notifyDataSetChanged();
 
                     Toast.makeText(context, "effacé", Toast.LENGTH_SHORT).show();
 

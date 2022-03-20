@@ -12,7 +12,7 @@ public class InteractHelper {
     private final TextView textViewTempsRestant;
     private final TextView textViewAlarmeActive;
 
-    private Context context;
+    private final Context context;
 
 
 

@@ -54,9 +54,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public static ListView listView;
+    public ListView listView;
     public static ArrayList<Alarm> items;
-    public static ModelAlarmeAdapter adapter;
+    public  ModelAlarmeAdapter adapter;
 
 
 
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         initAjout(currentAlarme);
 
                         items = Trie.ListItems(ListSortId, MapIdAlarm);
-                        listView.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
 
 
                         StorageUtils.write(MapIdAlarm, MainActivity.this);
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(modelAlarmeAdapter);
 
 */
-        adapter = new ModelAlarmeAdapter(this, items, textViewTempsRestant, textViewAlarmeActive);
+        adapter = new ModelAlarmeAdapter(this, items, textViewTempsRestant, textViewAlarmeActive, listView);
         listView.setAdapter(adapter);
 
 
@@ -175,12 +175,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
     private void initStorage(){
         //creation du fichier si il n'existe pas avec un tableau vide
-        if(new StorageUtils().read(this)== null) {
+        if(StorageUtils.read(this)== null) {
             Map<Long, Alarm> MapIdAlarmInit = new HashMap<>();
             //ecriture
-            new StorageUtils().write(MapIdAlarmInit, this);
+            StorageUtils.write(MapIdAlarmInit, this);
         }
 
 
