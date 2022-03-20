@@ -96,7 +96,7 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
             switch1.setOnClickListener(v -> {
                 interactHelper.switchHelper(currentAlarm);
 
-                MainActivity.items = Trie.ListItems(MainActivity.ListSortId, MainActivity.MapIdAlarm);
+                Trie.ListItems();
                 this.notifyDataSetChanged();
 
 
@@ -115,7 +115,7 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 
                     interactHelper.effacer(currentAlarm);
 
-                    MainActivity.items = Trie.ListItems(MainActivity.ListSortId, MainActivity.MapIdAlarm);
+                    Trie.ListItems();
                     this.notifyDataSetChanged();
 
                     Toast.makeText(context, "effacé", Toast.LENGTH_SHORT).show();

@@ -10,12 +10,15 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import fr.wiiznokes.horloge11.app.MainActivity;
+
 
 public class StorageUtils {
 
     private static final String fileName = "save.txt";
 
-    public static void write(Map<Long, Alarm> MapIdAlarm, Context context){
+
+    public static void write(Context context, Map<Long, Alarm> MapIdAlarm){
 
         try {
             FileOutputStream output = context.openFileOutput(fileName, MODE_PRIVATE);
@@ -29,7 +32,7 @@ public class StorageUtils {
     }
 
 
-    public static Map<Long, Alarm> read(Context context){
+    public static int read(Context context){
         Map<Long, Alarm> MapIdAlarm;
         try {
             FileInputStream input = context.openFileInput(fileName);
@@ -37,10 +40,12 @@ public class StorageUtils {
             MapIdAlarm = (Map<Long, Alarm>) in.readObject();
             in.close();
             input.close();
-            return MapIdAlarm;
+            MainActivity.MapIdAlarm = MapIdAlarm;
+            return 0;
         } catch (Exception e) {
             System.out.println("erreur dans la lecture");
+            return 1;
         }
-        return null;
+
     }
 }

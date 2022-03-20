@@ -52,11 +52,10 @@ public class MainActivity extends AppCompatActivity {
     public TextView textViewAlarmeActive;
 
 
-
-
-    public ListView listView;
+    //listview
     public static ArrayList<Alarm> items;
-    public  ModelAlarmeAdapter adapter;
+    public ListView listView;
+    public ModelAlarmeAdapter adapter;
 
 
 
@@ -80,11 +79,11 @@ public class MainActivity extends AppCompatActivity {
                         //creation de tous les objets
                         initAjout(currentAlarme);
 
-                        items = Trie.ListItems(ListSortId, MapIdAlarm);
+                        Trie.ListItems();
                         adapter.notifyDataSetChanged();
 
 
-                        StorageUtils.write(MapIdAlarm, MainActivity.this);
+                        StorageUtils.write(MainActivity.this, MapIdAlarm);
 
 
 
@@ -179,20 +178,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void initStorage(){
         //creation du fichier si il n'existe pas avec un tableau vide
-        if(StorageUtils.read(this)== null) {
+        if(StorageUtils.read(this)== 1) {
             Map<Long, Alarm> MapIdAlarmInit = new HashMap<>();
             //ecriture
-            StorageUtils.write(MapIdAlarmInit, this);
+            StorageUtils.write(this, MapIdAlarmInit);
         }
 
 
-        MapIdAlarm = StorageUtils.read(MainActivity.this);
-        MapIdDate = Trie.MapIdDate(MapIdAlarm);
-        ListActif = Trie.ListActifInit(MapIdAlarm, MapIdDate);
-        ListInactif = Trie.ListInactifInit(MapIdAlarm, MapIdDate);
-        ListSortId = Trie.ListSortId(ListActif, ListInactif);
-
-        items = Trie.ListItems(ListSortId, MapIdAlarm);
+        StorageUtils.read(this);
+        Trie.MapIdDate();
+        Trie.ListActifInit();
+        Trie.ListInactifInit();
+        Trie.ListSortId();
+        Trie.ListItems();
     }
 
     private void initAffichage(){
@@ -219,8 +217,8 @@ public class MainActivity extends AppCompatActivity {
         MapIdAlarm.put(currentAlarm.getId(), currentAlarm);
         MapIdDate.put(currentAlarm.getId(), Trie.dateProchaineSonnerie(currentAlarm));
 
-        Trie.ListActifChange(ListActif, currentAlarm.getId(), MapIdDate);
-        ListSortId = Trie.ListSortId(ListActif, ListInactif);
+        Trie.ListActifChange(currentAlarm.getId());
+        Trie.ListSortId();
 
     }
 }

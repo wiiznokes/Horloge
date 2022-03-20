@@ -9,15 +9,17 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import fr.wiiznokes.horloge11.app.MainActivity;
+
 public class Trie {
 
 
-    public static Map<Long, Calendar> MapIdDate(Map<Long, Alarm> MapIdAlarm){
+    public static void MapIdDate(){
         Map<Long, Calendar> MapIdDate = new HashMap<>();
-        for(Alarm Alarm : MapIdAlarm.values()){
+        for(Alarm Alarm : MainActivity.MapIdAlarm.values()){
             MapIdDate.put(Alarm.getId(), dateProchaineSonnerie(Alarm));
         }
-        return MapIdDate;
+        MainActivity.MapIdDate = MapIdDate;
     }
 
 
@@ -102,13 +104,13 @@ public class Trie {
     }
 
 
-    public static List<Long> ListActifInit(Map<Long, Alarm> MapIdAlarm, Map<Long, Calendar> MapIdDate){
+    public static void ListActifInit(){
 
         List<Long> ListActifInit = new ArrayList<>();
 
-        for (Alarm Alarme : MapIdAlarm.values()){
+        for (Alarm Alarme : MainActivity.MapIdAlarm.values()){
             if(Alarme.isActive()){
-                Calendar dateSonnerie = MapIdDate.get(Alarme.getId());
+                Calendar dateSonnerie = MainActivity.MapIdDate.get(Alarme.getId());
                 if(ListActifInit.size() == 0){
                     ListActifInit.add(Alarme.getId());
                 }
@@ -116,7 +118,7 @@ public class Trie {
                     int i = 0;
                     boolean insertionChek = false;
                     while (i < ListActifInit.size() && !insertionChek){
-                        if(dateSonnerie.compareTo(MapIdDate.get(ListActifInit.get(i))) < 0){
+                        if(dateSonnerie.compareTo(MainActivity.MapIdDate.get(ListActifInit.get(i))) < 0){
                             ListActifInit.add(i, Alarme.getId());
                             insertionChek = true;
                         }
@@ -128,16 +130,16 @@ public class Trie {
                 }
             }
         }
-        return ListActifInit;
+        MainActivity.ListActif = ListActifInit;
     }
 
-    public static List<Long> ListInactifInit(Map<Long, Alarm> MapIdAlarm, Map<Long, Calendar> MapIdDate){
+    public static void ListInactifInit(){
 
         List<Long> ListInactifInit = new ArrayList<>();
 
-        for (Alarm Alarme : MapIdAlarm.values()){
+        for (Alarm Alarme : MainActivity.MapIdAlarm.values()){
             if(!Alarme.isActive()){
-                Calendar dateSonnerie = MapIdDate.get(Alarme.getId());
+                Calendar dateSonnerie = MainActivity.MapIdDate.get(Alarme.getId());
                 if(ListInactifInit.size() == 0){
                     ListInactifInit.add(Alarme.getId());
                 }
@@ -145,7 +147,7 @@ public class Trie {
                     int i = 0;
                     boolean insertionChek = false;
                     while (i < ListInactifInit.size() && !insertionChek){
-                        if(dateSonnerie.compareTo(MapIdDate.get(ListInactifInit.get(i))) < 0){
+                        if(dateSonnerie.compareTo(MainActivity.MapIdDate.get(ListInactifInit.get(i))) < 0){
                             ListInactifInit.add(i, Alarme.getId());
                             insertionChek = true;
                         }
@@ -157,13 +159,13 @@ public class Trie {
                 }
             }
         }
-        return ListInactifInit;
+        MainActivity.ListInactif = ListInactifInit;
     }
 
 
 
-    public static List<Long> ListSortId(List<Long> ListActif, List<Long> ListInactif){
-        return Stream.concat(ListActif.stream(), ListInactif.stream()).collect(Collectors.toList());
+    public static void ListSortId(){
+        MainActivity.ListSortId = Stream.concat(MainActivity.ListActif.stream(), MainActivity.ListInactif.stream()).collect(Collectors.toList());
     }
 
 
@@ -173,20 +175,20 @@ public class Trie {
 
 
     //inserer un id au bon endroit dans la ListTrie des alarmes actives
-    public static void ListActifChange(List<Long> ListActif, Long id, Map<Long, Calendar> MapIdDate){
-        Calendar dateSonnerie = MapIdDate.get(id);
+    public static void ListActifChange(Long id){
+        Calendar dateSonnerie = MainActivity.MapIdDate.get(id);
         int i = 0;
         //condition pour savoir si ListActif est vide
-        if(ListActif.size() == 0){
-            ListActif.add(id);
+        if(MainActivity.ListActif.size() == 0){
+            MainActivity.ListActif.add(id);
         }
         else{
             boolean insertionChek = false;
-            while (i < ListActif.size() && !insertionChek){
+            while (i < MainActivity.ListActif.size() && !insertionChek){
                 //si la date de sonnerie de l'alarme est avant la date de sonnerie de l'alarm à l'index i de ListActif
                 //-> ajouter id de l'alarme à l'index i dans ListActif
-                if(dateSonnerie.compareTo(MapIdDate.get(ListActif.get(i))) < 0){
-                    ListActif.add(i, id);
+                if(dateSonnerie.compareTo(MainActivity.MapIdDate.get(MainActivity.ListActif.get(i))) < 0){
+                    MainActivity.ListActif.add(i, id);
                     insertionChek = true;
                 }
                 else{
@@ -196,23 +198,23 @@ public class Trie {
             }
             //ajouter à la fin de ListActif si l'insertion n'a pas pu se faire
             if(!insertionChek) {
-                ListActif.add(id);
+                MainActivity.ListActif.add(id);
             }
         }
     }
     //inserer un id au bon endroit dans la ListTrie des alarmes Inactives
-    public static void ListInactifChange(List<Long> ListInactif, Long id, Map<Long, Calendar> MapIdDate){
-        Calendar dateSonnerie = MapIdDate.get(id);
+    public static void ListInactifChange(Long id){
+        Calendar dateSonnerie = MainActivity.MapIdDate.get(id);
         int i = 0;
         //condition pour savoir si ListInactif est vide
-        if(ListInactif.size() == 0){
-            ListInactif.add(id);
+        if(MainActivity.ListInactif.size() == 0){
+            MainActivity.ListInactif.add(id);
         }
         else{
             boolean insertionChek = false;
-            while (i < ListInactif.size() && !insertionChek){
-                if(dateSonnerie.compareTo(MapIdDate.get(ListInactif.get(i))) < 0){
-                    ListInactif.add(i, id);
+            while (i < MainActivity.ListInactif.size() && !insertionChek){
+                if(dateSonnerie.compareTo(MainActivity.MapIdDate.get(MainActivity.ListInactif.get(i))) < 0){
+                    MainActivity.ListInactif.add(i, id);
                     insertionChek = true;
                 }
                 else {
@@ -220,19 +222,19 @@ public class Trie {
                 }
             }
             if(!insertionChek) {
-                ListInactif.add(id);
+                MainActivity.ListInactif.add(id);
             }
         }
     }
 
 
-    public static ArrayList<Alarm> ListItems(List<Long> ListSortId, Map<Long, Alarm> MapIdAlarm){
+    public static void ListItems(){
 
         ArrayList<Alarm> ListSortAlarm = new ArrayList<>();
-        for(Long id : ListSortId){
-            ListSortAlarm.add(MapIdAlarm.get(id));
+        for(Long id : MainActivity.ListSortId){
+            ListSortAlarm.add(MainActivity.MapIdAlarm.get(id));
         }
 
-        return ListSortAlarm;
+        MainActivity.items = ListSortAlarm;
     }
 }
