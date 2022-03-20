@@ -52,19 +52,22 @@ public class InteractHelper {
 
             //si l'alarm devient la première, affichage temps restant modifié
             if (currentAlarm.getId() == MainActivity.ListActif.get(0)){
-                textViewTempsRestant.setText(Affichage.tempsRestant(MainActivity.MapIdAlarm.get(MainActivity.ListActif.get(0))));
+                textViewTempsRestant.setText(Affichage.tempsRestant(currentAlarm));
             }
         }
 
+        MainActivity.removeItem(MainActivity.ListSortId.indexOf(currentAlarm.getId()));
+
         MainActivity.MapIdAlarm.put(currentAlarm.getId(), currentAlarm);
         Trie.ListSortId();
-
-        //MainActivity.changePosItem(positionBefore, currentAlarm, positionAfter);
 
         textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
 
         //ecriture
         StorageUtils.write(context, MainActivity.MapIdAlarm);
+
+        //maj affichage
+        MainActivity.addItem(currentAlarm, MainActivity.ListSortId.indexOf(currentAlarm.getId()));
     }
 
 
@@ -73,7 +76,6 @@ public class InteractHelper {
     public void effacer(Alarm currentAlarm){
 
         long id = currentAlarm.getId();
-
 
         //si alarm est la premiere
         if(MainActivity.ListActif.size() > 0){
@@ -98,12 +100,12 @@ public class InteractHelper {
         else{
             MainActivity.ListInactif.remove((Object) id);
         }
-        Trie.ListSortId();
 
+        MainActivity.removeItem(MainActivity.ListSortId.indexOf(id));
+        Trie.ListSortId();
 
         //maj nb alarm active
         textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
-
 
         //ecriture
         StorageUtils.write(context, MainActivity.MapIdAlarm);

@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
     //listview
     public static ArrayList<Alarm> items;
-    public ListView listView;
-    public ModelAlarmeAdapter adapter;
+    public static ListView listView;
+    public static ModelAlarmeAdapter adapter;
 
 
 
@@ -79,9 +79,8 @@ public class MainActivity extends AppCompatActivity {
                         //creation de tous les objets
                         initAjout(currentAlarme);
 
-                        Trie.ListItems();
-                        adapter.notifyDataSetChanged();
 
+                        MainActivity.addItem(currentAlarme, ListSortId.indexOf(currentAlarme.getId()));
 
                         StorageUtils.write(MainActivity.this, MapIdAlarm);
 
@@ -117,13 +116,6 @@ public class MainActivity extends AppCompatActivity {
 
         initAffichage();
 
-/*
-        //ajout des data au inflate
-        modelAlarmeAdapter = new ModelAlarmeAdapter(this);
-        //affichage des alarmes crées
-        listView.setAdapter(modelAlarmeAdapter);
-
-*/
         adapter = new ModelAlarmeAdapter(this, items, textViewTempsRestant, textViewAlarmeActive, listView);
         listView.setAdapter(adapter);
 
@@ -169,6 +161,17 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+
+    public static void addItem(Alarm alarm, int position){
+        items.add(position, alarm);
+        listView.setAdapter(adapter);
+    }
+
+    public static void removeItem(int position){
+        items.remove(position);
+        listView.setAdapter(adapter);
     }
 
 
