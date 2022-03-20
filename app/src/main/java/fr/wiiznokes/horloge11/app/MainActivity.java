@@ -1,7 +1,6 @@
 package fr.wiiznokes.horloge11.app;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 
@@ -9,21 +8,19 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,28 +31,32 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-    ImageButton addAlarm;
-    EditText addAlarmText;
-
-    //liste object Alarm
-    public List<Alarm> Array1;
-    //dictionnaire key:id valeur:position dans Array1
-    public Map<Integer, Integer> MapIdPos;
+    //dictionnaire key:id valeur:Alarm
+    static public Map<Long, Alarm> MapIdAlarm;
     //dictionnaire key:id valeur:dateSonnerie
-    public Map<Integer, Calendar> MapIdDate;
+    static public Map<Long, Calendar> MapIdDate;
     //liste id alarm actif triée
-    public List<Integer> ListActif;
+    static public List<Long> ListActif;
     //liste id alarm Inactif triée
-    public List<Integer> ListInactif;
+    static public List<Long> ListInactif;
     //liste somme de ListActif et Listinactif
-    public List<Integer> ListSortId;
+    static public List<Long> ListSortId;
 
 
-    //element utiles pour la maj d'affichage
-    public LinearLayout linearLayout;
+    //ajout alarme
+    public ImageButton addAlarm;
+    public EditText addAlarmText;
+
+    //element interactif
     public TextView textViewTempsRestant;
     public TextView textViewAlarmeActive;
+
+
+    //listview
+    public static ArrayList<Alarm> items;
+    public static ListView listView;
+    public static ModelAlarmeAdapter adapter;
+
 
 
 
@@ -72,47 +73,24 @@ public class MainActivity extends AppCompatActivity {
 
                         addAlarmText.setVisibility(View.INVISIBLE);
 
-                        //creation de tous les objets
-                        init();
-
                         //recuperation de l'objet Alarm
-                        Alarm Alarme = Array1.get(Array1.size() - 1);
+                        Alarm currentAlarme = (Alarm) result.getData().getSerializableExtra("AlarmeAdd");
 
-                        //creation de l'affichage de l'alarme
-                        ConstraintLayout constraintLayout = new Affichage().newConstaintLayout(Alarme, MainActivity.this);
+                        //creation de tous les objets
+                        initAjout(currentAlarme);
 
-                        //ajout de l'affichage de l'alarme
-                        linearLayout.addView(constraintLayout, ListSortId.indexOf(Alarme.getId()));
 
-                        //switch
-                        SwitchMaterial switchView = (SwitchMaterial) constraintLayout.getChildAt(1);
-                        switchView.setOnClickListener(v -> {
-                            new InteractHelper().switchHelper(switchView, Array1, MapIdPos, MapIdDate, ListActif, ListInactif, ListSortId, linearLayout, textViewTempsRestant, textViewAlarmeActive);
-                            //ecriture du fichier
-                            new StorageUtils().write(Array1, MainActivity.this);
+                        MainActivity.addItem(currentAlarme, ListSortId.indexOf(currentAlarme.getId()));
 
-                        });
+                        StorageUtils.write(MainActivity.this, MapIdAlarm);
 
-                        //suppression alarm
-                        constraintLayout.setOnLongClickListener(v -> {
-                            AlertDialog.Builder popUp = new AlertDialog.Builder(MainActivity.this);
-                            popUp.setNegativeButton("EFFACER", (dialog, which) -> {
-                                Toast.makeText(MainActivity.this, "effacé", Toast.LENGTH_SHORT).show();
-                                new InteractHelper().effacer(constraintLayout, Array1, MapIdPos, MapIdDate, ListActif, ListInactif, linearLayout, textViewTempsRestant, textViewAlarmeActive);
-                                //ecriture du fichier
-                                new StorageUtils().write(Array1, MainActivity.this);
 
-                            });
-                            popUp.setPositiveButton("MODIFIER", (dialog, which) -> Toast.makeText(MainActivity.this, "modifié", Toast.LENGTH_SHORT).show());
-                            popUp.show();
-                            return false;
-                        });
 
                         //maj nb alarmes actives
-                        textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
-
+                        textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(ListActif.size()));
                         //maj temps restant
-                        textViewTempsRestant.setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(0)))));
+                        textViewTempsRestant.setText(Affichage.tempsRestant(items.get(0)));
+
 
                     }
                     //bouton retour addActivity
@@ -134,70 +112,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //recuperation des vues pour affichage
-        this.addAlarm = findViewById(R.id.floatingActionButton4);
-        this.addAlarmText = findViewById(R.id.editTextTextPersonName);
-        this.linearLayout = findViewById(R.id.linearLayout1);
-        this.textViewTempsRestant = findViewById(R.id.textView4);
-        this.textViewAlarmeActive = findViewById(R.id.textView2);
+        initStorage();
+
+        initAffichage();
+
+        adapter = new ModelAlarmeAdapter(this, items, textViewTempsRestant, textViewAlarmeActive, listView);
+        listView.setAdapter(adapter);
 
 
-        //creation du fichier si il n'existe pas avec un tableau vide
-        if(new StorageUtils().read(this)== null){
-            List<Alarm> ArrayInit = new ArrayList<Alarm>();
-            //ecriture
-            new StorageUtils().write(ArrayInit, this);
-        }
 
-
-        //creation de tous les objets
-        init();
-        //affichage du nombre d'alarmes actives
-        textViewAlarmeActive.setText(new Affichage().NombreAlarmsActives(ListActif.size()));
-        //affichage du temps restant
-        if(ListActif.size() > 0){
-            textViewTempsRestant.setText(new Affichage().tempsRestant(Array1.get(MapIdPos.get(ListActif.get(0)))));
-        }
-        else{
-            textViewTempsRestant.setText(R.string.tempsRestant0alarm);
-        }
-        //affichage des alarmes crées
-        List<List> ListViews = afficheAlarmesInit(this);
-        //recuperation de la liste des views des switchs
-        List<SwitchMaterial> switchsView = ListViews.get(0);
-
-        //boucle qui recuperer les views des switchs
-        for(SwitchMaterial switchView : switchsView){
-            switchView.setOnClickListener(v -> {
-                new InteractHelper().switchHelper(switchView, Array1, MapIdPos, MapIdDate, ListActif, ListInactif, ListSortId, linearLayout, textViewTempsRestant, textViewAlarmeActive);
-                //ecriture du fichier
-                new StorageUtils().write(Array1, MainActivity.this);
-            });
-        }
-
-        //recuperation de la liste des views des constaintLayout
-        List<ConstraintLayout> constraintLayoutViews = ListViews.get(1);
-        for (ConstraintLayout constraintLayout : constraintLayoutViews){
-            //suppression alarm
-            constraintLayout.setOnLongClickListener(v -> {
-
-                AlertDialog.Builder popUp = new AlertDialog.Builder(MainActivity.this);
-
-                //test
-                popUp.setMessage(Array1.get(MapIdPos.get(constraintLayout.getId()-10000)).getNameAlarm());
-
-                popUp.setNegativeButton("EFFACER", (dialog, which) -> {
-                    Toast.makeText(MainActivity.this, "effacé", Toast.LENGTH_SHORT).show();
-                    new InteractHelper().effacer(constraintLayout, Array1, MapIdPos, MapIdDate, ListActif, ListInactif, linearLayout, textViewTempsRestant, textViewAlarmeActive);
-                    //ecriture du fichier
-                    new StorageUtils().write(Array1, MainActivity.this);
-
-                });
-                popUp.setPositiveButton("MODIFIER", (dialog, which) -> Toast.makeText(MainActivity.this, "modifié", Toast.LENGTH_SHORT).show());
-                popUp.show();
-                return false;
-            });
-        }
 
 
 
@@ -213,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     );
                     //ajout d'information dans l'intention
                     intent.putExtra("alarmName", addAlarmText.getText().toString());
+
                     //lancement de addActivity avec un id de lancement
                     activityResultLauncher.launch(intent);
                 }
@@ -239,46 +163,65 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void init(){
-        Array1 = new StorageUtils().read(this);
-        MapIdPos = new Trie().MapIdPos(Array1);
-        MapIdDate = new Trie().MapIdDate(Array1);
-        ListActif = new Trie().ListActifInit(Array1, MapIdDate);
-        ListInactif = new Trie().ListInactifInit(Array1, MapIdDate);
-        ListSortId = new Trie().ListSortId(ListActif, ListInactif);
+
+    public static void addItem(Alarm alarm, int position){
+        items.add(position, alarm);
+        listView.setAdapter(adapter);
+    }
+
+    public static void removeItem(int position){
+        items.remove(position);
+        listView.setAdapter(adapter);
     }
 
 
-    private List<List> afficheAlarmesInit(Context context){
 
 
 
-        //reinitialisation LinearLayout
-        linearLayout.removeAllViews();
 
-        //creation list pour les view des switchs et des constraintLayout
-        List<SwitchMaterial> switchsViews = new ArrayList<>();
-        List<ConstraintLayout> constraintLayoutViews = new ArrayList<>();
-
-        for (int id : ListSortId){
-            Alarm Alarme = Array1.get(MapIdPos.get(id));
-            ConstraintLayout constraintLayout = new Affichage().newConstaintLayout(Alarme, context);
-
-            //ajout de switch a la liste des views
-            switchsViews.add(((SwitchMaterial) constraintLayout.getChildAt(1)));
-            //ajout du constraint layout a la liste des views
-            constraintLayoutViews.add(constraintLayout);
-
-            //ajout constraint layout au linear layout
-            linearLayout.addView(constraintLayout);
+    private void initStorage(){
+        //creation du fichier si il n'existe pas avec un tableau vide
+        if(StorageUtils.read(this)== 1) {
+            Map<Long, Alarm> MapIdAlarmInit = new HashMap<>();
+            //ecriture
+            StorageUtils.write(this, MapIdAlarmInit);
         }
 
 
-        List<List> ListViews = new ArrayList<>();
-        ListViews.add(switchsViews);
-        ListViews.add(constraintLayoutViews);
+        StorageUtils.read(this);
+        Trie.MapIdDate();
+        Trie.ListActifInit();
+        Trie.ListInactifInit();
+        Trie.ListSortId();
+        Trie.ListItems();
+    }
 
-        return ListViews;
+    private void initAffichage(){
+        //recuperation des vues pour affichage
+        this.addAlarm = findViewById(R.id.floatingActionButton4);
+        this.addAlarmText = findViewById(R.id.editTextTextPersonName);
+        this.textViewTempsRestant = findViewById(R.id.textView4);
+        this.textViewAlarmeActive = findViewById(R.id.textView2);
+        listView = findViewById(R.id.list_view1);
+
+
+        //affichage du nombre d'alarmes actives
+        textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(ListActif.size()));
+        //affichage du temps restant
+        if(ListActif.size() > 0){
+            textViewTempsRestant.setText(Affichage.tempsRestant(MapIdAlarm.get(ListActif.get(0))));
+        }
+        else{
+            textViewTempsRestant.setText(R.string.tempsRestant0alarm);
+        }
+    }
+
+    private void initAjout(Alarm currentAlarm) {
+        MapIdAlarm.put(currentAlarm.getId(), currentAlarm);
+        MapIdDate.put(currentAlarm.getId(), Trie.dateProchaineSonnerie(currentAlarm));
+
+        Trie.ListActifChange(currentAlarm.getId());
+        Trie.ListSortId();
 
     }
 }

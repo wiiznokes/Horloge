@@ -1,8 +1,9 @@
 package fr.wiiznokes.horloge11.utils;
 
+
 import java.io.Serializable;
 
-public class Alarm implements Serializable {
+public class Alarm implements Serializable{
 
     public Alarm() {
 
@@ -13,6 +14,8 @@ public class Alarm implements Serializable {
 
 
     private String nameAlarm;
+
+
     public String getNameAlarm() {
         return nameAlarm;
     }
@@ -23,13 +26,7 @@ public class Alarm implements Serializable {
 
 
 
-    private String hoursText;
-    public String getHoursText() {
-        return hoursText;
-    }
-    public void setHoursText(String hoursText) {
-        this.hoursText = hoursText;
-    }
+
 
     private int hours;
     public int getHours() {
@@ -137,15 +134,29 @@ public class Alarm implements Serializable {
     }
 
 
-    private int id;
-    public int getId() {
+    private long id;
+    public long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
+    private String hoursText;
+    public String getHoursText() {
+        return hoursText;
+    }
+    public void setHoursText(String hoursText) {
+        this.hoursText = hoursText;
+    }
 
+    private String jourSonnerieText;
+    public String getJourSonnerieText() {
+        return jourSonnerieText;
+    }
 
+    public void setJourSonnerieText(String jourSonnerieText) {
+        this.jourSonnerieText = jourSonnerieText;
+    }
 
 }
