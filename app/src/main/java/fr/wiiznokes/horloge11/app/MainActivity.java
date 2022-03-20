@@ -12,10 +12,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -47,12 +50,17 @@ public class MainActivity extends AppCompatActivity {
     //element interactif
     public TextView textViewTempsRestant;
     public TextView textViewAlarmeActive;
-    public ListView listView;
+
 
     public ModelAlarmeAdapter modelAlarmeAdapter;
     public StorageUtils storageUtils;
     public Trie trie;
     public Affichage affichage;
+
+    static public ListView listView;
+    static ArrayList<Alarm> items;
+    static ModelAlarmeAdapter adapter;
+
 
 
 
@@ -85,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                         //maj nb alarmes actives
                         textViewAlarmeActive.setText(affichage.NombreAlarmsActives(ListActif.size()));
                         //maj temps restant
-                        textViewTempsRestant.setText(affichage.tempsRestant(modelAlarmeAdapter.ListSortAlarm.get(0)));
+                        textViewTempsRestant.setText(affichage.tempsRestant(modelAlarmeAdapter.list.get(0)));
 
 
                     }
@@ -112,11 +120,14 @@ public class MainActivity extends AppCompatActivity {
 
         initAffichage();
 
-
+/*
         //ajout des data au inflate
         modelAlarmeAdapter = new ModelAlarmeAdapter(this);
         //affichage des alarmes crées
         listView.setAdapter(modelAlarmeAdapter);
+
+*/
+        adapter = new ModelAlarmeAdapter(getApplicationContext(), items);
 
 
 
@@ -161,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
 
@@ -210,6 +222,6 @@ public class MainActivity extends AppCompatActivity {
         trie.ListActifChange(ListActif, currentAlarm.getId(), MapIdDate);
 
         ListSortId = trie.ListSortId(ListActif, ListInactif);
-        modelAlarmeAdapter.ListSortAlarm.add(ListSortId.indexOf(currentAlarm.getId()), currentAlarm);
+        modelAlarmeAdapter.list.add(ListSortId.indexOf(currentAlarm.getId()), currentAlarm);
     }
 }

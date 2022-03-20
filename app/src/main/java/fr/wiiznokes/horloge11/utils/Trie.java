@@ -226,9 +226,9 @@ public class Trie {
     }
 
 
-    public List<Alarm> ListSortAlarm(List<Long> ListSortId, Map<Long, Alarm> MapIdAlarm){
+    public ArrayList<Alarm> ListSortAlarm(List<Long> ListSortId, Map<Long, Alarm> MapIdAlarm){
 
-        List<Alarm> ListSortAlarm = new ArrayList<>();
+        ArrayList<Alarm> ListSortAlarm = new ArrayList<>();
         for(Long id : ListSortId){
             ListSortAlarm.add(MapIdAlarm.get(id));
         }

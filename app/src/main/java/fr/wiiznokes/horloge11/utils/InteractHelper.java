@@ -21,8 +21,7 @@ public class InteractHelper {
 
     }
 
-    public void switchHelper(long id, MainActivity mainActivity){
-        Alarm currentAlarm = mainActivity.MapIdAlarm.get(id);
+    public void switchHelper(Alarm currentAlarm, MainActivity mainActivity){
 
 
         if(currentAlarm.isActive()){
@@ -63,7 +62,9 @@ public class InteractHelper {
 
 
 
-    public void effacer(long id, MainActivity mainActivity){
+    public void effacer(Alarm currentAlarm, MainActivity mainActivity){
+
+        long id = currentAlarm.getId();
 
         int index = mainActivity.ListSortId.indexOf(id);
 
@@ -72,7 +73,7 @@ public class InteractHelper {
             if(mainActivity.ListActif.get(0) == id){
                 try {
                     mainActivity.ListActif.get(1);
-                    textViewTempsRestant.setText(new Affichage().tempsRestant(mainActivity.modelAlarmeAdapter.ListSortAlarm.get(1)));
+                    textViewTempsRestant.setText(new Affichage().tempsRestant(mainActivity.modelAlarmeAdapter.list.get(1)));
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException){
                     textViewTempsRestant.setText(R.string.tempsRestant0alarm);
@@ -80,7 +81,7 @@ public class InteractHelper {
 
             }
         }
-        mainActivity.modelAlarmeAdapter.ListSortAlarm.remove(index);
+        mainActivity.modelAlarmeAdapter.list.remove(index);
         mainActivity.MapIdAlarm.remove(id);
         mainActivity.MapIdDate.remove(id);
 
