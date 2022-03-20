@@ -13,9 +13,9 @@ import java.io.ObjectOutputStream;
 
 public class StorageUtils {
 
-    private final String fileName = "save.txt";
+    private static final String fileName = "save.txt";
 
-    public void write(Map<Long, Alarm> MapIdAlarm, Context context){
+    public static void write(Map<Long, Alarm> MapIdAlarm, Context context){
 
         try {
             FileOutputStream output = context.openFileOutput(fileName, MODE_PRIVATE);
@@ -29,7 +29,7 @@ public class StorageUtils {
     }
 
 
-    public Map<Long, Alarm> read(Context context){
+    public static Map<Long, Alarm> read(Context context){
         Map<Long, Alarm> MapIdAlarm;
         try {
             FileInputStream input = context.openFileInput(fileName);

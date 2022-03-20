@@ -9,7 +9,7 @@ public class Affichage extends AppCompatActivity {
 
 
 
-    public String NombreAlarmsActives (int numberAlarmsActives){
+    public static String NombreAlarmsActives (int numberAlarmsActives){
         String phrase;
         if (numberAlarmsActives == 0 || numberAlarmsActives == 1){
             phrase = "Alarme active : " + numberAlarmsActives;
@@ -20,7 +20,7 @@ public class Affichage extends AppCompatActivity {
         return phrase;
     }
 
-    public String tempsRestant(Alarm Alarme){
+    public static String tempsRestant(Alarm Alarme){
 
         Calendar dateSonnerie = new Trie().dateProchaineSonnerie(Alarme);
         long heureSys = System.currentTimeMillis();

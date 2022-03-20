@@ -32,15 +32,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     //dictionnaire key:id valeur:Alarm
-    public Map<Long, Alarm> MapIdAlarm;
+    static public Map<Long, Alarm> MapIdAlarm;
     //dictionnaire key:id valeur:dateSonnerie
-    public Map<Long, Calendar> MapIdDate;
+    static public Map<Long, Calendar> MapIdDate;
     //liste id alarm actif triée
-    public List<Long> ListActif;
+    static public List<Long> ListActif;
     //liste id alarm Inactif triée
-    public List<Long> ListInactif;
+    static public List<Long> ListInactif;
     //liste somme de ListActif et Listinactif
-    public List<Long> ListSortId;
+    static public List<Long> ListSortId;
 
 
     //ajout alarme
@@ -52,14 +52,11 @@ public class MainActivity extends AppCompatActivity {
     public TextView textViewAlarmeActive;
 
 
-    public ModelAlarmeAdapter modelAlarmeAdapter;
-    public StorageUtils storageUtils;
-    public Trie trie;
-    public Affichage affichage;
 
-    static public ListView listView;
-    static ArrayList<Alarm> items;
-    static ModelAlarmeAdapter adapter;
+
+    public static ListView listView;
+    public static ArrayList<Alarm> items;
+    public static ModelAlarmeAdapter adapter;
 
 
 
@@ -83,17 +80,18 @@ public class MainActivity extends AppCompatActivity {
                         //creation de tous les objets
                         initAjout(currentAlarme);
 
-                        storageUtils.write(MapIdAlarm, MainActivity.this);
+                        items = Trie.ListItems(ListSortId, MapIdAlarm);
+                        listView.setAdapter(adapter);
 
 
+                        StorageUtils.write(MapIdAlarm, MainActivity.this);
 
-                        modelAlarmeAdapter.notifyDataSetChanged();
 
 
                         //maj nb alarmes actives
-                        textViewAlarmeActive.setText(affichage.NombreAlarmsActives(ListActif.size()));
+                        textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(ListActif.size()));
                         //maj temps restant
-                        textViewTempsRestant.setText(affichage.tempsRestant(modelAlarmeAdapter.list.get(0)));
+                        textViewTempsRestant.setText(Affichage.tempsRestant(items.get(0)));
 
 
                     }
@@ -127,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(modelAlarmeAdapter);
 
 */
-        adapter = new ModelAlarmeAdapter(getApplicationContext(), items);
+        adapter = new ModelAlarmeAdapter(this, items, textViewTempsRestant, textViewAlarmeActive);
+        listView.setAdapter(adapter);
 
 
 
@@ -176,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
     private void initStorage(){
         //creation du fichier si il n'existe pas avec un tableau vide
         if(new StorageUtils().read(this)== null) {
@@ -185,14 +183,14 @@ public class MainActivity extends AppCompatActivity {
             new StorageUtils().write(MapIdAlarmInit, this);
         }
 
-        storageUtils = new StorageUtils();
-        trie = new Trie();
 
-        this.MapIdAlarm = storageUtils.read(MainActivity.this);
-        this.MapIdDate = trie.MapIdDate(MapIdAlarm);
-        this.ListActif = trie.ListActifInit(MapIdAlarm, MapIdDate);
-        this.ListInactif = trie.ListInactifInit(MapIdAlarm, MapIdDate);
-        this.ListSortId = trie.ListSortId(ListActif, ListInactif);
+        MapIdAlarm = StorageUtils.read(MainActivity.this);
+        MapIdDate = Trie.MapIdDate(MapIdAlarm);
+        ListActif = Trie.ListActifInit(MapIdAlarm, MapIdDate);
+        ListInactif = Trie.ListInactifInit(MapIdAlarm, MapIdDate);
+        ListSortId = Trie.ListSortId(ListActif, ListInactif);
+
+        items = Trie.ListItems(ListSortId, MapIdAlarm);
     }
 
     private void initAffichage(){
@@ -201,14 +199,14 @@ public class MainActivity extends AppCompatActivity {
         this.addAlarmText = findViewById(R.id.editTextTextPersonName);
         this.textViewTempsRestant = findViewById(R.id.textView4);
         this.textViewAlarmeActive = findViewById(R.id.textView2);
-        this.listView = findViewById(R.id.list_view1);
+        listView = findViewById(R.id.list_view1);
 
-        affichage = new Affichage();
+
         //affichage du nombre d'alarmes actives
-        textViewAlarmeActive.setText(affichage.NombreAlarmsActives(ListActif.size()));
+        textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(ListActif.size()));
         //affichage du temps restant
         if(ListActif.size() > 0){
-            textViewTempsRestant.setText(affichage.tempsRestant(MapIdAlarm.get(ListActif.get(0))));
+            textViewTempsRestant.setText(Affichage.tempsRestant(MapIdAlarm.get(ListActif.get(0))));
         }
         else{
             textViewTempsRestant.setText(R.string.tempsRestant0alarm);
@@ -217,11 +215,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void initAjout(Alarm currentAlarm) {
         MapIdAlarm.put(currentAlarm.getId(), currentAlarm);
-        MapIdDate.put(currentAlarm.getId(), trie.dateProchaineSonnerie(currentAlarm));
+        MapIdDate.put(currentAlarm.getId(), Trie.dateProchaineSonnerie(currentAlarm));
 
-        trie.ListActifChange(ListActif, currentAlarm.getId(), MapIdDate);
+        Trie.ListActifChange(ListActif, currentAlarm.getId(), MapIdDate);
+        ListSortId = Trie.ListSortId(ListActif, ListInactif);
 
-        ListSortId = trie.ListSortId(ListActif, ListInactif);
-        modelAlarmeAdapter.list.add(ListSortId.indexOf(currentAlarm.getId()), currentAlarm);
     }
 }

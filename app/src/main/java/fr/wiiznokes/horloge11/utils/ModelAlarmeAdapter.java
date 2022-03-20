@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import fr.wiiznokes.horloge11.R;
@@ -25,8 +26,7 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 
 
 
-    public MainActivity mainActivity;
-
+    public Context context;
 
     public InteractHelper interactHelper;
 
@@ -36,14 +36,14 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 
 
 
-    public ModelAlarmeAdapter(Context context, ArrayList<Alarm> items){
+    public ModelAlarmeAdapter(Context context, ArrayList<Alarm> items, TextView textViewTempsRestant, TextView textViewAlarmeActive){
 
         super(context, R.layout.alarme_affichage, items);
 
-        this.mainActivity = (MainActivity) context;
-
+        this.context = context;
         this.list = items;
-        this.interactHelper = new InteractHelper(mainActivity.textViewTempsRestant, mainActivity.textViewAlarmeActive);
+
+        this.interactHelper = new InteractHelper(textViewTempsRestant, textViewAlarmeActive, context);
 
 
     }
@@ -70,7 +70,7 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
             //We must create a View:
 
 
-            LayoutInflater layoutInflater = (LayoutInflater) mainActivity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
             convertView = layoutInflater.inflate(R.layout.alarme_affichage, null);
 
@@ -87,24 +87,32 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 
             //switch listener
             switch1.setOnClickListener(v -> {
-                interactHelper.switchHelper(currentAlarm, mainActivity);
-                notifyDataSetChanged();
+                interactHelper.switchHelper(currentAlarm);
+                MainActivity.items = Trie.ListItems(MainActivity.ListSortId, MainActivity.MapIdAlarm);
+                MainActivity.listView.setAdapter(MainActivity.adapter);
+
+
             });
 
             //item Listener
             convertView.setOnLongClickListener(v -> {
-                AlertDialog.Builder popUp = new AlertDialog.Builder(mainActivity);
+                AlertDialog.Builder popUp = new AlertDialog.Builder(context);
 
                 popUp.setPositiveButton("MODIFIER", ((dialog, which) -> {
-                    Toast.makeText(mainActivity, "modifié", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "modifié", Toast.LENGTH_SHORT).show();
                 }));
 
 
                 popUp.setNegativeButton("EFFACER", (dialog, which) -> {
 
-                    interactHelper.effacer(idAlarm, mainActivity);
-                    Toast.makeText(mainActivity, "effacé", Toast.LENGTH_SHORT).show();
-                    notifyDataSetChanged();
+                    interactHelper.effacer(currentAlarm);
+
+                    MainActivity.items = Trie.ListItems(MainActivity.ListSortId, MainActivity.MapIdAlarm);
+                    MainActivity.listView.setAdapter(MainActivity.adapter);
+
+                    Toast.makeText(context, "effacé", Toast.LENGTH_SHORT).show();
+
+
                 });
 
                 popUp.show();
