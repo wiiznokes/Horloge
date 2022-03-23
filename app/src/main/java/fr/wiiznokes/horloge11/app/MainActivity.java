@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                         addAlarmText.setVisibility(View.INVISIBLE);
 
                         //recuperation de l'objet Alarm
-                        Alarm currentAlarme = (Alarm) result.getData().getSerializableExtra("AlarmeAdd");
+                        Alarm currentAlarme = (Alarm) result.getData().getSerializableExtra("alarm");
 
                         //creation de tous les objets
                         initAjout(currentAlarme);

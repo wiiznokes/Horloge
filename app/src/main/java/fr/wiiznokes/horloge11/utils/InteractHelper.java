@@ -28,7 +28,7 @@ public class InteractHelper {
 
     public void switchHelper(Alarm currentAlarm){
 
-
+        //l'alarm devient inactive
         if(currentAlarm.isActive()){
             currentAlarm.setActive(false);
 
@@ -44,6 +44,7 @@ public class InteractHelper {
             MainActivity.ListActif.remove(currentAlarm.getId());
             Trie.ListInactifChange(currentAlarm.getId());
         }
+        //l'alarm devient active
         else {
             currentAlarm.setActive(true);
 
@@ -54,6 +55,7 @@ public class InteractHelper {
             if (currentAlarm.getId() == MainActivity.ListActif.get(0)){
                 textViewTempsRestant.setText(Affichage.tempsRestant(currentAlarm));
             }
+            AlertHelper.add(currentAlarm, context);
         }
 
         MainActivity.removeItem(MainActivity.ListSortId.indexOf(currentAlarm.getId()));

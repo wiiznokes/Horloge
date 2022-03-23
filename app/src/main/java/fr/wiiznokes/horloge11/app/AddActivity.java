@@ -222,28 +222,29 @@ public class AddActivity extends AppCompatActivity {
                 Alarm1.setHours(Integer.parseInt(alarmHours.getText().toString().substring(0, 2)));
                 Alarm1.setMinute(Integer.parseInt(alarmHours.getText().toString().substring(3, 5)));
 
+                //texte jours actifs
                 String joursActif = "";
                 if ((mondayState && tuesdayState && wednesdayState && thursdayState && fridayState && saturdayState && sundayState) ||
                         (!mondayState && !tuesdayState && !wednesdayState && !thursdayState && !fridayState && !saturdayState && !sundayState)){
                     Alarm1.setWeek(true);
                     joursActif = "Tous les jours";
                 } else {
-                    Alarm1.setMonday(mondayState);
-                    joursActif = joursActif + "lun ";
-                    Alarm1.setTuesday(tuesdayState);
-                    joursActif = joursActif + "mar ";
-                    Alarm1.setWednesday(wednesdayState);
-                    joursActif = joursActif + "mer ";
-                    Alarm1.setThursday(thursdayState);
-                    joursActif = joursActif + "jeu ";
-                    Alarm1.setFriday(fridayState);
-                    joursActif = joursActif + "ven ";
-                    Alarm1.setSaturday(saturdayState);
-                    joursActif = joursActif + "sam ";
-                    Alarm1.setSunday(sundayState);
-                    joursActif = joursActif + "dim ";
+                    if(mondayState){joursActif = joursActif + "lun ";}
+                    if(tuesdayState){joursActif = joursActif + "mar ";}
+                    if(wednesdayState){joursActif = joursActif + "mer ";}
+                    if(thursdayState){joursActif = joursActif + "jeu ";}
+                    if(fridayState){joursActif = joursActif + "ven ";}
+                    if(saturdayState){joursActif = joursActif + "sam ";}
+                    if(sundayState){joursActif = joursActif + "dim ";}
                     Alarm1.setWeek(false);
                 }
+                Alarm1.setMonday(mondayState);
+                Alarm1.setTuesday(tuesdayState);
+                Alarm1.setWednesday(wednesdayState);
+                Alarm1.setThursday(thursdayState);
+                Alarm1.setFriday(fridayState);
+                Alarm1.setSaturday(saturdayState);
+                Alarm1.setSunday(sundayState);
                 Alarm1.setJourSonnerieText(joursActif);
 
 
@@ -254,7 +255,7 @@ public class AddActivity extends AppCompatActivity {
 
 
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra("AlarmeAdd", Alarm1);
+                resultIntent.putExtra("alarm", Alarm1);
                 setResult(0, resultIntent);
                 finish();
             }

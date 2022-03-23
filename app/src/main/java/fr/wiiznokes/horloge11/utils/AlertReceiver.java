@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 
 import androidx.core.app.NotificationCompat;
 
@@ -25,6 +26,11 @@ public class AlertReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         System.out.println("je suis dans AlertReceiver");
 
+        //recuperation de l'objet Alarm
+        Bundle extras = intent.getExtras();
+
+        Alarm currentAlarm = (Alarm) extras.get("alarm");
+
         //creation de l'intent alarm notif
         Intent intentAlarmNotif = new Intent(context, NotifActivity.class);
         intentAlarmNotif.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -40,8 +46,8 @@ public class AlertReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelID)
                 //ajout de notify pending intent
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("My notification")
-                .setContentText("Hello World!")
+                .setContentTitle(currentAlarm.getNameAlarm())
+                .setContentText("Reveille-toi il est " + currentAlarm.getHoursText())
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setFullScreenIntent(fullScreenPendingIntent, true)
                 .setContentIntent(fullScreenPendingIntent);
