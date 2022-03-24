@@ -36,7 +36,7 @@ public class AlertReceiver extends BroadcastReceiver {
         intentAlarmNotif.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         //create the pendingIntent
-        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent fullScreenPendingIntent  = PendingIntent.getActivity(context, 0, intentAlarmNotif, PendingIntent.FLAG_UPDATE_CURRENT);
+        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent fullScreenPendingIntent  = PendingIntent.getActivity(context, 0, intentAlarmNotif, PendingIntent.FLAG_MUTABLE);
 
 
         //creation du channel

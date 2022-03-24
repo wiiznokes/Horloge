@@ -18,6 +18,7 @@ public class AlertHelper {
     Context context;
 
 
+
     public AlertHelper(Context context){
         this.context = context;
     }
@@ -35,12 +36,14 @@ public class AlertHelper {
         );
         intent.putExtra("alarm", currentAlarm);
 
-        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 11, intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 11, intent, PendingIntent.FLAG_IMMUTABLE);
 
 
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         long time = MainActivity.MapIdDate.get(currentAlarm.getId()).getTimeInMillis();
+        System.out.println("l'horaire de sonnerie en miliseconde");
+        System.out.println(time);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent);
     }
 
