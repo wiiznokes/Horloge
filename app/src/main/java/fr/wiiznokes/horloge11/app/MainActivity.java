@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -79,8 +80,10 @@ public class MainActivity extends AppCompatActivity {
                         //creation de tous les objets
                         initAjout(currentAlarme);
 
-
+                        //maj listView
                         MainActivity.addItem(currentAlarme, ListSortId.indexOf(currentAlarme.getId()));
+                        //ajout Alarm a AlarmManger
+                        new AlertHelper(MainActivity.this).add(currentAlarme);
 
                         StorageUtils.write(MainActivity.this, MapIdAlarm);
 

@@ -13,6 +13,7 @@ public class InteractHelper {
     private final TextView textViewAlarmeActive;
 
     private final Context context;
+    private final AlertHelper alertHelper;
 
 
 
@@ -24,6 +25,7 @@ public class InteractHelper {
         this.textViewTempsRestant = textViewTempsRestant;
         this.textViewAlarmeActive = textViewAlarmeActive;
         this.context = context;
+        this.alertHelper = new AlertHelper(context);
     }
 
     public void switchHelper(Alarm currentAlarm){
@@ -43,6 +45,8 @@ public class InteractHelper {
             }
             MainActivity.ListActif.remove(currentAlarm.getId());
             Trie.ListInactifChange(currentAlarm.getId());
+            //remove Alarm de AlarmManager
+            alertHelper.remove(currentAlarm);
         }
         //l'alarm devient active
         else {
@@ -55,7 +59,8 @@ public class InteractHelper {
             if (currentAlarm.getId() == MainActivity.ListActif.get(0)){
                 textViewTempsRestant.setText(Affichage.tempsRestant(currentAlarm));
             }
-            AlertHelper.add(currentAlarm, context);
+            //ajout de l'alarm au AlarmManager
+            alertHelper.add(currentAlarm);
         }
 
         MainActivity.removeItem(MainActivity.ListSortId.indexOf(currentAlarm.getId()));

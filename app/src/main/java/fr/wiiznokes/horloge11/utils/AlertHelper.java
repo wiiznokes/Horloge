@@ -16,11 +16,14 @@ import fr.wiiznokes.horloge11.app.MainActivity;
 public class AlertHelper {
 
     Context context;
+    AlarmManager alarmManager;
 
 
 
     public AlertHelper(Context context){
         this.context = context;
+        this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
     }
 
 
@@ -28,23 +31,31 @@ public class AlertHelper {
 
 
 
-    public static void add(Alarm currentAlarm, Context context){
-
+    public void add(Alarm currentAlarm){
+        //creation du pending intent
         Intent intent = new Intent(
                 context,
                 AlertReceiver.class
         );
         intent.putExtra("alarm", currentAlarm);
-
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 11, intent, PendingIntent.FLAG_IMMUTABLE);
 
-
-
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        //recuperation de la date de sonnerie
         long time = MainActivity.MapIdDate.get(currentAlarm.getId()).getTimeInMillis();
-        System.out.println("l'horaire de sonnerie en miliseconde");
-        System.out.println(time);
+
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+    }
+
+    public void remove(Alarm currentAlarm){
+        Intent intent = new Intent(
+                context,
+                AlertReceiver.class
+        );
+        intent.putExtra("alarm", currentAlarm);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 11, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        alarmManager.cancel(pendingIntent);
+
     }
 
 
