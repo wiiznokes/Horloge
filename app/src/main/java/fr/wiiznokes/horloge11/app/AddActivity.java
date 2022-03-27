@@ -21,15 +21,10 @@ import fr.wiiznokes.horloge11.utils.Alarm;
 public class AddActivity extends AppCompatActivity {
 
 
-
-
-
-    private ImageButton boutonRetour;
-
     private EditText alarmName;
 
     private EditText alarmHours;
-    private String[] numberList = {"3","4","5","6","7","8","9"};
+    private final String[] numberList = {"3","4","5","6","7","8","9"};
     int nbChiffreDesHeures = 0;
 
     private RadioButton monday;
@@ -49,10 +44,6 @@ public class AddActivity extends AppCompatActivity {
 
     private EditText sonnerieName;
 
-    private ImageButton save;
-
-
-
 
     @SuppressLint("CutPasteId")
     @Override
@@ -63,7 +54,7 @@ public class AddActivity extends AppCompatActivity {
 
 
         //bouton retour
-        this.boutonRetour = findViewById(R.id.imageButton4);
+        ImageButton boutonRetour = findViewById(R.id.imageButton4);
         boutonRetour.setOnClickListener(v -> {
             setResult(11);
             finish();
@@ -205,7 +196,7 @@ public class AddActivity extends AppCompatActivity {
         });
 
         this.sonnerieName = findViewById(R.id.editText29);
-        save = findViewById(R.id.floatingActionButton);
+        ImageButton save = findViewById(R.id.floatingActionButton);
         save.setOnClickListener(v -> {
 
             //si l'alarm a un nom et une date

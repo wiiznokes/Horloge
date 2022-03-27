@@ -49,13 +49,16 @@ public class AlertReceiver extends BroadcastReceiver {
         //creation de la notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelID)
                 //ajout de notify pending intent
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(currentAlarm.getNameAlarm())
-                .setContentText("Reveille-toi il est " + currentAlarm.getHoursText())
+                .setContentText(currentAlarm.getNameAlarm())
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setFullScreenIntent(fullScreenPendingIntent, true)
                 .setContentIntent(fullScreenPendingIntent)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .addAction(R.drawable.ic_launcher_foreground, "reporter", pendingSnoozeBuilder())
+                .addAction(R.drawable.ic_launcher_foreground, "effacer", pendingRemoveBuilder());
+
 
 
 
@@ -74,7 +77,6 @@ public class AlertReceiver extends BroadcastReceiver {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             //creation de l'objet channel
             NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH);
-            channel.setDescription("Je suis la description du channel");
             //ajout du channel au Notification manager
             getManager(nManager).createNotificationChannel(channel);
         }
@@ -84,6 +86,22 @@ public class AlertReceiver extends BroadcastReceiver {
             this.nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         }
         return this.nManager;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private PendingIntent pendingRemoveBuilder(){
+        Intent intent = new Intent(context, boutonNotifReceiver.class);
+        intent.setAction("remove");
+        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private PendingIntent pendingSnoozeBuilder(){
+        Intent intent = new Intent(context, boutonNotifReceiver.class);
+        intent.setAction("snooze");
+        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
+
     }
 
 
