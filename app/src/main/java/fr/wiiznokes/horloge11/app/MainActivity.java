@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         initAjout(currentAlarme);
 
                         //maj listView
-                        MainActivity.addItem(currentAlarme, ListSortId.indexOf(currentAlarme.getId()));
+                        MainActivity.addItem(currentAlarme, ListSortId.indexOf(currentAlarme.id));
                         //ajout Alarm a AlarmManger
                         new AlertHelper(MainActivity.this).add(currentAlarme);
 
@@ -220,10 +220,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initAjout(Alarm currentAlarm) {
-        MapIdAlarm.put(currentAlarm.getId(), currentAlarm);
-        MapIdDate.put(currentAlarm.getId(), Trie.dateProchaineSonnerie(currentAlarm));
+        MapIdAlarm.put(currentAlarm.id, currentAlarm);
+        MapIdDate.put(currentAlarm.id, Trie.dateProchaineSonnerie(currentAlarm));
 
-        Trie.ListActifChange(currentAlarm.getId());
+        Trie.ListActifChange(currentAlarm.id);
         Trie.ListSortId();
 
     }

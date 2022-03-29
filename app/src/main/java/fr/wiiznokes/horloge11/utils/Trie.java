@@ -17,7 +17,7 @@ public class Trie {
     public static void MapIdDate(){
         Map<Long, Calendar> MapIdDate = new HashMap<>();
         for(Alarm Alarm : MainActivity.MapIdAlarm.values()){
-            MapIdDate.put(Alarm.getId(), dateProchaineSonnerie(Alarm));
+            MapIdDate.put(Alarm.id, dateProchaineSonnerie(Alarm));
         }
         MainActivity.MapIdDate = MapIdDate;
     }
@@ -31,11 +31,11 @@ public class Trie {
 
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(heureSys);
-        c.set(Calendar.HOUR_OF_DAY, Alarme.getHours());
-        c.set(Calendar.MINUTE, Alarme.getMinute());
+        c.set(Calendar.HOUR_OF_DAY, Alarme.hours);
+        c.set(Calendar.MINUTE, Alarme.minute);
         c.set(Calendar.SECOND, 0);
 
-        if (Alarme.isWeek()){
+        if (Alarme.week){
             //si alarm est avant heure actuelle
             if(heureSysteme.compareTo(c) > 0){
                 c.add(Calendar.DATE, 1);
@@ -44,25 +44,25 @@ public class Trie {
         }
         else{
             List<Integer>daysActifs = new ArrayList<>();
-            if(Alarme.isSunday()){
+            if(Alarme.sunday){
                 daysActifs.add(1);
             }
-            if(Alarme.isMonday()){
+            if(Alarme.monday){
                 daysActifs.add(2);
             }
-            if(Alarme.isTuesday()){
+            if(Alarme.tuesday){
                 daysActifs.add(3);
             }
-            if(Alarme.isWednesday()){
+            if(Alarme.wednesday){
                 daysActifs.add(4);
             }
-            if(Alarme.isThursday()){
+            if(Alarme.thursday){
                 daysActifs.add(5);
             }
-            if(Alarme.isFriday()){
+            if(Alarme.friday){
                 daysActifs.add(6);
             }
-            if(Alarme.isSaturday()){
+            if(Alarme.saturday){
                 daysActifs.add(7);
             }
             int dayOfWeek = heureSysteme.get(Calendar.DAY_OF_WEEK);
@@ -109,23 +109,23 @@ public class Trie {
         List<Long> ListActifInit = new ArrayList<>();
 
         for (Alarm Alarme : MainActivity.MapIdAlarm.values()){
-            if(Alarme.isActive()){
-                Calendar dateSonnerie = MainActivity.MapIdDate.get(Alarme.getId());
+            if(Alarme.active){
+                Calendar dateSonnerie = MainActivity.MapIdDate.get(Alarme.id);
                 if(ListActifInit.size() == 0){
-                    ListActifInit.add(Alarme.getId());
+                    ListActifInit.add(Alarme.id);
                 }
                 else{
                     int i = 0;
                     boolean insertionChek = false;
                     while (i < ListActifInit.size() && !insertionChek){
                         if(dateSonnerie.compareTo(MainActivity.MapIdDate.get(ListActifInit.get(i))) < 0){
-                            ListActifInit.add(i, Alarme.getId());
+                            ListActifInit.add(i, Alarme.id);
                             insertionChek = true;
                         }
                         i = i + 1;
                     }
                     if(!insertionChek) {
-                        ListActifInit.add(Alarme.getId());
+                        ListActifInit.add(Alarme.id);
                     }
                 }
             }
@@ -138,23 +138,23 @@ public class Trie {
         List<Long> ListInactifInit = new ArrayList<>();
 
         for (Alarm Alarme : MainActivity.MapIdAlarm.values()){
-            if(!Alarme.isActive()){
-                Calendar dateSonnerie = MainActivity.MapIdDate.get(Alarme.getId());
+            if(!Alarme.active){
+                Calendar dateSonnerie = MainActivity.MapIdDate.get(Alarme.id);
                 if(ListInactifInit.size() == 0){
-                    ListInactifInit.add(Alarme.getId());
+                    ListInactifInit.add(Alarme.id);
                 }
                 else{
                     int i = 0;
                     boolean insertionChek = false;
                     while (i < ListInactifInit.size() && !insertionChek){
                         if(dateSonnerie.compareTo(MainActivity.MapIdDate.get(ListInactifInit.get(i))) < 0){
-                            ListInactifInit.add(i, Alarme.getId());
+                            ListInactifInit.add(i, Alarme.id);
                             insertionChek = true;
                         }
                         i = i + 1;
                     }
                     if(!insertionChek) {
-                        ListInactifInit.add(Alarme.getId());
+                        ListInactifInit.add(Alarme.id);
                     }
                 }
             }

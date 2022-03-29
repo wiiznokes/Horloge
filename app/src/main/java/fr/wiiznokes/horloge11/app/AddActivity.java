@@ -1,13 +1,16 @@
 package fr.wiiznokes.horloge11.app;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -195,7 +198,15 @@ public class AddActivity extends AppCompatActivity {
             sunday.setChecked(sundayState);
         });
 
-        this.sonnerieName = findViewById(R.id.editText29);
+        //sonnerie
+
+
+
+
+
+
+
+
         ImageButton save = findViewById(R.id.floatingActionButton);
         save.setOnClickListener(v -> {
 
@@ -205,19 +216,19 @@ public class AddActivity extends AppCompatActivity {
                 //creation de l'object alarm
                 Alarm Alarm1 = new Alarm();
 
-                Alarm1.setNameAlarm(alarmName.getText().toString());
+                Alarm1.alarmName = alarmName.getText().toString();
 
-                Alarm1.setActive(true);
+                Alarm1.active = true;
 
-                Alarm1.setHoursText(alarmHours.getText().toString());
-                Alarm1.setHours(Integer.parseInt(alarmHours.getText().toString().substring(0, 2)));
-                Alarm1.setMinute(Integer.parseInt(alarmHours.getText().toString().substring(3, 5)));
+                Alarm1.hoursText = alarmHours.getText().toString();
+                Alarm1.hours = Integer.parseInt(alarmHours.getText().toString().substring(0, 2));
+                Alarm1.minute = Integer.parseInt(alarmHours.getText().toString().substring(3, 5));
 
                 //texte jours actifs
                 String joursActif = "";
                 if ((mondayState && tuesdayState && wednesdayState && thursdayState && fridayState && saturdayState && sundayState) ||
                         (!mondayState && !tuesdayState && !wednesdayState && !thursdayState && !fridayState && !saturdayState && !sundayState)){
-                    Alarm1.setWeek(true);
+                    Alarm1.week = true;
                     joursActif = "Tous les jours";
                 } else {
                     if(mondayState){joursActif = joursActif + "lun ";}
@@ -227,22 +238,21 @@ public class AddActivity extends AppCompatActivity {
                     if(fridayState){joursActif = joursActif + "ven ";}
                     if(saturdayState){joursActif = joursActif + "sam ";}
                     if(sundayState){joursActif = joursActif + "dim ";}
-                    Alarm1.setWeek(false);
+                    Alarm1.week = false;
                 }
-                Alarm1.setMonday(mondayState);
-                Alarm1.setTuesday(tuesdayState);
-                Alarm1.setWednesday(wednesdayState);
-                Alarm1.setThursday(thursdayState);
-                Alarm1.setFriday(fridayState);
-                Alarm1.setSaturday(saturdayState);
-                Alarm1.setSunday(sundayState);
-                Alarm1.setJourSonnerieText(joursActif);
+                Alarm1.monday = mondayState;
+                Alarm1.tuesday = tuesdayState;
+                Alarm1.wednesday = wednesdayState;
+                Alarm1.thursday = thursdayState;
+                Alarm1.friday = fridayState;
+                Alarm1.saturday = saturdayState;
+                Alarm1.sunday = sundayState;
+                Alarm1.jourSonnerieText = joursActif;
 
 
-                Alarm1.setSonnerie(sonnerieName.getText().toString());
 
                 //set de l'id de l'alarm
-                Alarm1.setId(new Random().nextLong());
+                Alarm1.id = new Random().nextLong();
 
 
                 Intent resultIntent = new Intent();
@@ -251,6 +261,10 @@ public class AddActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+    }
+
+    public void setSonnerie(View view) {
 
     }
 }

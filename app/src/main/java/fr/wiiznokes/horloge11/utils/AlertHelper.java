@@ -41,7 +41,7 @@ public class AlertHelper {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 11, intent, PendingIntent.FLAG_IMMUTABLE);
 
         //recuperation de la date de sonnerie
-        long time = MainActivity.MapIdDate.get(currentAlarm.getId()).getTimeInMillis();
+        long time = MainActivity.MapIdDate.get(currentAlarm.id).getTimeInMillis();
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent);
     }

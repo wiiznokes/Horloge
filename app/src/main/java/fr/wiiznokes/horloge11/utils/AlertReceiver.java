@@ -50,8 +50,8 @@ public class AlertReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelID)
                 //ajout de notify pending intent
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle(currentAlarm.getNameAlarm())
-                .setContentText(currentAlarm.getNameAlarm())
+                .setContentTitle(currentAlarm.alarmName)
+                .setContentText(currentAlarm.alarmName)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setFullScreenIntent(fullScreenPendingIntent, true)
                 .setContentIntent(fullScreenPendingIntent)

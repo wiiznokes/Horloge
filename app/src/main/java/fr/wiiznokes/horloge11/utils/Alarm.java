@@ -1,6 +1,8 @@
 package fr.wiiznokes.horloge11.utils;
 
 
+import android.net.Uri;
+
 import java.io.Serializable;
 
 public class Alarm implements Serializable{
@@ -9,154 +11,45 @@ public class Alarm implements Serializable{
 
     }
 
+    public String alarmName;
 
 
 
 
-    private String nameAlarm;
 
-
-    public String getNameAlarm() {
-        return nameAlarm;
-    }
-    public void setNameAlarm(String nameAlarm) {
-        this.nameAlarm = nameAlarm;
-    }
+    public int hours;
+    public int minute;
 
 
 
 
 
 
-    private int hours;
-    public int getHours() {
-        return hours;
-    }
-    public void setHours(int hours) {
-        this.hours = hours;
-    }
+    public boolean active;
 
-    private int minute;
-    public int getMinute() {
-        return minute;
-    }
-    public void setMinute(int minute) {
-        this.minute = minute;
-    }
+    //sonnerie
+    public Uri uriSonnerie;
+    public boolean vibreur;
+    public boolean silence;
 
 
 
 
 
-
-    private boolean active;
-    public boolean isActive() {
-        return active;
-    }
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-
-
-    private String sonnerie;
-    public String getSonnerie() {
-        return sonnerie;
-    }
-    public void setSonnerie(String sonnerie) {
-        this.sonnerie = sonnerie;
-    }
+    public boolean week;
+    public boolean monday;
+    public boolean tuesday;
+    public boolean wednesday;
+    public boolean thursday;
+    public boolean friday;
+    public boolean saturday;
+    public boolean sunday;
 
 
+    public long id;
 
-    private boolean week;
-    public boolean isWeek() {
-        return week;
-    }
-    public void setWeek(boolean week) {
-        this.week = week;
-    }
+    public String hoursText;
 
-    private boolean monday;
-    public boolean isMonday() {
-        return monday;
-    }
-    public void setMonday(boolean monday) {
-        this.monday = monday;
-    }
-
-    private boolean tuesday;
-    public boolean isTuesday() {
-        return tuesday;
-    }
-    public void setTuesday(boolean tuesday) {
-        this.tuesday = tuesday;
-    }
-
-    private boolean wednesday;
-    public boolean isWednesday() {
-        return wednesday;
-    }
-    public void setWednesday(boolean wednesday) {
-        this.wednesday = wednesday;
-    }
-
-    private boolean thursday;
-    public boolean isThursday() {
-        return thursday;
-    }
-    public void setThursday(boolean thursday) {
-        this.thursday = thursday;
-    }
-
-    private boolean friday;
-    public boolean isFriday() {
-        return friday;
-    }
-    public void setFriday(boolean friday) {
-        this.friday = friday;
-    }
-
-    private boolean saturday;
-    public boolean isSaturday() {
-        return saturday;
-    }
-    public void setSaturday(boolean saturday) {
-        this.saturday = saturday;
-    }
-
-    private boolean sunday;
-    public boolean isSunday() {
-        return sunday;
-    }
-    public void setSunday(boolean sunday) {
-        this.sunday = sunday;
-    }
-
-
-    private long id;
-    public long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    private String hoursText;
-    public String getHoursText() {
-        return hoursText;
-    }
-    public void setHoursText(String hoursText) {
-        this.hoursText = hoursText;
-    }
-
-    private String jourSonnerieText;
-    public String getJourSonnerieText() {
-        return jourSonnerieText;
-    }
-
-    public void setJourSonnerieText(String jourSonnerieText) {
-        this.jourSonnerieText = jourSonnerieText;
-    }
+    public String jourSonnerieText;
 
 }

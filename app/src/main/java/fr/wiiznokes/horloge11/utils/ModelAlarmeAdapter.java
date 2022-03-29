@@ -53,7 +53,7 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 
     @Override
     public long getItemId(int index) {
-        return list.get(index).getId();
+        return list.get(index).id;
     }
 
 
@@ -66,13 +66,13 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
             Alarm currentAlarm = getItem(position);
 
             TextView hours = convertView.findViewById(R.id.hours);
-            hours.setText(currentAlarm.getHoursText());
+            hours.setText(currentAlarm.hoursText);
             SwitchMaterial switch1 = convertView.findViewById(R.id.switch1);
-            switch1.setChecked(currentAlarm.isActive());
+            switch1.setChecked(currentAlarm.active);
             TextView alarmName = convertView.findViewById(R.id.alarmeName);
-            alarmName.setText(currentAlarm.getNameAlarm());
+            alarmName.setText(currentAlarm.alarmName);
             TextView joursSonneries = convertView.findViewById(R.id.jours);
-            joursSonneries.setText(currentAlarm.getJourSonnerieText());
+            joursSonneries.setText(currentAlarm.jourSonnerieText);
 
             //switch listener
             switch1.setOnClickListener(v -> {
