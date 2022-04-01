@@ -1,14 +1,12 @@
-package fr.wiiznokes.horloge11.utils;
+package fr.wiiznokes.horloge11.utils.affichage;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.media.midi.MidiManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,12 +14,10 @@ import android.widget.Toast;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
-import fr.wiiznokes.horloge11.app.MainActivity;
+import fr.wiiznokes.horloge11.utils.interact.InteractHelper;
+import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
 public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 

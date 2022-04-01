@@ -1,6 +1,5 @@
-package fr.wiiznokes.horloge11.utils;
+package fr.wiiznokes.horloge11.utils.alert;
 
-import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,16 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-import androidx.core.view.accessibility.AccessibilityEventCompat;
 
 import fr.wiiznokes.horloge11.R;
-import fr.wiiznokes.horloge11.app.MainActivity;
 import fr.wiiznokes.horloge11.app.NotifActivity;
+import fr.wiiznokes.horloge11.utils.interact.boutonNotifReceiver;
+import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
 public class AlertReceiver extends BroadcastReceiver {
     private static final String channelID = "channelID";

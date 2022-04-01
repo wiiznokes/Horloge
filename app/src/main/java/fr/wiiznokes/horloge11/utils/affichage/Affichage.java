@@ -1,9 +1,12 @@
-package fr.wiiznokes.horloge11.utils;
+package fr.wiiznokes.horloge11.utils.affichage;
 
 
 
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.Calendar;
+
+import fr.wiiznokes.horloge11.utils.storage.Alarm;
+import fr.wiiznokes.horloge11.utils.storage.Trie;
 
 public class Affichage extends AppCompatActivity {
 
@@ -22,7 +25,7 @@ public class Affichage extends AppCompatActivity {
 
     public static String tempsRestant(Alarm Alarme){
 
-        Calendar dateSonnerie = new Trie().dateProchaineSonnerie(Alarme);
+        Calendar dateSonnerie = Trie.dateProchaineSonnerie(Alarme);
         long heureSys = System.currentTimeMillis();
 
         long diffMiliSec = dateSonnerie.getTimeInMillis() - heureSys;

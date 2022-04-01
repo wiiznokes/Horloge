@@ -1,4 +1,4 @@
-package fr.wiiznokes.horloge11.utils;
+package fr.wiiznokes.horloge11.utils.storage;
 
 
 import android.net.Uri;

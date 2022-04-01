@@ -1,16 +1,12 @@
-package fr.wiiznokes.horloge11.utils;
+package fr.wiiznokes.horloge11.utils.alert;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import java.util.Calendar;
-
-import fr.wiiznokes.horloge11.app.AddActivity;
 import fr.wiiznokes.horloge11.app.MainActivity;
+import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
 
 public class AlertHelper {

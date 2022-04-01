@@ -1,4 +1,4 @@
-package fr.wiiznokes.horloge11.utils;
+package fr.wiiznokes.horloge11.utils.storage;
 
 import static android.content.Context.MODE_PRIVATE;
 

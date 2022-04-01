@@ -1,4 +1,4 @@
-package fr.wiiznokes.horloge11.utils;
+package fr.wiiznokes.horloge11.utils.interact;
 
 
 import android.content.Context;
@@ -6,6 +6,11 @@ import android.widget.TextView;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.app.MainActivity;
+import fr.wiiznokes.horloge11.utils.affichage.Affichage;
+import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
+import fr.wiiznokes.horloge11.utils.storage.Alarm;
+import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
+import fr.wiiznokes.horloge11.utils.storage.Trie;
 
 public class InteractHelper {
 

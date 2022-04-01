@@ -1,4 +1,4 @@
-package fr.wiiznokes.horloge11.utils;
+package fr.wiiznokes.horloge11.utils.storage;
 
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class Trie {
 
     public static void MapIdDate(){
         Map<Long, Calendar> MapIdDate = new HashMap<>();
-        for(Alarm Alarm : MainActivity.MapIdAlarm.values()){
+        for(fr.wiiznokes.horloge11.utils.storage.Alarm Alarm : MainActivity.MapIdAlarm.values()){
             MapIdDate.put(Alarm.id, dateProchaineSonnerie(Alarm));
         }
         MainActivity.MapIdDate = MapIdDate;

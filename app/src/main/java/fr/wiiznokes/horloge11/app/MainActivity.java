@@ -11,9 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -26,7 +24,12 @@ import java.util.List;
 import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
-import fr.wiiznokes.horloge11.utils.*;
+import fr.wiiznokes.horloge11.utils.affichage.Affichage;
+import fr.wiiznokes.horloge11.utils.affichage.ModelAlarmeAdapter;
+import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
+import fr.wiiznokes.horloge11.utils.storage.Alarm;
+import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
+import fr.wiiznokes.horloge11.utils.storage.Trie;
 
 public class MainActivity extends AppCompatActivity {
 
