@@ -1,14 +1,23 @@
 package fr.wiiznokes.horloge11.app;
 
 import android.annotation.SuppressLint;
+import android.app.Instrumentation;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
@@ -16,20 +25,20 @@ import java.util.Random;
 
 
 import fr.wiiznokes.horloge11.R;
-import fr.wiiznokes.horloge11.utils.Alarm;
+import fr.wiiznokes.horloge11.utils.affichage.Affichage;
+import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
+import fr.wiiznokes.horloge11.utils.storage.Alarm;
+import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 
 public class AddActivity extends AppCompatActivity {
 
+    public static Alarm currentAlarm;
 
-
-
-
-    private ImageButton boutonRetour;
 
     private EditText alarmName;
 
     private EditText alarmHours;
-    private String[] numberList = {"3","4","5","6","7","8","9"};
+    private final String[] numberList = {"3","4","5","6","7","8","9"};
     int nbChiffreDesHeures = 0;
 
     private RadioButton monday;
@@ -47,10 +56,6 @@ public class AddActivity extends AppCompatActivity {
     private RadioButton sunday;
     private Boolean sundayState = false;
 
-    private EditText sonnerieName;
-
-    private ImageButton save;
-
 
 
 
@@ -60,10 +65,13 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
+        currentAlarm = new Alarm();
+
+
 
 
         //bouton retour
-        this.boutonRetour = findViewById(R.id.imageButton4);
+        ImageButton boutonRetour = findViewById(R.id.imageButton4);
         boutonRetour.setOnClickListener(v -> {
             setResult(11);
             finish();
@@ -204,58 +212,71 @@ public class AddActivity extends AppCompatActivity {
             sunday.setChecked(sundayState);
         });
 
-        this.sonnerieName = findViewById(R.id.editText29);
-        save = findViewById(R.id.floatingActionButton);
+        //sonnerie
+        Button buttonAddSonnerie = findViewById(R.id.button);
+        buttonAddSonnerie.setOnClickListener(v -> {
+            Intent intent = new Intent(AddActivity.this, addSonnerieActivity.class);
+            intent.putExtra("currentAlarm", currentAlarm);
+
+            startActivity(intent);
+
+        });
+
+
+
+
+
+
+
+        ImageButton save = findViewById(R.id.floatingActionButton);
         save.setOnClickListener(v -> {
 
             //si l'alarm a un nom et une date
-            if(alarmName.length() != 0 && alarmHours.length() == 5) {
+            if(alarmName.length() != 0 && alarmHours.length() == 5 && (currentAlarm.silence || currentAlarm.uriSonnerie != null)) {
 
-                //creation de l'object alarm
-                Alarm Alarm1 = new Alarm();
 
-                Alarm1.setNameAlarm(alarmName.getText().toString());
 
-                Alarm1.setActive(true);
 
-                Alarm1.setHoursText(alarmHours.getText().toString());
-                Alarm1.setHours(Integer.parseInt(alarmHours.getText().toString().substring(0, 2)));
-                Alarm1.setMinute(Integer.parseInt(alarmHours.getText().toString().substring(3, 5)));
+                currentAlarm.alarmName = alarmName.getText().toString();
 
+                currentAlarm.active = true;
+
+                currentAlarm.hoursText = alarmHours.getText().toString();
+                currentAlarm.hours = Integer.parseInt(alarmHours.getText().toString().substring(0, 2));
+                currentAlarm.minute = Integer.parseInt(alarmHours.getText().toString().substring(3, 5));
+
+                //texte jours actifs
                 String joursActif = "";
                 if ((mondayState && tuesdayState && wednesdayState && thursdayState && fridayState && saturdayState && sundayState) ||
                         (!mondayState && !tuesdayState && !wednesdayState && !thursdayState && !fridayState && !saturdayState && !sundayState)){
-                    Alarm1.setWeek(true);
+                    currentAlarm.week = true;
                     joursActif = "Tous les jours";
                 } else {
-                    Alarm1.setMonday(mondayState);
-                    joursActif = joursActif + "lun ";
-                    Alarm1.setTuesday(tuesdayState);
-                    joursActif = joursActif + "mar ";
-                    Alarm1.setWednesday(wednesdayState);
-                    joursActif = joursActif + "mer ";
-                    Alarm1.setThursday(thursdayState);
-                    joursActif = joursActif + "jeu ";
-                    Alarm1.setFriday(fridayState);
-                    joursActif = joursActif + "ven ";
-                    Alarm1.setSaturday(saturdayState);
-                    joursActif = joursActif + "sam ";
-                    Alarm1.setSunday(sundayState);
-                    joursActif = joursActif + "dim ";
-                    Alarm1.setWeek(false);
+                    if(mondayState){joursActif = joursActif + "lun ";}
+                    if(tuesdayState){joursActif = joursActif + "mar ";}
+                    if(wednesdayState){joursActif = joursActif + "mer ";}
+                    if(thursdayState){joursActif = joursActif + "jeu ";}
+                    if(fridayState){joursActif = joursActif + "ven ";}
+                    if(saturdayState){joursActif = joursActif + "sam ";}
+                    if(sundayState){joursActif = joursActif + "dim ";}
+                    currentAlarm.week = false;
                 }
-                Alarm1.setJourSonnerieText(joursActif);
+                currentAlarm.monday = mondayState;
+                currentAlarm.tuesday = tuesdayState;
+                currentAlarm.wednesday = wednesdayState;
+                currentAlarm.thursday = thursdayState;
+                currentAlarm.friday = fridayState;
+                currentAlarm.saturday = saturdayState;
+                currentAlarm.sunday = sundayState;
+                currentAlarm.jourSonnerieText = joursActif;
 
 
-                Alarm1.setSonnerie(sonnerieName.getText().toString());
+                currentAlarm.vibreur = ((CheckBox)findViewById(R.id.checkBox)).isChecked();
 
                 //set de l'id de l'alarm
-                Alarm1.setId(new Random().nextLong());
+                currentAlarm.id = new Random().nextLong();
 
-
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("AlarmeAdd", Alarm1);
-                setResult(0, resultIntent);
+                setResult(0);
                 finish();
             }
         });

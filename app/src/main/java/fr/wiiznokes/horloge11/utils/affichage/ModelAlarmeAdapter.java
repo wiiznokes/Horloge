@@ -1,14 +1,12 @@
-package fr.wiiznokes.horloge11.utils;
+package fr.wiiznokes.horloge11.utils.affichage;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.media.midi.MidiManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,12 +14,10 @@ import android.widget.Toast;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
-import fr.wiiznokes.horloge11.app.MainActivity;
+import fr.wiiznokes.horloge11.utils.interact.InteractHelper;
+import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
 public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 
@@ -53,7 +49,7 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 
     @Override
     public long getItemId(int index) {
-        return list.get(index).getId();
+        return list.get(index).id;
     }
 
 
@@ -66,13 +62,13 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
             Alarm currentAlarm = getItem(position);
 
             TextView hours = convertView.findViewById(R.id.hours);
-            hours.setText(currentAlarm.getHoursText());
+            hours.setText(currentAlarm.hoursText);
             SwitchMaterial switch1 = convertView.findViewById(R.id.switch1);
-            switch1.setChecked(currentAlarm.isActive());
+            switch1.setChecked(currentAlarm.active);
             TextView alarmName = convertView.findViewById(R.id.alarmeName);
-            alarmName.setText(currentAlarm.getNameAlarm());
+            alarmName.setText(currentAlarm.alarmName);
             TextView joursSonneries = convertView.findViewById(R.id.jours);
-            joursSonneries.setText(currentAlarm.getJourSonnerieText());
+            joursSonneries.setText(currentAlarm.jourSonnerieText);
 
             //switch listener
             switch1.setOnClickListener(v -> {

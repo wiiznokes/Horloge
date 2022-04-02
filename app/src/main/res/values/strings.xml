@@ -4,5 +4,7 @@
     <string name="parametre">parametre</string>
     <string name="nom_de_l_alarme">Nom de l\'alarme</string>
     <string name="tempsRestant0alarm">Temps restant : Aucune alarme active</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

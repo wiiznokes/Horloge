@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -25,7 +24,12 @@ import java.util.List;
 import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
-import fr.wiiznokes.horloge11.utils.*;
+import fr.wiiznokes.horloge11.utils.affichage.Affichage;
+import fr.wiiznokes.horloge11.utils.affichage.ModelAlarmeAdapter;
+import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
+import fr.wiiznokes.horloge11.utils.storage.Alarm;
+import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
+import fr.wiiznokes.horloge11.utils.storage.Trie;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -74,13 +78,15 @@ public class MainActivity extends AppCompatActivity {
                         addAlarmText.setVisibility(View.INVISIBLE);
 
                         //recuperation de l'objet Alarm
-                        Alarm currentAlarme = (Alarm) result.getData().getSerializableExtra("AlarmeAdd");
+                        Alarm currentAlarm = AddActivity.currentAlarm;
 
                         //creation de tous les objets
-                        initAjout(currentAlarme);
+                        initAjout(currentAlarm);
 
-
-                        MainActivity.addItem(currentAlarme, ListSortId.indexOf(currentAlarme.getId()));
+                        //maj listView
+                        MainActivity.addItem(currentAlarm, ListSortId.indexOf(currentAlarm.id));
+                        //ajout Alarm a AlarmManger
+                        new AlertHelper(MainActivity.this).add(currentAlarm);
 
                         StorageUtils.write(MainActivity.this, MapIdAlarm);
 
@@ -217,10 +223,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initAjout(Alarm currentAlarm) {
-        MapIdAlarm.put(currentAlarm.getId(), currentAlarm);
-        MapIdDate.put(currentAlarm.getId(), Trie.dateProchaineSonnerie(currentAlarm));
+        MapIdAlarm.put(currentAlarm.id, currentAlarm);
+        MapIdDate.put(currentAlarm.id, Trie.dateProchaineSonnerie(currentAlarm));
 
-        Trie.ListActifChange(currentAlarm.getId());
+        Trie.ListActifChange(currentAlarm.id);
         Trie.ListSortId();
 
     }
