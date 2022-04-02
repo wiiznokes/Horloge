@@ -1,8 +1,6 @@
 package fr.wiiznokes.horloge11.utils.storage;
 
 
-import android.net.Uri;
-
 import java.io.Serializable;
 
 public class Alarm implements Serializable{
@@ -14,26 +12,15 @@ public class Alarm implements Serializable{
     public String alarmName;
 
 
-
-
-
     public int hours;
     public int minute;
-
-
-
-
-
 
     public boolean active;
 
     //sonnerie
-    public Uri uriSonnerie = null;
+    public String uriSonnerie = null;
     public boolean vibreur;
     public boolean silence = false;
-
-
-
 
 
     public boolean week;
@@ -49,7 +36,6 @@ public class Alarm implements Serializable{
     public long id;
 
     public String hoursText;
-
     public String jourSonnerieText;
 
 }

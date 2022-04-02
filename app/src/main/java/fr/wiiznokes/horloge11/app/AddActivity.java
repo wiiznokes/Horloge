@@ -270,18 +270,12 @@ public class AddActivity extends AppCompatActivity {
                 currentAlarm.sunday = sundayState;
                 currentAlarm.jourSonnerieText = joursActif;
 
-                CheckBox checkBox = findViewById(R.id.checkBox);
-                System.out.println("Hello la miff");
-                System.out.println(checkBox.isActivated());
-                System.out.println(currentAlarm.silence);
-                System.out.println(currentAlarm.uriSonnerie);
 
-                currentAlarm.vibreur = findViewById(R.id.checkBox).isActivated();
-
+                currentAlarm.vibreur = ((CheckBox)findViewById(R.id.checkBox)).isChecked();
 
                 //set de l'id de l'alarm
                 currentAlarm.id = new Random().nextLong();
-                
+
                 setResult(0);
                 finish();
             }

@@ -27,7 +27,7 @@ public class addSonnerieActivity extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
-                    if(result.getResultCode() == 0) {
+
 
                         if (result.getData() != null) {
                             Uri uri;
@@ -35,11 +35,11 @@ public class addSonnerieActivity extends AppCompatActivity {
                             if (uri == null) {
                                 uri = result.getData().getData();
                             }
-                            AddActivity.currentAlarm.uriSonnerie = uri;
+                            AddActivity.currentAlarm.uriSonnerie = uri.toString();
                             AddActivity.currentAlarm.silence = false;
                         }
                         finish();
-                    }
+
                 }
             }
     );
