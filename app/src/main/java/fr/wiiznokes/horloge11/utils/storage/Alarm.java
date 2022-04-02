@@ -28,9 +28,9 @@ public class Alarm implements Serializable{
     public boolean active;
 
     //sonnerie
-    public Uri uriSonnerie;
+    public Uri uriSonnerie = null;
     public boolean vibreur;
-    public boolean silence;
+    public boolean silence = false;
 
 
 

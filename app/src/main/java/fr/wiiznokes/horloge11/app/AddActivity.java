@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -30,6 +31,8 @@ import fr.wiiznokes.horloge11.utils.storage.Alarm;
 import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 
 public class AddActivity extends AppCompatActivity {
+
+    public static Alarm currentAlarm;
 
 
     private EditText alarmName;
@@ -56,29 +59,14 @@ public class AddActivity extends AppCompatActivity {
 
 
 
-    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-
-                @Override
-                public void onActivityResult(ActivityResult result) {
-
-
-
-
-                }
-            }
-    );
-
-
-
     @SuppressLint("CutPasteId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        Alarm Alarm1 = new Alarm();
+        currentAlarm = new Alarm();
+
 
 
 
@@ -226,15 +214,12 @@ public class AddActivity extends AppCompatActivity {
 
         //sonnerie
         Button buttonAddSonnerie = findViewById(R.id.button);
-        buttonAddSonnerie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AddActivity.this, addSonnerieActivity.class);
-                intent.putExtra("currentAlarm", Alarm1);
+        buttonAddSonnerie.setOnClickListener(v -> {
+            Intent intent = new Intent(AddActivity.this, addSonnerieActivity.class);
+            intent.putExtra("currentAlarm", currentAlarm);
 
-                activityResultLauncher.launch(intent);
+            startActivity(intent);
 
-            }
         });
 
 
@@ -247,24 +232,24 @@ public class AddActivity extends AppCompatActivity {
         save.setOnClickListener(v -> {
 
             //si l'alarm a un nom et une date
-            if(alarmName.length() != 0 && alarmHours.length() == 5) {
+            if(alarmName.length() != 0 && alarmHours.length() == 5 && (currentAlarm.silence || currentAlarm.uriSonnerie != null)) {
 
 
 
 
-                Alarm1.alarmName = alarmName.getText().toString();
+                currentAlarm.alarmName = alarmName.getText().toString();
 
-                Alarm1.active = true;
+                currentAlarm.active = true;
 
-                Alarm1.hoursText = alarmHours.getText().toString();
-                Alarm1.hours = Integer.parseInt(alarmHours.getText().toString().substring(0, 2));
-                Alarm1.minute = Integer.parseInt(alarmHours.getText().toString().substring(3, 5));
+                currentAlarm.hoursText = alarmHours.getText().toString();
+                currentAlarm.hours = Integer.parseInt(alarmHours.getText().toString().substring(0, 2));
+                currentAlarm.minute = Integer.parseInt(alarmHours.getText().toString().substring(3, 5));
 
                 //texte jours actifs
                 String joursActif = "";
                 if ((mondayState && tuesdayState && wednesdayState && thursdayState && fridayState && saturdayState && sundayState) ||
                         (!mondayState && !tuesdayState && !wednesdayState && !thursdayState && !fridayState && !saturdayState && !sundayState)){
-                    Alarm1.week = true;
+                    currentAlarm.week = true;
                     joursActif = "Tous les jours";
                 } else {
                     if(mondayState){joursActif = joursActif + "lun ";}
@@ -274,26 +259,30 @@ public class AddActivity extends AppCompatActivity {
                     if(fridayState){joursActif = joursActif + "ven ";}
                     if(saturdayState){joursActif = joursActif + "sam ";}
                     if(sundayState){joursActif = joursActif + "dim ";}
-                    Alarm1.week = false;
+                    currentAlarm.week = false;
                 }
-                Alarm1.monday = mondayState;
-                Alarm1.tuesday = tuesdayState;
-                Alarm1.wednesday = wednesdayState;
-                Alarm1.thursday = thursdayState;
-                Alarm1.friday = fridayState;
-                Alarm1.saturday = saturdayState;
-                Alarm1.sunday = sundayState;
-                Alarm1.jourSonnerieText = joursActif;
+                currentAlarm.monday = mondayState;
+                currentAlarm.tuesday = tuesdayState;
+                currentAlarm.wednesday = wednesdayState;
+                currentAlarm.thursday = thursdayState;
+                currentAlarm.friday = fridayState;
+                currentAlarm.saturday = saturdayState;
+                currentAlarm.sunday = sundayState;
+                currentAlarm.jourSonnerieText = joursActif;
 
+                CheckBox checkBox = findViewById(R.id.checkBox);
+                System.out.println("Hello la miff");
+                System.out.println(checkBox.isActivated());
+                System.out.println(currentAlarm.silence);
+                System.out.println(currentAlarm.uriSonnerie);
+
+                currentAlarm.vibreur = findViewById(R.id.checkBox).isActivated();
 
 
                 //set de l'id de l'alarm
-                Alarm1.id = new Random().nextLong();
-
-
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("alarm", Alarm1);
-                setResult(0, resultIntent);
+                currentAlarm.id = new Random().nextLong();
+                
+                setResult(0);
                 finish();
             }
         });

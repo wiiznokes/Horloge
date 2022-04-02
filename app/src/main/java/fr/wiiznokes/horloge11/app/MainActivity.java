@@ -78,15 +78,15 @@ public class MainActivity extends AppCompatActivity {
                         addAlarmText.setVisibility(View.INVISIBLE);
 
                         //recuperation de l'objet Alarm
-                        Alarm currentAlarme = (Alarm) result.getData().getSerializableExtra("alarm");
+                        Alarm currentAlarm = AddActivity.currentAlarm;
 
                         //creation de tous les objets
-                        initAjout(currentAlarme);
+                        initAjout(currentAlarm);
 
                         //maj listView
-                        MainActivity.addItem(currentAlarme, ListSortId.indexOf(currentAlarme.id));
+                        MainActivity.addItem(currentAlarm, ListSortId.indexOf(currentAlarm.id));
                         //ajout Alarm a AlarmManger
-                        new AlertHelper(MainActivity.this).add(currentAlarme);
+                        new AlertHelper(MainActivity.this).add(currentAlarm);
 
                         StorageUtils.write(MainActivity.this, MapIdAlarm);
 

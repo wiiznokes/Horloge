@@ -20,7 +20,6 @@ import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
 public class addSonnerieActivity extends AppCompatActivity {
 
-    public Uri uri;
 
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -28,13 +27,17 @@ public class addSonnerieActivity extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
-                    if(result.getData() != null) {
-                        uri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                    if(result.getResultCode() == 0) {
 
-                        Intent resultIntent = new Intent();
-                        resultIntent.putExtra("silence", false);
-                        resultIntent.putExtra("uri", uri);
-                        setResult(0, resultIntent);
+                        if (result.getData() != null) {
+                            Uri uri;
+                            uri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                            if (uri == null) {
+                                uri = result.getData().getData();
+                            }
+                            AddActivity.currentAlarm.uriSonnerie = uri;
+                            AddActivity.currentAlarm.silence = false;
+                        }
                         finish();
                     }
                 }
@@ -46,20 +49,20 @@ public class addSonnerieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_sonnerie);
 
+
         ImageButton boutonRetour = findViewById(R.id.boutonRetour);
         boutonRetour.setOnClickListener(v -> {
-            setResult(1);
             finish();
         });
 
 
-        Alarm currentAlarm = (Alarm) this.getIntent().getExtras().get("alarm");
-
         //choisir ses sons
         View fragMySong = findViewById(R.id.fragMySong);
         fragMySong.setOnClickListener(v -> {
-
-
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("audio/*");
+            activityResultLauncher.launch(intent);
 
         });
 
@@ -74,11 +77,8 @@ public class addSonnerieActivity extends AppCompatActivity {
 
         View fragSilence = findViewById(R.id.fragSilence);
         fragSilence.setOnClickListener(v -> {
-            currentAlarm.silence = true;
 
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra("silence", true);
-            setResult(0, resultIntent);
+            AddActivity.currentAlarm.silence = true;
             finish();
         });
 
