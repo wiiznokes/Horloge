@@ -79,23 +79,6 @@
 
 
 
-
-
-        <EditText
-            android:id="@+id/editTextTextPersonName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:focusable="true"
-            android:gravity="center"
-            android:hint="@string/nom_de_l_alarme"
-            android:inputType="textPersonName"
-            android:text=""
-            android:visibility="invisible"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/list_view1"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

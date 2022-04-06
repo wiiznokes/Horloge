@@ -27,7 +27,8 @@
         <activity
             android:name=".app.AddActivity"
             android:exported="false"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateVisible"/>
         <activity
             android:name=".app.MainActivity"
             android:exported="true"

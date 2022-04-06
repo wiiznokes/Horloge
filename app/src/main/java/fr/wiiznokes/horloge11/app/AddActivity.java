@@ -2,16 +2,21 @@ package fr.wiiznokes.horloge11.app;
 
 import android.annotation.SuppressLint;
 import android.app.Instrumentation;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -67,22 +72,21 @@ public class AddActivity extends AppCompatActivity {
 
         currentAlarm = new Alarm();
 
-
-
-
         //bouton retour
-        ImageButton boutonRetour = findViewById(R.id.imageButton4);
-        boutonRetour.setOnClickListener(v -> {
+        ImageButton returnButton = findViewById(R.id.returnButton);
+        returnButton.setOnClickListener(v -> {
             setResult(11);
             finish();
         });
 
+
         //nom de l'alarme
-        this.alarmName = findViewById(R.id.textView12);
-        alarmName.setText(this.getIntent().getExtras().getString("alarmName"));
+        this.alarmName = findViewById(R.id.alarmNameEditText);
+        alarmName.requestFocus();
 
         //heure de l'alarme
-        this.alarmHours = findViewById(R.id.textView13);
+        this.alarmHours = findViewById(R.id.alarmHoursEditText);
+
         alarmHours.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -163,6 +167,7 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
+
         monday = findViewById(R.id.radioButton);
         monday.setChecked(false);
         monday.setOnClickListener(v -> {
@@ -213,7 +218,7 @@ public class AddActivity extends AppCompatActivity {
         });
 
         //sonnerie
-        Button buttonAddSonnerie = findViewById(R.id.button);
+        Button buttonAddSonnerie = findViewById(R.id.sonnerieButton);
         buttonAddSonnerie.setOnClickListener(v -> {
             Intent intent = new Intent(AddActivity.this, addSonnerieActivity.class);
             intent.putExtra("currentAlarm", currentAlarm);
@@ -228,7 +233,7 @@ public class AddActivity extends AppCompatActivity {
 
 
 
-        ImageButton save = findViewById(R.id.floatingActionButton);
+        ImageButton save = findViewById(R.id.saveButton);
         save.setOnClickListener(v -> {
 
             //si l'alarm a un nom et une date
@@ -271,7 +276,7 @@ public class AddActivity extends AppCompatActivity {
                 currentAlarm.jourSonnerieText = joursActif;
 
 
-                currentAlarm.vibreur = ((CheckBox)findViewById(R.id.checkBox)).isChecked();
+                currentAlarm.vibreur = ((CheckBox)findViewById(R.id.vibrationCheckBox)).isChecked();
 
                 //set de l'id de l'alarm
                 currentAlarm.id = new Random().nextLong();

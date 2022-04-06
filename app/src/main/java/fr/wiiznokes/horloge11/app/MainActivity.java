@@ -10,7 +10,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -99,11 +101,6 @@ public class MainActivity extends AppCompatActivity {
 
 
                     }
-                    //bouton retour addActivity
-                    if(result.getResultCode() == 11){
-                        addAlarmText.setVisibility(View.INVISIBLE);
-                    }
-
                 }
             }
     );
@@ -131,43 +128,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         addAlarm.setOnClickListener(view -> {
-            //si l'edit text est deja visible et que l'on click sur le + et que l'on a donné une nom à l'alarme
-            if (addAlarmText.getVisibility() == View.VISIBLE) {
-                if(addAlarmText.length() != 0){
-                    //lancement de AddActivity
-                    //creation de l'intention à partir du context et du fichier .class à ouvrir
-                    Intent intent = new Intent(
-                            MainActivity.this,
-                            AddActivity.class
-                    );
-                    //ajout d'information dans l'intention
-                    intent.putExtra("alarmName", addAlarmText.getText().toString());
 
-                    //lancement de addActivity avec un id de lancement
-                    activityResultLauncher.launch(intent);
-                }
-            }
-            else{
-                //edit text visible
-                addAlarmText.setVisibility(View.VISIBLE);
-                //demande du focus
-                addAlarmText.requestFocus();
-                //demande du clavier
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-                //on regarde un changement de focus
-                addAlarmText.setOnFocusChangeListener((view1, hasFocus) -> {
-                    if (!hasFocus) {
-                        //si plus de focus
-                        addAlarmText.setVisibility(View.INVISIBLE);
-                        addAlarmText.setText("");
-                        InputMethodManager imm1 = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm1.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-                    }
-                });
-            }
+            //creation de l'intention à partir du context et du fichier .class à ouvrir
+            Intent intent = new Intent(
+                    MainActivity.this,
+                    AddActivity.class
+            );
+            activityResultLauncher.launch(intent);
         });
     }
+
 
 
     public static void addItem(Alarm alarm, int position){
@@ -205,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
     private void initAffichage(){
         //recuperation des vues pour affichage
         this.addAlarm = findViewById(R.id.floatingActionButton4);
-        this.addAlarmText = findViewById(R.id.editTextTextPersonName);
         this.textViewTempsRestant = findViewById(R.id.textView4);
         this.textViewAlarmeActive = findViewById(R.id.textView2);
         listView = findViewById(R.id.list_view1);
