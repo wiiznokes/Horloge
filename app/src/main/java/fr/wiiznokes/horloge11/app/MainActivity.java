@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.utils.affichage.Affichage;
@@ -49,9 +50,10 @@ public class MainActivity extends AppCompatActivity {
     static public List<Long> ListSortId;
 
 
+
     //ajout alarme
     public ImageButton addAlarm;
-    public EditText addAlarmText;
+    public ImageButton params;
 
     //element interactif
     public TextView textViewTempsRestant;
@@ -65,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -76,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
                     //bouton save addActivity
                     if(result.getResultCode() == 0){
-
-                        addAlarmText.setVisibility(View.INVISIBLE);
 
                         //recuperation de l'objet Alarm
                         Alarm currentAlarm = AddActivity.currentAlarm;
@@ -98,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
                         textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(ListActif.size()));
                         //maj temps restant
                         textViewTempsRestant.setText(Affichage.tempsRestant(items.get(0)));
-
 
                     }
                 }
@@ -125,6 +122,15 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        params.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(
+                        MainActivity.this,
+                        ParamsActivity.class
+                );
+                activityResultLauncher.launch(intent);            }
+        });
 
 
         addAlarm.setOnClickListener(view -> {
@@ -174,10 +180,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void initAffichage(){
         //recuperation des vues pour affichage
-        this.addAlarm = findViewById(R.id.floatingActionButton4);
-        this.textViewTempsRestant = findViewById(R.id.textView4);
-        this.textViewAlarmeActive = findViewById(R.id.textView2);
-        listView = findViewById(R.id.list_view1);
+        this.addAlarm = findViewById(R.id.addAlarmButton);
+        this.params = findViewById(R.id.paramsButton);
+        this.textViewTempsRestant = findViewById(R.id.tempsRestantTextView);
+        this.textViewAlarmeActive = findViewById(R.id.alarmeActiveTextView);
+        listView = findViewById(R.id.list_view);
 
 
         //affichage du nombre d'alarmes actives

@@ -13,6 +13,19 @@
     <string name="vibration">vibration</string>
     <string name="sonnerie_button">Sonnerie</string>
 
+    <string name="all_days_text">Tous les jours</string>
+
+    <string-array name="days_in_week_text">
+        <item>lun</item>
+        <item>mar</item>
+        <item>mer</item>
+        <item>jeu</item>
+        <item>ven</item>
+        <item>sam</item>
+        <item>dim</item>
+    </string-array>
+
+
     <string name="lundi">L</string>
     <string name="mardi">M</string>
     <string name="mercredi">M</string>
@@ -20,5 +33,11 @@
     <string name="vendredi">V</string>
     <string name="samedi">S</string>
     <string name="dimanche">D</string>
+
+    <string name="description_add_bouton">add alarm button</string>
+
+    <string name="active_alarme">Alarme active : </string>
+
+    <string name="temps_restant">Temps restant :</string>
 
 </resources>

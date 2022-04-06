@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -93,7 +94,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
             @Override
-            public void afterTextChanged(Editable editable) {alarmHoursHelper();}
+            public void afterTextChanged(Editable editable) {
+                alarmHoursHelper();
+        }
         });
 
         monday = findViewById(R.id.radioButton);
@@ -158,60 +161,58 @@ public class AddActivity extends AppCompatActivity {
 
 
 
-
         ImageButton save = findViewById(R.id.saveButton);
         save.setOnClickListener(v -> {
 
-            if()
-
-            //si l'alarm a un nom et une date
-            if(alarmHours.length() == 5 && (currentAlarm.silence || currentAlarm.uriSonnerie != null)) {
-
-
-
-
-                currentAlarm.alarmName = alarmName.getText().toString();
-
-                currentAlarm.active = true;
-
-                currentAlarm.hoursText = alarmHours.getText().toString();
-                currentAlarm.hours = Integer.parseInt(alarmHours.getText().toString().substring(0, 2));
-                currentAlarm.minute = Integer.parseInt(alarmHours.getText().toString().substring(3, 5));
-
-                //texte jours actifs
-                String joursActif = "";
-                if ((mondayState && tuesdayState && wednesdayState && thursdayState && fridayState && saturdayState && sundayState) ||
-                        (!mondayState && !tuesdayState && !wednesdayState && !thursdayState && !fridayState && !saturdayState && !sundayState)){
-                    currentAlarm.week = true;
-                    joursActif = "Tous les jours";
-                } else {
-                    if(mondayState){joursActif = joursActif + "lun ";}
-                    if(tuesdayState){joursActif = joursActif + "mar ";}
-                    if(wednesdayState){joursActif = joursActif + "mer ";}
-                    if(thursdayState){joursActif = joursActif + "jeu ";}
-                    if(fridayState){joursActif = joursActif + "ven ";}
-                    if(saturdayState){joursActif = joursActif + "sam ";}
-                    if(sundayState){joursActif = joursActif + "dim ";}
-                    currentAlarm.week = false;
-                }
-                currentAlarm.monday = mondayState;
-                currentAlarm.tuesday = tuesdayState;
-                currentAlarm.wednesday = wednesdayState;
-                currentAlarm.thursday = thursdayState;
-                currentAlarm.friday = fridayState;
-                currentAlarm.saturday = saturdayState;
-                currentAlarm.sunday = sundayState;
-                currentAlarm.jourSonnerieText = joursActif;
-
-
-                currentAlarm.vibreur = ((CheckBox)findViewById(R.id.vibrationCheckBox)).isChecked();
-
-                //set de l'id de l'alarm
-                currentAlarm.id = new Random().nextLong();
-
-                setResult(0);
-                finish();
+            if(alarmHours.length() != 5){
+                Toast.makeText(this, "Heure de l'alarme invalide", Toast.LENGTH_SHORT).show();
+                return;
             }
+            if(!currentAlarm.silence && currentAlarm.uriSonnerie == null){
+                Toast.makeText(this, "Veuillez choisir un sonnerie", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
+            currentAlarm.alarmName = alarmName.getText().toString();
+
+            currentAlarm.hoursText = alarmHours.getText().toString();
+            currentAlarm.hours = Integer.parseInt(alarmHours.getText().toString().substring(0, 2));
+            currentAlarm.minute = Integer.parseInt(alarmHours.getText().toString().substring(3, 5));
+
+            //texte jours actifs
+            String joursActif = "";
+            if ((mondayState && tuesdayState && wednesdayState && thursdayState && fridayState && saturdayState && sundayState) ||
+                    (!mondayState && !tuesdayState && !wednesdayState && !thursdayState && !fridayState && !saturdayState && !sundayState)){
+                currentAlarm.week = true;
+                joursActif = this.getString(R.string.all_days_text);
+            } else {
+                String[] daysInWeekArray = getResources().getStringArray(R.array.days_in_week_text);
+                if(mondayState){joursActif = joursActif + daysInWeekArray[0] + " ";}
+                if(tuesdayState){joursActif = joursActif + daysInWeekArray[1] + " ";}
+                if(wednesdayState){joursActif = joursActif + daysInWeekArray[2] + " ";}
+                if(thursdayState){joursActif = joursActif + daysInWeekArray[3] + " ";}
+                if(fridayState){joursActif = joursActif + daysInWeekArray[4] + " ";}
+                if(saturdayState){joursActif = joursActif + daysInWeekArray[5] + " ";}
+                if(sundayState){joursActif = joursActif + daysInWeekArray[6] + " ";}
+                currentAlarm.week = false;
+            }
+            currentAlarm.monday = mondayState;
+            currentAlarm.tuesday = tuesdayState;
+            currentAlarm.wednesday = wednesdayState;
+            currentAlarm.thursday = thursdayState;
+            currentAlarm.friday = fridayState;
+            currentAlarm.saturday = saturdayState;
+            currentAlarm.sunday = sundayState;
+            currentAlarm.jourSonnerieText = joursActif;
+
+            currentAlarm.vibreur = ((CheckBox)findViewById(R.id.vibrationCheckBox)).isChecked();
+
+            //set de l'id de l'alarm
+            currentAlarm.id = new Random().nextLong();
+
+            setResult(0);
+            finish();
         });
 
     }

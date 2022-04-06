@@ -15,7 +15,7 @@ public class Alarm implements Serializable{
     public int hours;
     public int minute;
 
-    public boolean active;
+    public boolean active = true;
 
     //sonnerie
     public String uriSonnerie = null;

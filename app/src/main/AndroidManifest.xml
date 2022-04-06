@@ -16,8 +16,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Horloge11">
         <activity
+            android:name=".app.ParamsActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme"/>
+        <activity
             android:name=".app.addSonnerieActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".app.NotifActivity"
             android:exported="false"
@@ -28,7 +33,7 @@
             android:name=".app.AddActivity"
             android:exported="false"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateVisible"/>
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".app.MainActivity"
             android:exported="true"
