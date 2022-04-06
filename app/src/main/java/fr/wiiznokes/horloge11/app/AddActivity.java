@@ -89,84 +89,12 @@ public class AddActivity extends AppCompatActivity {
 
         alarmHours.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-
-            }
-
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
             @Override
-            public void afterTextChanged(Editable editable) {
-                //recuperation du texte sous type String
-                String alarmHoursTxt = alarmHours.getText().toString();
-
-                //si suppression de ":", remise à 0
-                if (!(alarmHoursTxt.contains(":"))) {
-                    alarmHours.setText(":");
-                }
-                else{
-                    //remise a 0 si taille depasse 5
-                    if (alarmHoursTxt.length() > 5) {
-                        alarmHours.setText(":");
-                    }
-
-                    //remplacement de la premiere case par 0 quand elle est pas égale a 1 ou 2 et quand il y a au moins un caractère avant ":"
-                    if (alarmHoursTxt.indexOf(":") > 0) {
-                        //verif
-                        for (String number:numberList) {
-                            if (alarmHoursTxt.substring(0, 1).contains(number)) {
-                                alarmHours.setText("0" + alarmHoursTxt.substring(0, 1) + ":" + alarmHoursTxt.substring(alarmHoursTxt.indexOf(":") + 1, alarmHoursTxt.length()));
-
-                                //mettre la selection à la fin
-                                alarmHoursTxt = alarmHours.getText().toString();
-                                alarmHours.setSelection(alarmHoursTxt.length());
-                                break;
-                            }
-                        }
-                    }
-
-
-
-                    //heure < 23
-                    if (alarmHoursTxt.indexOf(":") > 0) {
-                        if (Integer.parseInt(alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":"))) > 23){
-                            alarmHours.setText("2:"+alarmHoursTxt.substring(alarmHoursTxt.indexOf(":")+1, alarmHoursTxt.length()));
-                            //mettre selection avant :
-                            alarmHoursTxt = alarmHours.getText().toString();
-                            alarmHours.setSelection(alarmHoursTxt.indexOf(":"));
-                        }
-                    }
-
-                    //condition si des minutes sont écrites
-                    if(alarmHoursTxt.length() - alarmHoursTxt.indexOf(":") -1 > 0){
-                        //chiffre des dizaine < 5
-                        if (Integer.parseInt(alarmHoursTxt.substring(alarmHoursTxt.indexOf(":")+1, alarmHoursTxt.indexOf(":")+2)) > 5){
-                            alarmHours.setText(alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":")) + ":");
-                            //mettre selection après ":"
-                            alarmHoursTxt = alarmHours.getText().toString();
-                            alarmHours.setSelection(alarmHoursTxt.indexOf(":")+1);
-                        }
-                    }
-
-                    //si nombre de minutes > 2 chiffres, supprime dernier chiffre
-                    if(alarmHoursTxt.length() - alarmHoursTxt.indexOf(":") -1 > 2) {
-                        alarmHours.setText(alarmHoursTxt.substring(0, alarmHoursTxt.length() - 1));
-                    }
-
-                    //selcetion à la fin si heure = 2 chiffres et si changement
-                    if(alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":")).length() == 2 && nbChiffreDesHeures < 2){
-                        alarmHours.setSelection(alarmHoursTxt.length());
-                    }
-                    nbChiffreDesHeures = alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":")).length();
-
-                }
-            }
+            public void afterTextChanged(Editable editable) {alarmHoursHelper();}
         });
-
 
         monday = findViewById(R.id.radioButton);
         monday.setChecked(false);
@@ -222,9 +150,7 @@ public class AddActivity extends AppCompatActivity {
         buttonAddSonnerie.setOnClickListener(v -> {
             Intent intent = new Intent(AddActivity.this, addSonnerieActivity.class);
             intent.putExtra("currentAlarm", currentAlarm);
-
             startActivity(intent);
-
         });
 
 
@@ -236,8 +162,10 @@ public class AddActivity extends AppCompatActivity {
         ImageButton save = findViewById(R.id.saveButton);
         save.setOnClickListener(v -> {
 
+            if()
+
             //si l'alarm a un nom et une date
-            if(alarmName.length() != 0 && alarmHours.length() == 5 && (currentAlarm.silence || currentAlarm.uriSonnerie != null)) {
+            if(alarmHours.length() == 5 && (currentAlarm.silence || currentAlarm.uriSonnerie != null)) {
 
 
 
@@ -286,5 +214,72 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+
+
+    private void alarmHoursHelper(){
+
+        //recuperation du texte sous type String
+        String alarmHoursTxt = alarmHours.getText().toString();
+
+        //si suppression de ":", remise à 0
+        if (!(alarmHoursTxt.contains(":"))) {
+            alarmHours.setText(":");
+        }
+        else{
+            //remise a 0 si taille depasse 5
+            if (alarmHoursTxt.length() > 5) {
+                alarmHours.setText(":");
+            }
+
+            //remplacement de la premiere case par 0 quand elle est pas égale a 1 ou 2 et quand il y a au moins un caractère avant ":"
+            if (alarmHoursTxt.indexOf(":") > 0) {
+                //verif
+                for (String number:numberList) {
+                    if (alarmHoursTxt.substring(0, 1).contains(number)) {
+                        alarmHours.setText("0" + alarmHoursTxt.substring(0, 1) + ":" + alarmHoursTxt.substring(alarmHoursTxt.indexOf(":") + 1, alarmHoursTxt.length()));
+
+                        //mettre la selection à la fin
+                        alarmHoursTxt = alarmHours.getText().toString();
+                        alarmHours.setSelection(alarmHoursTxt.length());
+                    }
+                }
+            }
+
+
+
+            //heure < 23
+            if (alarmHoursTxt.indexOf(":") > 0) {
+                if (Integer.parseInt(alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":"))) > 23){
+                    alarmHours.setText("2:"+alarmHoursTxt.substring(alarmHoursTxt.indexOf(":")+1, alarmHoursTxt.length()));
+                    //mettre selection avant :
+                    alarmHoursTxt = alarmHours.getText().toString();
+                    alarmHours.setSelection(alarmHoursTxt.indexOf(":"));
+                }
+            }
+            //condition si des minutes sont écrites
+            if(alarmHoursTxt.length() - alarmHoursTxt.indexOf(":") -1 > 0){
+                //chiffre des dizaine < 5
+                if (Integer.parseInt(alarmHoursTxt.substring(alarmHoursTxt.indexOf(":")+1, alarmHoursTxt.indexOf(":")+2)) > 5){
+                    alarmHours.setText(alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":")) + ":");
+                    //mettre selection après ":"
+                    alarmHoursTxt = alarmHours.getText().toString();
+                    alarmHours.setSelection(alarmHoursTxt.indexOf(":")+1);
+                }
+            }
+
+            //si nombre de minutes > 2 chiffres, supprime dernier chiffre
+            if(alarmHoursTxt.length() - alarmHoursTxt.indexOf(":") -1 > 2) {
+                alarmHours.setText(alarmHoursTxt.substring(0, alarmHoursTxt.length() - 1));
+            }
+
+            //selcetion à la fin si heure = 2 chiffres et si changement
+            if(alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":")).length() == 2 && nbChiffreDesHeures < 2){
+                alarmHours.setSelection(alarmHoursTxt.length());
+            }
+            nbChiffreDesHeures = alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":")).length();
+        }
     }
 }
