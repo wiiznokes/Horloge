@@ -39,5 +39,6 @@
     <string name="active_alarme">Alarme active : </string>
 
     <string name="temps_restant">Temps restant :</string>
+    <string name="settingTV">Paramètre</string>
 
 </resources>
