@@ -86,7 +86,6 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
                 popUp.setNegativeButton("EFFACER", (dialog, which) -> {
 
                     interactHelper.effacer(currentAlarm);
-
                     Toast.makeText(context, "effacé", Toast.LENGTH_SHORT).show();
                 });
                 popUp.show();

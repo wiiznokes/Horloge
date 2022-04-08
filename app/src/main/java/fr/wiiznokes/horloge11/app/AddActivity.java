@@ -61,12 +61,13 @@ public class AddActivity extends AppCompatActivity {
         init();
 
         if(getIntent().getBooleanExtra("isModif", false)){
-            currentAlarm = getIntent().getParcelableExtra("currentAlarm");
+            currentAlarm = (Alarm) getIntent().getSerializableExtra("currentAlarm");
             modifAlarmHelper();
             setResult(1);
         }
         else{
             currentAlarm = new Alarm();
+            currentAlarm.id = new Random().nextLong();
             setResult(0);
         }
 
@@ -181,9 +182,6 @@ public class AddActivity extends AppCompatActivity {
             currentAlarm.jourSonnerieText = joursActif;
 
             currentAlarm.vibreur = vibrate.isChecked();
-
-            //set de l'id de l'alarm
-            currentAlarm.id = new Random().nextLong();
 
             finish();
         });

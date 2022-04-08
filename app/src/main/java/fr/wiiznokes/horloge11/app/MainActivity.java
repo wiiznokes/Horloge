@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                         //recuperation de l'objet Alarm
                         Alarm currentAlarm = AddActivity.currentAlarm;
 
-                        MainActivity.removeItem(ListSortId.indexOf(currentAlarm.id));
+                        items.remove(MapIdAlarm.get(currentAlarm.id));
 
                         MapIdAlarm.put(currentAlarm.id, currentAlarm);
                         MapIdDate.put(currentAlarm.id, Trie.dateProchaineSonnerie(currentAlarm));
@@ -126,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
                         textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(ListActif.size()));
                         //maj temps restant
                         textViewTempsRestant.setText(Affichage.tempsRestant(items.get(0)));
+
+                        Toast.makeText(MainActivity.this, "modifié", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
