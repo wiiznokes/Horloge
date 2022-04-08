@@ -1,7 +1,6 @@
 package fr.wiiznokes.horloge11.app;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 
 import androidx.activity.result.ActivityResult;
@@ -10,11 +9,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,7 +19,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.utils.affichage.Affichage;
@@ -154,15 +147,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        params.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(
-                        MainActivity.this,
-                        ParamsActivity.class
-                );
-                activityResultLauncher.launch(intent);            }
-        });
+        params.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    MainActivity.this,
+                    ParamsActivity.class
+            );
+            activityResultLauncher.launch(intent);            });
 
 
         addAlarm.setOnClickListener(view -> {
