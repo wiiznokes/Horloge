@@ -1,29 +1,16 @@
 package fr.wiiznokes.horloge11.app;
 
 import android.annotation.SuppressLint;
-import android.app.Instrumentation;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
@@ -31,10 +18,7 @@ import java.util.Random;
 
 
 import fr.wiiznokes.horloge11.R;
-import fr.wiiznokes.horloge11.utils.affichage.Affichage;
-import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
-import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -62,6 +46,9 @@ public class AddActivity extends AppCompatActivity {
     private RadioButton sunday;
     private Boolean sundayState = false;
 
+    private Button buttonAddSonnerie;
+    private CheckBox vibrate;
+
 
 
 
@@ -71,7 +58,18 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        currentAlarm = new Alarm();
+        init();
+
+        if(getIntent().getBooleanExtra("isModif", false)){
+            currentAlarm = getIntent().getParcelableExtra("currentAlarm");
+            modifAlarmHelper();
+            setResult(1);
+        }
+        else{
+            currentAlarm = new Alarm();
+            setResult(0);
+        }
+
 
         //bouton retour
         ImageButton returnButton = findViewById(R.id.returnButton);
@@ -80,13 +78,7 @@ public class AddActivity extends AppCompatActivity {
             finish();
         });
 
-
-        //nom de l'alarme
-        this.alarmName = findViewById(R.id.alarmNameEditText);
         alarmName.requestFocus();
-
-        //heure de l'alarme
-        this.alarmHours = findViewById(R.id.alarmHoursEditText);
 
         alarmHours.addTextChangedListener(new TextWatcher() {
             @Override
@@ -99,65 +91,47 @@ public class AddActivity extends AppCompatActivity {
         }
         });
 
-        monday = findViewById(R.id.radioButton);
-        monday.setChecked(false);
         monday.setOnClickListener(v -> {
             mondayState = !mondayState;
             monday.setChecked(mondayState);
         });
 
-        tuesday = findViewById(R.id.radioButton2);
-        tuesday.setChecked(false);
         tuesday.setOnClickListener(v -> {
             tuesdayState = !tuesdayState;
             tuesday.setChecked(tuesdayState);
         });
 
-        wednesday = findViewById(R.id.radioButton3);
-        wednesday.setChecked(false);
         wednesday.setOnClickListener(v -> {
             wednesdayState = !wednesdayState;
             wednesday.setChecked(wednesdayState);
         });
 
-        thursday = findViewById(R.id.radioButton4);
-        thursday.setChecked(false);
         thursday.setOnClickListener(v -> {
             thursdayState = !thursdayState;
             thursday.setChecked(thursdayState);
         });
 
-        friday = findViewById(R.id.radioButton5);
-        friday.setChecked(false);
         friday.setOnClickListener(v -> {
             fridayState = !fridayState;
             friday.setChecked(fridayState);
         });
 
-        saturday = findViewById(R.id.radioButton6);
-        saturday.setChecked(false);
         saturday.setOnClickListener(v -> {
             saturdayState = !saturdayState;
             saturday.setChecked(saturdayState);
         });
 
-        sunday = findViewById(R.id.radioButton7);
-        sunday.setChecked(false);
         sunday.setOnClickListener(v -> {
             sundayState = !sundayState;
             sunday.setChecked(sundayState);
         });
 
         //sonnerie
-        Button buttonAddSonnerie = findViewById(R.id.sonnerieButton);
         buttonAddSonnerie.setOnClickListener(v -> {
             Intent intent = new Intent(AddActivity.this, addSonnerieActivity.class);
             intent.putExtra("currentAlarm", currentAlarm);
             startActivity(intent);
         });
-
-
-
 
 
 
@@ -206,15 +180,45 @@ public class AddActivity extends AppCompatActivity {
             currentAlarm.sunday = sundayState;
             currentAlarm.jourSonnerieText = joursActif;
 
-            currentAlarm.vibreur = ((CheckBox)findViewById(R.id.vibrationCheckBox)).isChecked();
+            currentAlarm.vibreur = vibrate.isChecked();
 
             //set de l'id de l'alarm
             currentAlarm.id = new Random().nextLong();
 
-            setResult(0);
             finish();
         });
 
+    }
+
+    private void modifAlarmHelper(){
+        alarmName.setText(currentAlarm.alarmName);
+        alarmHours.setText(currentAlarm.hoursText);
+        monday.setChecked(currentAlarm.monday);
+        tuesday.setChecked(currentAlarm.tuesday);
+        wednesday.setChecked(currentAlarm.wednesday);
+        thursday.setChecked(currentAlarm.thursday);
+        friday.setChecked(currentAlarm.friday);
+        saturday.setChecked(currentAlarm.saturday);
+        sunday.setChecked(currentAlarm.sunday);
+
+        vibrate.setChecked(currentAlarm.vibreur);
+    }
+
+    private void init(){
+        alarmName = findViewById(R.id.alarmNameEditText);
+
+        alarmHours = findViewById(R.id.alarmHoursEditText);
+
+        monday = findViewById(R.id.radioButton);
+        tuesday = findViewById(R.id.radioButton2);
+        wednesday = findViewById(R.id.radioButton3);
+        thursday = findViewById(R.id.radioButton4);
+        friday = findViewById(R.id.radioButton5);
+        saturday = findViewById(R.id.radioButton6);
+        sunday = findViewById(R.id.radioButton7);
+
+        buttonAddSonnerie = findViewById(R.id.sonnerieButton);
+        vibrate = findViewById(R.id.vibrationCheckBox);
     }
 
 

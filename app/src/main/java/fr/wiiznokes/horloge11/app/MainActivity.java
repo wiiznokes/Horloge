@@ -98,6 +98,35 @@ public class MainActivity extends AppCompatActivity {
                         textViewTempsRestant.setText(Affichage.tempsRestant(items.get(0)));
 
                     }
+
+                    if(result.getResultCode() == 1){
+                        //recuperation de l'objet Alarm
+                        Alarm currentAlarm = AddActivity.currentAlarm;
+
+                        MainActivity.removeItem(ListSortId.indexOf(currentAlarm.id));
+
+                        MapIdAlarm.put(currentAlarm.id, currentAlarm);
+                        MapIdDate.put(currentAlarm.id, Trie.dateProchaineSonnerie(currentAlarm));
+
+                        ListActif.remove(currentAlarm.id);
+                        ListInactif.remove(currentAlarm.id);
+                        Trie.ListActifChange(currentAlarm.id);
+                        Trie.ListSortId();
+
+                        MainActivity.addItem(currentAlarm, ListSortId.indexOf(currentAlarm.id));
+
+                        //ajout Alarm a AlarmManger
+                        new AlertHelper(MainActivity.this).add(currentAlarm);
+
+
+                        StorageUtils.writeObject(MainActivity.this, MapIdAlarm, StorageUtils.alarmsFile);
+
+
+                        //maj nb alarmes actives
+                        textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(ListActif.size()));
+                        //maj temps restant
+                        textViewTempsRestant.setText(Affichage.tempsRestant(items.get(0)));
+                    }
                 }
             }
     );
@@ -199,11 +228,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initAjout(Alarm currentAlarm) {
+
         MapIdAlarm.put(currentAlarm.id, currentAlarm);
         MapIdDate.put(currentAlarm.id, Trie.dateProchaineSonnerie(currentAlarm));
 
         Trie.ListActifChange(currentAlarm.id);
         Trie.ListSortId();
 
+    }
+
+    public ActivityResultLauncher<Intent> getactivityResultLauncher(){
+        return activityResultLauncher;
     }
 }

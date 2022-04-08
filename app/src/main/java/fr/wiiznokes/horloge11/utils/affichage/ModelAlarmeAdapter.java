@@ -80,7 +80,7 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
             convertView.setOnLongClickListener(v -> {
                 AlertDialog.Builder popUp = new AlertDialog.Builder(context);
                 popUp.setPositiveButton("MODIFIER", ((dialog, which) -> {
-                    Toast.makeText(context, "modifié", Toast.LENGTH_SHORT).show();
+                    interactHelper.modifier(currentAlarm);
                 }));
 
                 popUp.setNegativeButton("EFFACER", (dialog, which) -> {

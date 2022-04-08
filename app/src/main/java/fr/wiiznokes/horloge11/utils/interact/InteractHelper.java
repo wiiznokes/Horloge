@@ -2,9 +2,11 @@ package fr.wiiznokes.horloge11.utils.interact;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.TextView;
 
 import fr.wiiznokes.horloge11.R;
+import fr.wiiznokes.horloge11.app.AddActivity;
 import fr.wiiznokes.horloge11.app.MainActivity;
 import fr.wiiznokes.horloge11.utils.affichage.Affichage;
 import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
@@ -122,6 +124,16 @@ public class InteractHelper {
         //ecriture
         StorageUtils.writeObject(context, MainActivity.MapIdAlarm, StorageUtils.alarmsFile);
 
+    }
+
+    public void modifier(Alarm currentAlarm){
+        //creation de l'intention à partir du context et du fichier .class à ouvrir
+        Intent intent = new Intent( context,
+                AddActivity.class
+        );
+        intent.putExtra("isModif", true);
+        intent.putExtra("currentAlarm", currentAlarm);
+        ((MainActivity) context).getactivityResultLauncher().launch(intent);
     }
 
 
