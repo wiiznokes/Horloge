@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                         //ajout Alarm a AlarmManger
                         new AlertHelper(MainActivity.this).add(currentAlarm);
 
-                        StorageUtils.write(MainActivity.this, MapIdAlarm);
+                        StorageUtils.writeObject(MainActivity.this, MapIdAlarm, StorageUtils.alarmsFile);
 
 
 
@@ -163,14 +163,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initStorage(){
         //creation du fichier si il n'existe pas avec un tableau vide
-        if(StorageUtils.read(this)== 1) {
+        if(StorageUtils.readObject(this, StorageUtils.alarmsFile) == null) {
             Map<Long, Alarm> MapIdAlarmInit = new HashMap<>();
             //ecriture
-            StorageUtils.write(this, MapIdAlarmInit);
+            StorageUtils.writeObject(this, MapIdAlarmInit, StorageUtils.alarmsFile);
         }
 
 
-        StorageUtils.read(this);
+        MapIdAlarm = (Map<Long, Alarm>) StorageUtils.readObject(this, StorageUtils.alarmsFile);
         Trie.MapIdDate();
         Trie.ListActifInit();
         Trie.ListInactifInit();

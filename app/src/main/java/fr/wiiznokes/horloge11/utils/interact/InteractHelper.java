@@ -76,7 +76,7 @@ public class InteractHelper {
         textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
 
         //ecriture
-        StorageUtils.write(context, MainActivity.MapIdAlarm);
+        StorageUtils.writeObject(context, MainActivity.MapIdAlarm, StorageUtils.alarmsFile);
 
         //maj affichage
         MainActivity.addItem(currentAlarm, MainActivity.ListSortId.indexOf(currentAlarm.id));
@@ -120,7 +120,7 @@ public class InteractHelper {
         textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
 
         //ecriture
-        StorageUtils.write(context, MainActivity.MapIdAlarm);
+        StorageUtils.writeObject(context, MainActivity.MapIdAlarm, StorageUtils.alarmsFile);
 
     }
 

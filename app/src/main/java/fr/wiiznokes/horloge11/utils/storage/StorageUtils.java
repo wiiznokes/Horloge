@@ -3,6 +3,8 @@ package fr.wiiznokes.horloge11.utils.storage;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
+
+import java.io.IOException;
 import java.util.Map;
 
 import java.io.FileInputStream;
@@ -15,37 +17,35 @@ import fr.wiiznokes.horloge11.app.MainActivity;
 
 public class StorageUtils {
 
-    private static final String fileName = "save.txt";
+    public static final String alarmsFile = "alarms.txt";
+    public static final String paramsFile = "params.txt";
 
 
-    public static void write(Context context, Map<Long, Alarm> MapIdAlarm){
 
+    public static void writeObject(Context context, Object object, String fileName){
         try {
             FileOutputStream output = context.openFileOutput(fileName, MODE_PRIVATE);
             ObjectOutputStream out = new ObjectOutputStream(output);
-            out.writeObject(MapIdAlarm);
+            out.writeObject(object);
             out.close();
             output.close();
-        } catch (Exception e) {
-            System.out.println("erreur dans l'écriture");
+        } catch (IOException io) {
+            io.printStackTrace();
         }
     }
-
-
-    public static int read(Context context){
-        Map<Long, Alarm> MapIdAlarm;
+    public static Object readObject(Context context, String fileName){
+        Object object;
         try {
             FileInputStream input = context.openFileInput(fileName);
             ObjectInputStream in = new ObjectInputStream(input);
-            MapIdAlarm = (Map<Long, Alarm>) in.readObject();
+            object = in.readObject();
             in.close();
             input.close();
-            MainActivity.MapIdAlarm = MapIdAlarm;
-            return 0;
-        } catch (Exception e) {
-            System.out.println("erreur dans la lecture");
-            return 1;
+            return object;
+        } catch (IOException | ClassNotFoundException ioException) {
+            ioException.printStackTrace();
+            return null;
         }
-
     }
 }
+
