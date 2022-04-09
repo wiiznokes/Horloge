@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/fragMySong"
-        android:name="fr.wiiznokes.horloge11.fragments.sonnerieFragment"
+        android:name="fr.wiiznokes.horloge11.fragments.choixSonnerie.sonnerieFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/tvMysong"
@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/fragMySong" />
     <fragment
         android:id="@+id/fragAppareilSong"
-        android:name="fr.wiiznokes.horloge11.fragments.sonnerieFragment"
+        android:name="fr.wiiznokes.horloge11.fragments.choixSonnerie.sonnerieFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/tvAppareilSong"
@@ -77,7 +77,7 @@
 
     <fragment
         android:id="@+id/fragSilence"
-        android:name="fr.wiiznokes.horloge11.fragments.silenceFragment"
+        android:name="fr.wiiznokes.horloge11.fragments.choixSonnerie.silenceFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/tvSilence"
