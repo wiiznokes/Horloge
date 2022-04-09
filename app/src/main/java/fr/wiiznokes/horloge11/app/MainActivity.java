@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
+import fr.wiiznokes.horloge11.temp.AddActivity;
 import fr.wiiznokes.horloge11.utils.affichage.Affichage;
 import fr.wiiznokes.horloge11.utils.affichage.ModelAlarmeAdapter;
 import fr.wiiznokes.horloge11.utils.alert.AlertHelper;

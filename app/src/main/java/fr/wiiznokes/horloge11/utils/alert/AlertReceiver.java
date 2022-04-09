@@ -13,7 +13,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import fr.wiiznokes.horloge11.R;
-import fr.wiiznokes.horloge11.app.NotifActivity;
+import fr.wiiznokes.horloge11.app.AlarmActivity;
 import fr.wiiznokes.horloge11.utils.interact.boutonNotifReceiver;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
@@ -36,7 +36,7 @@ public class AlertReceiver extends BroadcastReceiver {
         Alarm currentAlarm = (Alarm) extras.get("alarm");
 
         //creation du pending intent vers alarm notif
-        Intent intentAlarmNotif = new Intent(context, NotifActivity.class);
+        Intent intentAlarmNotif = new Intent(context, AlarmActivity.class);
         intentAlarmNotif.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent fullScreenPendingIntent  = PendingIntent.getActivity(context, 0, intentAlarmNotif, PendingIntent.FLAG_MUTABLE);
 

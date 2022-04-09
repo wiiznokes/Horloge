@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.widget.TextView;
 
 import fr.wiiznokes.horloge11.R;
-import fr.wiiznokes.horloge11.app.AddActivity;
+import fr.wiiznokes.horloge11.temp.AddActivity;
 import fr.wiiznokes.horloge11.app.MainActivity;
 import fr.wiiznokes.horloge11.utils.affichage.Affichage;
 import fr.wiiznokes.horloge11.utils.alert.AlertHelper;

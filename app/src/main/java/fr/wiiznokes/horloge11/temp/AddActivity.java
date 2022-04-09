@@ -1,4 +1,4 @@
-package fr.wiiznokes.horloge11.app;
+package fr.wiiznokes.horloge11.temp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
