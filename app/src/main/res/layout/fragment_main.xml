@@ -16,7 +16,7 @@
 
 
         <TextView
-            android:id="@+id/alarmeActiveTextView"
+            android:id="@+id/activeAlarmTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/active_alarme"
@@ -27,7 +27,7 @@
 
 
         <ImageButton
-            android:id="@+id/paramsButton"
+            android:id="@+id/settingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -40,7 +40,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/tempsRestantTextView"
+        android:id="@+id/timeLeftTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/temps_restant"
