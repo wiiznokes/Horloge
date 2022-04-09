@@ -58,81 +58,13 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        init();
-
-        if(getIntent().getBooleanExtra("isModif", false)){
-            currentAlarm = (Alarm) getIntent().getSerializableExtra("currentAlarm");
-            modifAlarmHelper();
-            setResult(1);
-        }
-        else{
-            currentAlarm = new Alarm();
-            currentAlarm.id = new Random().nextLong();
-            setResult(0);
-        }
 
 
-        //bouton retour
-        ImageButton returnButton = findViewById(R.id.returnButton);
-        returnButton.setOnClickListener(v -> {
-            setResult(11);
-            finish();
-        });
 
-        alarmName.requestFocus();
 
-        alarmHours.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                alarmHoursHelper();
-        }
-        });
 
-        monday.setOnClickListener(v -> {
-            mondayState = !mondayState;
-            monday.setChecked(mondayState);
-        });
 
-        tuesday.setOnClickListener(v -> {
-            tuesdayState = !tuesdayState;
-            tuesday.setChecked(tuesdayState);
-        });
 
-        wednesday.setOnClickListener(v -> {
-            wednesdayState = !wednesdayState;
-            wednesday.setChecked(wednesdayState);
-        });
-
-        thursday.setOnClickListener(v -> {
-            thursdayState = !thursdayState;
-            thursday.setChecked(thursdayState);
-        });
-
-        friday.setOnClickListener(v -> {
-            fridayState = !fridayState;
-            friday.setChecked(fridayState);
-        });
-
-        saturday.setOnClickListener(v -> {
-            saturdayState = !saturdayState;
-            saturday.setChecked(saturdayState);
-        });
-
-        sunday.setOnClickListener(v -> {
-            sundayState = !sundayState;
-            sunday.setChecked(sundayState);
-        });
-
-        //sonnerie
-        buttonAddSonnerie.setOnClickListener(v -> {
-            Intent intent = new Intent(AddActivity.this, addSonnerieActivity.class);
-            intent.putExtra("currentAlarm", currentAlarm);
-            startActivity(intent);
-        });
 
 
 
@@ -188,101 +120,4 @@ public class AddActivity extends AppCompatActivity {
 
     }
 
-    private void modifAlarmHelper(){
-        alarmName.setText(currentAlarm.alarmName);
-        alarmHours.setText(currentAlarm.hoursText);
-        monday.setChecked(currentAlarm.monday);
-        tuesday.setChecked(currentAlarm.tuesday);
-        wednesday.setChecked(currentAlarm.wednesday);
-        thursday.setChecked(currentAlarm.thursday);
-        friday.setChecked(currentAlarm.friday);
-        saturday.setChecked(currentAlarm.saturday);
-        sunday.setChecked(currentAlarm.sunday);
-
-        vibrate.setChecked(currentAlarm.vibreur);
-    }
-
-    private void init(){
-        alarmName = findViewById(R.id.alarmNameEditText);
-
-        alarmHours = findViewById(R.id.alarmHoursEditText);
-
-        monday = findViewById(R.id.radioButton);
-        tuesday = findViewById(R.id.radioButton2);
-        wednesday = findViewById(R.id.radioButton3);
-        thursday = findViewById(R.id.radioButton4);
-        friday = findViewById(R.id.radioButton5);
-        saturday = findViewById(R.id.radioButton6);
-        sunday = findViewById(R.id.radioButton7);
-
-        buttonAddSonnerie = findViewById(R.id.sonnerieButton);
-        vibrate = findViewById(R.id.vibrationCheckBox);
-    }
-
-
-
-
-    private void alarmHoursHelper(){
-
-        //recuperation du texte sous type String
-        String alarmHoursTxt = alarmHours.getText().toString();
-
-        //si suppression de ":", remise à 0
-        if (!(alarmHoursTxt.contains(":"))) {
-            alarmHours.setText(":");
-        }
-        else{
-            //remise a 0 si taille depasse 5
-            if (alarmHoursTxt.length() > 5) {
-                alarmHours.setText(":");
-            }
-
-            //remplacement de la premiere case par 0 quand elle est pas égale a 1 ou 2 et quand il y a au moins un caractère avant ":"
-            if (alarmHoursTxt.indexOf(":") > 0) {
-                //verif
-                for (String number:numberList) {
-                    if (alarmHoursTxt.substring(0, 1).contains(number)) {
-                        alarmHours.setText("0" + alarmHoursTxt.substring(0, 1) + ":" + alarmHoursTxt.substring(alarmHoursTxt.indexOf(":") + 1, alarmHoursTxt.length()));
-
-                        //mettre la selection à la fin
-                        alarmHoursTxt = alarmHours.getText().toString();
-                        alarmHours.setSelection(alarmHoursTxt.length());
-                    }
-                }
-            }
-
-
-
-            //heure < 23
-            if (alarmHoursTxt.indexOf(":") > 0) {
-                if (Integer.parseInt(alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":"))) > 23){
-                    alarmHours.setText("2:"+alarmHoursTxt.substring(alarmHoursTxt.indexOf(":")+1, alarmHoursTxt.length()));
-                    //mettre selection avant :
-                    alarmHoursTxt = alarmHours.getText().toString();
-                    alarmHours.setSelection(alarmHoursTxt.indexOf(":"));
-                }
-            }
-            //condition si des minutes sont écrites
-            if(alarmHoursTxt.length() - alarmHoursTxt.indexOf(":") -1 > 0){
-                //chiffre des dizaine < 5
-                if (Integer.parseInt(alarmHoursTxt.substring(alarmHoursTxt.indexOf(":")+1, alarmHoursTxt.indexOf(":")+2)) > 5){
-                    alarmHours.setText(alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":")) + ":");
-                    //mettre selection après ":"
-                    alarmHoursTxt = alarmHours.getText().toString();
-                    alarmHours.setSelection(alarmHoursTxt.indexOf(":")+1);
-                }
-            }
-
-            //si nombre de minutes > 2 chiffres, supprime dernier chiffre
-            if(alarmHoursTxt.length() - alarmHoursTxt.indexOf(":") -1 > 2) {
-                alarmHours.setText(alarmHoursTxt.substring(0, alarmHoursTxt.length() - 1));
-            }
-
-            //selcetion à la fin si heure = 2 chiffres et si changement
-            if(alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":")).length() == 2 && nbChiffreDesHeures < 2){
-                alarmHours.setSelection(alarmHoursTxt.length());
-            }
-            nbChiffreDesHeures = alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":")).length();
-        }
-    }
 }

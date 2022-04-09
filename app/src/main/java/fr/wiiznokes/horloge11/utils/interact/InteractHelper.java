@@ -16,8 +16,9 @@ import fr.wiiznokes.horloge11.utils.storage.Trie;
 
 public class InteractHelper {
 
-    private final TextView textViewTempsRestant;
-    private final TextView textViewAlarmeActive;
+    private final TextView activeAlarmTextView;
+    private final TextView timeLeftTextView;
+
 
     private final Context context;
     private final AlertHelper alertHelper;
@@ -28,9 +29,9 @@ public class InteractHelper {
 
 
 
-    public InteractHelper(TextView textViewTempsRestant, TextView textViewAlarmeActive, Context context){
-        this.textViewTempsRestant = textViewTempsRestant;
-        this.textViewAlarmeActive = textViewAlarmeActive;
+    public InteractHelper(Context context, TextView activeAlarmTextView, TextView timeLeftTextView){
+        this.activeAlarmTextView = activeAlarmTextView;
+        this.timeLeftTextView = timeLeftTextView;
         this.context = context;
         this.alertHelper = new AlertHelper(context);
     }
@@ -44,10 +45,10 @@ public class InteractHelper {
             //si l'alarm etait la première, affichage temps restant modifié
             if (currentAlarm.id == MainActivity.ListActif.get(0)){
                 if(MainActivity.ListActif.size() >= 2){
-                    textViewTempsRestant.setText(Affichage.tempsRestant(MainActivity.MapIdAlarm.get(MainActivity.ListActif.get(1))));
+                    timeLeftTextView.setText(Affichage.tempsRestant(MainActivity.MapIdAlarm.get(MainActivity.ListActif.get(1))));
                 }
                 else{
-                    textViewTempsRestant.setText(R.string.tempsRestant0alarm);
+                    timeLeftTextView.setText(R.string.tempsRestant0alarm);
                 }
             }
             MainActivity.ListActif.remove(currentAlarm.id);
@@ -64,7 +65,7 @@ public class InteractHelper {
 
             //si l'alarm devient la première, affichage temps restant modifié
             if (currentAlarm.id == MainActivity.ListActif.get(0)){
-                textViewTempsRestant.setText(Affichage.tempsRestant(currentAlarm));
+                timeLeftTextView.setText(Affichage.tempsRestant(currentAlarm));
             }
             //ajout de l'alarm au AlarmManager
             alertHelper.add(currentAlarm);
@@ -75,7 +76,7 @@ public class InteractHelper {
         MainActivity.MapIdAlarm.put(currentAlarm.id, currentAlarm);
         Trie.ListSortId();
 
-        textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
+        activeAlarmTextView.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
 
         //ecriture
         StorageUtils.writeObject(context, MainActivity.MapIdAlarm, StorageUtils.alarmsFile);
@@ -97,10 +98,10 @@ public class InteractHelper {
 
 
                 if(MainActivity.ListActif.size() > 1){
-                    textViewTempsRestant.setText(Affichage.tempsRestant(MainActivity.items.get(1)));
+                    timeLeftTextView.setText(Affichage.tempsRestant(MainActivity.items.get(1)));
                 }
                 else {
-                    textViewTempsRestant.setText(R.string.tempsRestant0alarm);
+                    timeLeftTextView.setText(R.string.tempsRestant0alarm);
                 }
             }
         }
@@ -119,7 +120,7 @@ public class InteractHelper {
         Trie.ListSortId();
 
         //maj nb alarm active
-        textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
+        activeAlarmTextView.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
 
         //ecriture
         StorageUtils.writeObject(context, MainActivity.MapIdAlarm, StorageUtils.alarmsFile);

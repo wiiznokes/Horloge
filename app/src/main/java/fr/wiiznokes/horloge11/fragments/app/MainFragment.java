@@ -8,26 +8,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.app.MainActivity;
+import fr.wiiznokes.horloge11.utils.affichage.Affichage;
+import fr.wiiznokes.horloge11.utils.affichage.ModelAlarmeAdapter;
+import fr.wiiznokes.horloge11.utils.storage.Trie;
 
 
 public class MainFragment extends Fragment {
 
+
     public ImageButton settingButton;
     public ImageButton addAlarmButton;
 
-    public TextView timeLeftTextView;
+
     public TextView activeAlarmTextView;
+    public TextView timeLeftTextView;
+
+    public ListView listView;
+    public ModelAlarmeAdapter adapter;
 
 
 
     public MainFragment() {
-        // Required empty public constructor
     }
 
 
@@ -35,11 +43,17 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        settingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        settingButton.setOnClickListener(v ->
+                getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerView, new SettingFragment())
+                .commit());
 
-            }
+        initAffichage();
+
+        addAlarmButton.setOnClickListener(v -> {
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainerView, new AddFragment())
+                    .commit();
         });
 
 
@@ -54,9 +68,22 @@ public class MainFragment extends Fragment {
         this.settingButton = view.findViewById(R.id.settingButton);
         this.addAlarmButton = view.findViewById(R.id.addAlarmButton);
 
-        this.timeLeftTextView = view.findViewById(R.id.timeLeftTextView);
         this.activeAlarmTextView = view.findViewById(R.id.activeAlarmTextView);
+        this.timeLeftTextView = view.findViewById(R.id.timeLeftTextView);
+        this.listView = view.findViewById(R.id.list_view);
 
         return view;
+    }
+
+    private void initAffichage(){
+        activeAlarmTextView.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
+        if(MainActivity.ListActif.size() > 0){
+            timeLeftTextView.setText(Affichage.tempsRestant(MainActivity.MapIdAlarm.get(MainActivity.ListActif.get(0))));
+        }
+        else{
+            timeLeftTextView.setText(R.string.tempsRestant0alarm);
+        }
+        adapter = new ModelAlarmeAdapter(getContext(), Trie.ListItems(), activeAlarmTextView, timeLeftTextView, listView);
+        listView.setAdapter(adapter);
     }
 }

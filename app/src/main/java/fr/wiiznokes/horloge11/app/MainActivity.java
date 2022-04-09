@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
+import fr.wiiznokes.horloge11.fragments.app.MainFragment;
 import fr.wiiznokes.horloge11.temp.AddActivity;
 import fr.wiiznokes.horloge11.utils.affichage.Affichage;
 import fr.wiiznokes.horloge11.utils.affichage.ModelAlarmeAdapter;
@@ -30,6 +31,11 @@ import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 import fr.wiiznokes.horloge11.utils.storage.Trie;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    private MainFragment mainFragment;
+
+    public Affichage affichage;
 
 
 
@@ -46,13 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    //ajout alarme
-    public ImageButton addAlarm;
-    public ImageButton params;
 
-    //element interactif
-    public TextView textViewTempsRestant;
-    public TextView textViewAlarmeActive;
+
 
 
     //listview
@@ -138,33 +139,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         initStorage();
 
-        initAffichage();
-
-        adapter = new ModelAlarmeAdapter(this, items, textViewTempsRestant, textViewAlarmeActive, listView);
-        listView.setAdapter(adapter);
+        configureAndShowMainFragment();
 
 
-
-
-        params.setOnClickListener(v -> {
-            Intent intent = new Intent(
-                    MainActivity.this,
-                    ParamsActivity.class
-            );
-            activityResultLauncher.launch(intent);            });
-
-
-        addAlarm.setOnClickListener(view -> {
-
-            //creation de l'intention à partir du context et du fichier .class à ouvrir
-            Intent intent = new Intent(
-                    MainActivity.this,
-                    AddActivity.class
-            );
-            activityResultLauncher.launch(intent);
-        });
     }
 
 
@@ -201,25 +181,6 @@ public class MainActivity extends AppCompatActivity {
         Trie.ListItems();
     }
 
-    private void initAffichage(){
-        //recuperation des vues pour affichage
-        this.addAlarm = findViewById(R.id.addAlarmButton);
-        this.params = findViewById(R.id.paramsButton);
-        this.textViewTempsRestant = findViewById(R.id.tempsRestantTextView);
-        this.textViewAlarmeActive = findViewById(R.id.alarmeActiveTextView);
-        listView = findViewById(R.id.list_view);
-
-
-        //affichage du nombre d'alarmes actives
-        textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(ListActif.size()));
-        //affichage du temps restant
-        if(ListActif.size() > 0){
-            textViewTempsRestant.setText(Affichage.tempsRestant(MapIdAlarm.get(ListActif.get(0))));
-        }
-        else{
-            textViewTempsRestant.setText(R.string.tempsRestant0alarm);
-        }
-    }
 
     private void initAjout(Alarm currentAlarm) {
 
@@ -233,5 +194,19 @@ public class MainActivity extends AppCompatActivity {
 
     public ActivityResultLauncher<Intent> getactivityResultLauncher(){
         return activityResultLauncher;
+    }
+
+
+    private void configureAndShowMainFragment(){
+
+        mainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+
+        if(mainFragment == null) {
+            mainFragment = new MainFragment();
+            mainFragment.affichage = affichage;
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragmentContainerView, mainFragment)
+                    .commit();
+        }
     }
 }

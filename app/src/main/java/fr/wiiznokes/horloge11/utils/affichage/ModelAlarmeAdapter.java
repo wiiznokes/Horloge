@@ -22,19 +22,18 @@ import fr.wiiznokes.horloge11.utils.storage.Alarm;
 public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 
     public Context context;
-
     public InteractHelper interactHelper;
 
-    public ArrayList<Alarm> list;
+    public static ArrayList<Alarm> list;
 
     public ListView listView;
 
-    public ModelAlarmeAdapter(Context context, ArrayList<Alarm> items, TextView textViewTempsRestant, TextView textViewAlarmeActive, ListView listView){
+    public ModelAlarmeAdapter(Context context, ArrayList<Alarm> items, TextView activeAlarmTextView, TextView timeLeftTextView, ListView listView){
         super(context, R.layout.alarme_affichage, items);
         this.context = context;
-        this.list = items;
+        list = items;
         this.listView = listView;
-        this.interactHelper = new InteractHelper(textViewTempsRestant, textViewAlarmeActive, context);
+        this.interactHelper = new InteractHelper(context, activeAlarmTextView, timeLeftTextView);
     }
 
     @Override
