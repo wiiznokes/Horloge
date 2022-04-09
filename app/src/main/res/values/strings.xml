@@ -1,4 +1,6 @@
 <resources>
+
+
     <string name="app_name">Horloge1.1</string>
     <string name="home_next_alarme">"00:00"</string>
 
@@ -61,5 +63,10 @@
     <string name="choose_son_alarm">Son de l\'alarme</string>
     <string name="description_ajout_sonnerie">ajouter une sonnerie par defaut</string>
     <string name="ajout_sonnerie_defaut">Son de l\'alarme par defaut</string>
+    <string name="mySong">Mes sons</string>
+    <string name="desciptionAjout">ajoutSonnerie</string>
+    <string name="add">Ajouter</string>
+    <string name="androidSong">Sons d\'Android</string>
+    <string name="silence">Alarme silencieuse</string>
 
 </resources>

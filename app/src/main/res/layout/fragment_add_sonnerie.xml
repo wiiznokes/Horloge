@@ -1,14 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.helperFrag.AddSonnerieFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <ImageButton
+        android:id="@+id/returnButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/actionModeCloseDrawable"
+        android:contentDescription="@string/desciption_return_Button" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/settingTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/chooseSonnerie"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@+id/returnButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/returnButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        app:layout_constraintTop_toBottomOf="@+id/returnButton">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:orientation="vertical" >
+            <TextView
+                android:id="@+id/mysongTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/mySong"
+                android:textSize="20sp"
+ />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/mySongCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <ImageButton
+                    android:id="@+id/imageButton1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_input_add"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent"
+                    android:contentDescription="@string/desciptionAjout" />
+
+                <TextView
+                    android:id="@+id/TextView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add"
+                    android:textSize="20sp"
+
+                    app:layout_constraintTop_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/imageButton1"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/androidSongTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/androidSong"
+                android:textSize="20sp"
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/androidSongCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_input_add"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent"
+                    android:contentDescription="@string/desciptionAjout" />
+
+                <TextView
+                    android:id="@+id/TextView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add"
+                    android:textSize="20sp"
+
+                    app:layout_constraintTop_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/imageButton2"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/silenceTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/silence"
+                android:textSize="20sp"
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/silenceSongCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <ImageButton
+                    android:id="@+id/imageButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_input_add"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent"
+                    android:contentDescription="@string/desciptionAjout" />
+
+                <TextView
+                    android:id="@+id/TextView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add"
+                    android:textSize="20sp"
+
+                    app:layout_constraintTop_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/imageButton3"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

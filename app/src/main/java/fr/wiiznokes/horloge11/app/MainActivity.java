@@ -9,9 +9,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,7 +20,6 @@ import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.fragments.app.MainFragment;
-import fr.wiiznokes.horloge11.temp.AddActivity;
 import fr.wiiznokes.horloge11.utils.affichage.Affichage;
 import fr.wiiznokes.horloge11.utils.affichage.ModelAlarmeAdapter;
 import fr.wiiznokes.horloge11.utils.alert.AlertHelper;

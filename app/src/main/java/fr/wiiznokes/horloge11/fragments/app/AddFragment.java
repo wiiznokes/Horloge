@@ -1,6 +1,5 @@
 package fr.wiiznokes.horloge11.fragments.app;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -21,8 +20,6 @@ import java.util.Random;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.fragments.helperFrag.AddSonnerieFragment;
-import fr.wiiznokes.horloge11.temp.AddActivity;
-import fr.wiiznokes.horloge11.temp.addSonnerieActivity;
 import fr.wiiznokes.horloge11.utils.storage.AddAlarmHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
@@ -150,7 +147,7 @@ public class AddFragment extends Fragment {
         //sonnerie
         addSonnerieButton.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance(currentAlarm))
+                    .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance("addAlarm", currentAlarm))
                     .commit();
         });
 
@@ -209,7 +206,8 @@ public class AddFragment extends Fragment {
             }
 
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerView, new MainFragment());
+                    .replace(R.id.fragmentContainerView, new MainFragment())
+                    .commit();
 
         });
 
