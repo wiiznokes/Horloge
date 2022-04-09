@@ -16,10 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Horloge11">
         <activity
-            android:name=".app.ParamsActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme"/>
-        <activity
             android:name=".app.addSonnerieActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
