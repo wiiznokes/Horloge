@@ -3,10 +3,15 @@ package fr.wiiznokes.horloge11.utils.interact;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.app.MainActivity;
+import fr.wiiznokes.horloge11.fragments.app.AddFragment;
+import fr.wiiznokes.horloge11.fragments.app.MainFragment;
 import fr.wiiznokes.horloge11.utils.affichage.Affichage;
 import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
@@ -126,14 +131,12 @@ public class InteractHelper {
 
     }
 
-    public void modifier(Alarm currentAlarm){
-        //creation de l'intention à partir du context et du fichier .class à ouvrir
-        Intent intent = new Intent( context,
-                AddActivity.class
-        );
-        intent.putExtra("isModif", true);
-        intent.putExtra("currentAlarm", currentAlarm);
-        ((MainActivity) context).getactivityResultLauncher().launch(intent);
+    public void modifier(Alarm currentAlarm, View v){
+
+        MainActivity activity = (MainActivity) v.getContext();
+        activity.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerView, new AddFragment())
+                .commit();
     }
 
 

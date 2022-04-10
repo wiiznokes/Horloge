@@ -16,12 +16,13 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import java.util.ArrayList;
 
 import fr.wiiznokes.horloge11.R;
+import fr.wiiznokes.horloge11.app.MainActivity;
 import fr.wiiznokes.horloge11.utils.interact.InteractHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
 public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 
-    public Context context;
+    public MainActivity mainActivity;
     public InteractHelper interactHelper;
 
     public static ArrayList<Alarm> list;
@@ -30,7 +31,7 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 
     public ModelAlarmeAdapter(Context context, ArrayList<Alarm> items, TextView activeAlarmTextView, TextView timeLeftTextView, ListView listView){
         super(context, R.layout.alarme_affichage, items);
-        this.context = context;
+        this.mainActivity = (MainActivity) context;
         list = items;
         this.listView = listView;
         this.interactHelper = new InteractHelper(context, activeAlarmTextView, timeLeftTextView);
@@ -56,7 +57,7 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
 
-            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) mainActivity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.alarme_affichage, null);
             Alarm currentAlarm = getItem(position);
 
@@ -76,16 +77,16 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
             });
 
             //item Listener
-            convertView.setOnLongClickListener(v -> {
-                AlertDialog.Builder popUp = new AlertDialog.Builder(context);
+            convertView.setOnLongClickListener((View v) -> {
+                AlertDialog.Builder popUp = new AlertDialog.Builder(mainActivity);
                 popUp.setPositiveButton("MODIFIER", ((dialog, which) -> {
-                    interactHelper.modifier(currentAlarm);
+                    interactHelper.modifier(currentAlarm, v);
+                    Toast.makeText(mainActivity, "modifié", Toast.LENGTH_SHORT).show();
                 }));
 
                 popUp.setNegativeButton("EFFACER", (dialog, which) -> {
-
                     interactHelper.effacer(currentAlarm);
-                    Toast.makeText(context, "effacé", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mainActivity, "effacé", Toast.LENGTH_SHORT).show();
                 });
                 popUp.show();
                 return true;

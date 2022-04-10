@@ -20,6 +20,7 @@ import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.fragments.app.MainFragment;
+import fr.wiiznokes.horloge11.fragments.helperFrag.AddSonnerieFragment;
 import fr.wiiznokes.horloge11.utils.affichage.Affichage;
 import fr.wiiznokes.horloge11.utils.affichage.ModelAlarmeAdapter;
 import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
@@ -32,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
     private MainFragment mainFragment;
 
-    public Affichage affichage;
 
 
 
@@ -50,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    //parametre
+    private static final String sourceAddAlarm = "addAlarm";
+    private static final String sourceSetting = "setting";
 
 
 
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     public static ModelAlarmeAdapter adapter;
 
 
-
+/*
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
             }
     );
 
-
+*/
 
 
 
@@ -189,9 +192,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public ActivityResultLauncher<Intent> getactivityResultLauncher(){
-        return activityResultLauncher;
-    }
 
 
     private void configureAndShowMainFragment(){
@@ -199,11 +199,13 @@ public class MainActivity extends AppCompatActivity {
         mainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
 
         if(mainFragment == null) {
-            mainFragment = new MainFragment();
-            mainFragment.affichage = affichage;
+            mainFragment = MainFragment.newInstance();
+            mainFragment.initAffichage();
+
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragmentContainerView, mainFragment)
                     .commit();
         }
     }
+
 }
