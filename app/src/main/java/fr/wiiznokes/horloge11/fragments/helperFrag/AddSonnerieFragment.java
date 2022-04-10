@@ -24,11 +24,7 @@ import fr.wiiznokes.horloge11.fragments.app.AddFragment;
 import fr.wiiznokes.horloge11.fragments.app.SettingFragment;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddSonnerieFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class AddSonnerieFragment extends Fragment {
 
 
@@ -59,8 +55,8 @@ public class AddSonnerieFragment extends Fragment {
                         }
                         currentAlarm.uriSonnerie = uri.toString();
                         currentAlarm.silence = false;
+                        returnHelper();
                     }
-                    returnHelper();
                 }
             }
     );
@@ -131,14 +127,16 @@ public class AddSonnerieFragment extends Fragment {
     }
 
     private void returnHelper(){
+
         if(currentSource.equals(sourceAddAlarm)){
+            AddFragment.currentAlarm = currentAlarm;
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerView, new AddFragment())
+                    .remove(this)
                     .commit();
         }
         else {
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerView, new SettingFragment())
+                    .remove(this)
                     .commit();
         }
     }

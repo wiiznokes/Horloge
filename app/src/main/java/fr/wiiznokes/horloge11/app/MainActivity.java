@@ -144,9 +144,14 @@ public class MainActivity extends FragmentActivity {
 
         initStorage();
 
-        configureAndShowMainFragment();
 
 
+        mainFragment = new MainFragment();
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .add(R.id.fragmentContainerView, mainFragment)
+                .commit();
     }
 
 
@@ -194,19 +199,5 @@ public class MainActivity extends FragmentActivity {
 
     }
 
-
-
-    private void configureAndShowMainFragment(){
-
-        mainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
-
-        if(mainFragment == null) {
-            mainFragment = new MainFragment();
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragmentContainerView, mainFragment)
-                    .commit();
-        }
-    }
 
 }

@@ -80,7 +80,7 @@ public class MainFragment extends Fragment {
 
     public void initAffichage(){
 
-
+        //nb alarm active et temps restant init
         activeAlarmTextView.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
         if(MainActivity.ListActif.size() > 0){
             timeLeftTextView.setText(Affichage.tempsRestant(MainActivity.MapIdAlarm.get(MainActivity.ListActif.get(0))));
@@ -89,9 +89,10 @@ public class MainFragment extends Fragment {
             timeLeftTextView.setText(R.string.tempsRestant0alarm);
         }
 
-
+        //list view
         adapter = new ModelAlarmeAdapter(getContext(), Trie.ListItems(), activeAlarmTextView, timeLeftTextView, listView);
         listView.setAdapter(adapter);
+
 
         settingButton.setOnClickListener(v ->
                 getParentFragmentManager().beginTransaction()
@@ -101,6 +102,7 @@ public class MainFragment extends Fragment {
 
         addAlarmButton.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
+                    .addToBackStack(null)
                     .replace(R.id.fragmentContainerView, new AddFragment())
                     .commit();
         });

@@ -18,12 +18,15 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import java.util.Objects;
 import java.util.Random;
 
 import fr.wiiznokes.horloge11.R;
+import fr.wiiznokes.horloge11.app.MainActivity;
 import fr.wiiznokes.horloge11.fragments.helperFrag.AddSonnerieFragment;
 import fr.wiiznokes.horloge11.utils.storage.AddAlarmHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
+import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 
 
 public class AddFragment extends Fragment {
@@ -58,8 +61,6 @@ public class AddFragment extends Fragment {
 
     private ImageButton saveButton;
 
-
-    private static final String ARG_PARAM1 = "param1";
 
     private static boolean isModif = false;
 
@@ -153,11 +154,10 @@ public class AddFragment extends Fragment {
         addSonnerieButton.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance("addAlarm", currentAlarm))
-                    .commit();
+                    .commitNowAllowingStateLoss();
         });
 
         //save
-
         saveButton.setOnClickListener(v -> {
             if(alarmHoursEditText.length() != 5){
                 Toast.makeText(getContext(), "Heure de l'alarme invalide", Toast.LENGTH_SHORT).show();
@@ -210,10 +210,12 @@ public class AddFragment extends Fragment {
                 AddAlarmHelper.add(currentAlarm);
             }
 
+            MainActivity.MapIdAlarm.put(currentAlarm.id, currentAlarm);
+            StorageUtils.writeObject(requireContext(), MainActivity.MapIdAlarm, StorageUtils.alarmsFile);
+
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainerView, new MainFragment())
                     .commit();
-
         });
 
 
