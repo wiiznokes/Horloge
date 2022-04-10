@@ -2,6 +2,8 @@ package fr.wiiznokes.horloge11.fragments.app;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
@@ -59,30 +61,33 @@ public class AddFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
 
-    private static String source;
+    private static boolean isModif = false;
 
     public AddFragment() {
         // Required empty public constructor
     }
 
-    public static AlarmFragment newInstance(String currentSource, Alarm alarm) {
+    public static AlarmFragment newInstance(boolean modifSouce, Alarm alarm) {
         AlarmFragment fragment = new AlarmFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, currentSource);
         fragment.setArguments(args);
-        source = currentSource;
+        isModif = modifSouce;
         currentAlarm = alarm;
 
         return fragment;
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
-        if(source.equals("modifSource")){
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if(isModif){
             modifAlarmHelper();
         }
         else{
@@ -198,7 +203,7 @@ public class AddFragment extends Fragment {
 
             currentAlarm.vibreur = vibrateCheckBox.isChecked();
 
-            if(source.equals("modifSource")){
+            if(isModif){
                 AddAlarmHelper.replace(currentAlarm);
             }
             else{

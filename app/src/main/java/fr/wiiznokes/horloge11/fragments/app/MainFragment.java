@@ -2,6 +2,8 @@ package fr.wiiznokes.horloge11.fragments.app;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -43,19 +45,17 @@ public class MainFragment extends Fragment {
 
     }
 
-    public static MainFragment newInstance() {
-        MainFragment fragment = new MainFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        return fragment;
+        initAffichage();
+
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
 
     }
@@ -66,18 +66,19 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
 
 
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        this.settingButton = view.findViewById(R.id.settingButton);
+        this.addAlarmButton = view.findViewById(R.id.addAlarmButton);
+
+        this.activeAlarmTextView = view.findViewById(R.id.activeAlarmTextView);
+        this.timeLeftTextView = view.findViewById(R.id.timeLeftTextView);
+        this.listView = view.findViewById(R.id.list_view);
+
+        return view;
     }
 
     public void initAffichage(){
-
-        this.settingButton = requireView().findViewById(R.id.settingButton);
-        this.addAlarmButton = requireView().findViewById(R.id.addAlarmButton);
-
-        this.activeAlarmTextView = requireView().findViewById(R.id.activeAlarmTextView);
-        this.timeLeftTextView = requireView().findViewById(R.id.timeLeftTextView);
-        this.listView = requireView().findViewById(R.id.list_view);
-
 
 
         activeAlarmTextView.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
@@ -87,7 +88,7 @@ public class MainFragment extends Fragment {
         else{
             timeLeftTextView.setText(R.string.tempsRestant0alarm);
         }
-        
+
 
         adapter = new ModelAlarmeAdapter(getContext(), Trie.ListItems(), activeAlarmTextView, timeLeftTextView, listView);
         listView.setAdapter(adapter);
@@ -97,7 +98,6 @@ public class MainFragment extends Fragment {
                         .replace(R.id.fragmentContainerView, new SettingFragment())
                         .commit());
 
-        initAffichage();
 
         addAlarmButton.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()

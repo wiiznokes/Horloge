@@ -135,7 +135,7 @@ public class InteractHelper {
 
         MainActivity activity = (MainActivity) v.getContext();
         activity.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerView, new AddFragment())
+                .replace(R.id.fragmentContainerView, AddFragment.newInstance(true, currentAlarm))
                 .commit();
     }
 

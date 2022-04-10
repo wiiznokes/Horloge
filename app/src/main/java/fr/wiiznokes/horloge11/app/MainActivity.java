@@ -8,6 +8,8 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -28,7 +30,7 @@ import fr.wiiznokes.horloge11.utils.storage.Alarm;
 import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 import fr.wiiznokes.horloge11.utils.storage.Trie;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {
 
 
     private MainFragment mainFragment;
@@ -199,8 +201,7 @@ public class MainActivity extends AppCompatActivity {
         mainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
 
         if(mainFragment == null) {
-            mainFragment = MainFragment.newInstance();
-            mainFragment.initAffichage();
+            mainFragment = new MainFragment();
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragmentContainerView, mainFragment)

@@ -52,7 +52,8 @@
         android:layout_margin="30dp"
         app:srcCompat="@android:drawable/button_onoff_indicator_off"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/desciptionInutile" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -68,5 +68,6 @@
     <string name="add">Ajouter</string>
     <string name="androidSong">Sons d\'Android</string>
     <string name="silence">Alarme silencieuse</string>
+    <string name="desciptionInutile">inutile</string>
 
 </resources>
