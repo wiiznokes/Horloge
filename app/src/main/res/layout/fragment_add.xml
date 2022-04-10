@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="?attr/actionModeCloseDrawable"
+        android:background="@drawable/icon_return"
         android:contentDescription="@string/desciption_return_Button" />
 
     <EditText

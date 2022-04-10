@@ -10,10 +10,12 @@
         android:id="@+id/returnButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/icon_return"
+        android:contentDescription="@string/desciption_return_Button"
         app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="?attr/actionModeCloseDrawable"
-        android:contentDescription="@string/desciption_return_Button" />
+         />
 
     <TextView
         android:id="@+id/settingTextView"
@@ -38,9 +40,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-
             android:orientation="vertical" >
+
             <TextView
                 android:id="@+id/mysongTextView"
                 android:layout_width="match_parent"
@@ -59,9 +60,10 @@
                     android:id="@+id/imageButton1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_input_add"
+                    android:background="@drawable/icon_plus"
+
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     android:contentDescription="@string/desciptionAjout" />
 
                 <TextView
@@ -71,10 +73,10 @@
                     android:text="@string/add"
                     android:textSize="20sp"
 
-                    app:layout_constraintTop_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@+id/imageButton1"
-                    app:layout_constraintRight_toRightOf="parent" />
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/imageButton1" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -97,9 +99,10 @@
                     android:id="@+id/imageButton2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_input_add"
+                    android:background="@drawable/icon_plus"
+
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="parent"
                     android:contentDescription="@string/desciptionAjout" />
 
                 <TextView
@@ -109,7 +112,7 @@
                     android:text="@string/add"
                     android:textSize="20sp"
 
-                    app:layout_constraintTop_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/imageButton2"
                     app:layout_constraintRight_toRightOf="parent" />
@@ -135,9 +138,10 @@
                     android:id="@+id/imageButton3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_input_add"
+                    android:background="@drawable/icon_plus"
+
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="parent"
                     android:contentDescription="@string/desciptionAjout" />
 
                 <TextView
@@ -147,7 +151,7 @@
                     android:text="@string/add"
                     android:textSize="20sp"
 
-                    app:layout_constraintTop_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/imageButton3"
                     app:layout_constraintRight_toRightOf="parent" />
