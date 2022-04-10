@@ -97,9 +97,7 @@ public class AddFragment extends Fragment {
         }
 
         returnButton.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerView, new MainFragment())
-                    .commit();
+            getParentFragmentManager().popBackStack();
         });
 
         alarmNameEditText.requestFocus();
@@ -153,8 +151,9 @@ public class AddFragment extends Fragment {
         //sonnerie
         addSonnerieButton.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
+                    .addToBackStack(null)
                     .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance("addAlarm", currentAlarm))
-                    .commitNowAllowingStateLoss();
+                    .commit();
         });
 
         //save

@@ -82,7 +82,7 @@ public class AddSonnerieFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         returnButton.setOnClickListener(v -> {
-            returnHelper();
+            getParentFragmentManager().popBackStack();
         });
 
         //mySong
@@ -130,14 +130,11 @@ public class AddSonnerieFragment extends Fragment {
 
         if(currentSource.equals(sourceAddAlarm)){
             AddFragment.currentAlarm = currentAlarm;
-            getParentFragmentManager().beginTransaction()
-                    .remove(this)
-                    .commit();
+            getParentFragmentManager().popBackStack();
         }
         else {
-            getParentFragmentManager().beginTransaction()
-                    .remove(this)
-                    .commit();
+
+            getParentFragmentManager().popBackStack();
         }
     }
 
