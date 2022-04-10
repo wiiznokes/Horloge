@@ -4,22 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".app.MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".app.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
 
-
-
         <TextView
             android:id="@+id/activeAlarmTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/active_alarme"
             android:layout_margin="20dp"
+            android:text="@string/active_alarme"
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,10 +29,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
 
+            android:contentDescription="@string/parametre"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_manage"
-            android:contentDescription="@string/parametre" />
+            app:srcCompat="@android:drawable/ic_menu_manage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -42,23 +40,23 @@
         android:id="@+id/timeLeftTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/temps_restant"
-        android:layout_margin="2dp"/>
+        android:layout_margin="2dp"
+        android:text="@string/temps_restant" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        app:srcCompat="@android:drawable/button_onoff_indicator_off"
+        android:contentDescription="@string/desciptionInutile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/desciptionInutile" />
+        app:srcCompat="@android:drawable/button_onoff_indicator_off" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addAlarmButton"
@@ -66,11 +64,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:clickable="true"
+            android:contentDescription="@string/description_add_button"
+            android:focusable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@android:drawable/ic_input_add"
-            android:focusable="true"
-            android:contentDescription="@string/description_add_bouton" />
+            app:srcCompat="@android:drawable/ic_input_add" />
 
 
         <ListView

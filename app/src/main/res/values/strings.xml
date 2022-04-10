@@ -36,7 +36,7 @@
     <string name="samedi">S</string>
     <string name="dimanche">D</string>
 
-    <string name="description_add_bouton">add alarm button</string>
+    <string name="description_add_button">add alarm button</string>
 
     <string name="active_alarme">Alarme active : </string>
 
