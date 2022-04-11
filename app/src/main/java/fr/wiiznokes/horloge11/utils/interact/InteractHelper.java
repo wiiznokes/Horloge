@@ -1,9 +1,12 @@
 package fr.wiiznokes.horloge11.utils.interact;
 
 
+import static fr.wiiznokes.horloge11.app.MainActivity.items;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,10 +25,8 @@ public class InteractHelper {
 
     private final TextView activeAlarmTextView;
     private final TextView timeLeftTextView;
-
-
-    private final Context context;
-    private final AlertHelper alertHelper;
+    private final ListView listView;
+    private final MainActivity mainActivity;
 
 
 
@@ -33,11 +34,11 @@ public class InteractHelper {
 
 
 
-    public InteractHelper(Context context, TextView activeAlarmTextView, TextView timeLeftTextView){
+    public InteractHelper(MainActivity mainActivity, TextView activeAlarmTextView, TextView timeLeftTextView, ListView listView){
         this.activeAlarmTextView = activeAlarmTextView;
         this.timeLeftTextView = timeLeftTextView;
-        this.context = context;
-        this.alertHelper = new AlertHelper(context);
+        this.listView = listView;
+        this.mainActivity = mainActivity;
     }
 
     public void switchHelper(Alarm currentAlarm){
@@ -57,8 +58,10 @@ public class InteractHelper {
             }
             MainActivity.ListActif.remove(currentAlarm.id);
             Trie.ListInactifChange(currentAlarm.id);
+
+
             //remove Alarm de AlarmManager
-            alertHelper.remove(currentAlarm);
+            AlertHelper.remove(currentAlarm, mainActivity);
         }
         //l'alarm devient active
         else {
@@ -72,10 +75,10 @@ public class InteractHelper {
                 timeLeftTextView.setText(Affichage.tempsRestant(currentAlarm));
             }
             //ajout de l'alarm au AlarmManager
-            alertHelper.add(currentAlarm);
+            AlertHelper.add(currentAlarm, mainActivity);
         }
 
-        MainActivity.removeItem(MainActivity.ListSortId.indexOf(currentAlarm.id));
+        items.remove(MainActivity.ListSortId.indexOf(currentAlarm.id));
 
         MainActivity.MapIdAlarm.put(currentAlarm.id, currentAlarm);
         Trie.ListSortId();
@@ -83,10 +86,11 @@ public class InteractHelper {
         activeAlarmTextView.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
 
         //ecriture
-        StorageUtils.writeObject(context, MainActivity.MapIdAlarm, StorageUtils.alarmsFile);
+        StorageUtils.writeObject(mainActivity, MainActivity.MapIdAlarm, StorageUtils.alarmsFile);
 
         //maj affichage
-        MainActivity.addItem(currentAlarm, MainActivity.ListSortId.indexOf(currentAlarm.id));
+        items.add(MainActivity.ListSortId.indexOf(currentAlarm.id), currentAlarm);
+        MainFragment.adapter.notifyDataSetChanged();
     }
 
 
@@ -102,7 +106,7 @@ public class InteractHelper {
 
 
                 if(MainActivity.ListActif.size() > 1){
-                    timeLeftTextView.setText(Affichage.tempsRestant(MainActivity.items.get(1)));
+                    timeLeftTextView.setText(Affichage.tempsRestant(items.get(1)));
                 }
                 else {
                     timeLeftTextView.setText(R.string.tempsRestant0alarm);
@@ -120,14 +124,14 @@ public class InteractHelper {
             MainActivity.ListInactif.remove((Object) id);
         }
 
-        MainActivity.removeItem(MainActivity.ListSortId.indexOf(id));
+        items.remove(MainActivity.ListSortId.indexOf(id));
         Trie.ListSortId();
 
         //maj nb alarm active
         activeAlarmTextView.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
 
         //ecriture
-        StorageUtils.writeObject(context, MainActivity.MapIdAlarm, StorageUtils.alarmsFile);
+        StorageUtils.writeObject(mainActivity, MainActivity.MapIdAlarm, StorageUtils.alarmsFile);
 
     }
 

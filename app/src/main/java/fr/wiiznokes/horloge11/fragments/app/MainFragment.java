@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +38,10 @@ public class MainFragment extends Fragment {
     public TextView timeLeftTextView;
 
     public ListView listView;
-    public ModelAlarmeAdapter adapter;
+    public static ModelAlarmeAdapter adapter;
+
+    private static boolean isNewAlarm;
+    private static boolean isModif;
 
 
 
@@ -45,9 +49,30 @@ public class MainFragment extends Fragment {
 
     }
 
+    public static MainFragment newInstance(boolean newAlarm, boolean modif){
+        MainFragment fragment = new MainFragment();
+
+        isNewAlarm = newAlarm;
+        isModif = modif;
+
+        return fragment;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if(isNewAlarm){
+            Bundle bundle = getArguments();
+            Alarm currentAlarm = (Alarm) bundle.getSerializable("currentAlarm");
+
+            if(isModif){
+                ((MainActivity) requireContext()).modifAlarm(currentAlarm);
+            }
+            else{
+                ((MainActivity) requireContext()).addAlarm(currentAlarm);
+            }
+        }
 
         initAffichage();
 
@@ -90,12 +115,13 @@ public class MainFragment extends Fragment {
         }
 
         //list view
-        adapter = new ModelAlarmeAdapter(getContext(), Trie.ListItems(), activeAlarmTextView, timeLeftTextView, listView);
+        adapter = new ModelAlarmeAdapter((MainActivity) requireContext(), activeAlarmTextView, timeLeftTextView, listView);
         listView.setAdapter(adapter);
 
 
         settingButton.setOnClickListener(v ->
                 getParentFragmentManager().beginTransaction()
+                        .addToBackStack(null)
                         .replace(R.id.fragmentContainerView, new SettingFragment())
                         .commit());
 
@@ -103,7 +129,7 @@ public class MainFragment extends Fragment {
         addAlarmButton.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
                     .addToBackStack(null)
-                    .replace(R.id.fragmentContainerView, new AddFragment())
+                    .replace(R.id.fragmentContainerView, AddFragment.newInstance(false, null))
                     .commit();
         });
     }

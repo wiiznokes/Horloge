@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -33,11 +34,6 @@ import fr.wiiznokes.horloge11.utils.storage.Trie;
 public class MainActivity extends FragmentActivity {
 
 
-    private MainFragment mainFragment;
-
-
-
-
     //dictionnaire key:id valeur:Alarm
     static public Map<Long, Alarm> MapIdAlarm;
     //dictionnaire key:id valeur:dateSonnerie
@@ -50,88 +46,10 @@ public class MainActivity extends FragmentActivity {
     static public List<Long> ListSortId;
 
 
-
-
-    //parametre
-    private static final String sourceAddAlarm = "addAlarm";
-    private static final String sourceSetting = "setting";
-
-
-
-    //listview
+    //list pour le listView
     public static ArrayList<Alarm> items;
-    public static ListView listView;
-    public static ModelAlarmeAdapter adapter;
 
 
-/*
-    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @SuppressLint("ClickableViewAccessibility")
-                @Override
-                public void onActivityResult(ActivityResult result) {
-
-                    //bouton save addActivity
-                    if(result.getResultCode() == 0){
-
-                        //recuperation de l'objet Alarm
-                        Alarm currentAlarm = AddActivity.currentAlarm;
-
-                        //creation de tous les objets
-                        initAjout(currentAlarm);
-
-                        //maj listView
-                        MainActivity.addItem(currentAlarm, ListSortId.indexOf(currentAlarm.id));
-                        //ajout Alarm a AlarmManger
-                        new AlertHelper(MainActivity.this).add(currentAlarm);
-
-                        StorageUtils.writeObject(MainActivity.this, MapIdAlarm, StorageUtils.alarmsFile);
-
-
-
-                        //maj nb alarmes actives
-                        textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(ListActif.size()));
-                        //maj temps restant
-                        textViewTempsRestant.setText(Affichage.tempsRestant(items.get(0)));
-
-                    }
-
-                    if(result.getResultCode() == 1){
-                        //recuperation de l'objet Alarm
-                        Alarm currentAlarm = AddActivity.currentAlarm;
-
-                        items.remove(MapIdAlarm.get(currentAlarm.id));
-
-                        MapIdAlarm.put(currentAlarm.id, currentAlarm);
-                        MapIdDate.put(currentAlarm.id, Trie.dateProchaineSonnerie(currentAlarm));
-
-                        ListActif.remove(currentAlarm.id);
-                        ListInactif.remove(currentAlarm.id);
-                        Trie.ListActifChange(currentAlarm.id);
-                        Trie.ListSortId();
-
-                        MainActivity.addItem(currentAlarm, ListSortId.indexOf(currentAlarm.id));
-
-                        //ajout Alarm a AlarmManger
-                        new AlertHelper(MainActivity.this).add(currentAlarm);
-
-
-                        StorageUtils.writeObject(MainActivity.this, MapIdAlarm, StorageUtils.alarmsFile);
-
-
-                        //maj nb alarmes actives
-                        textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(ListActif.size()));
-                        //maj temps restant
-                        textViewTempsRestant.setText(Affichage.tempsRestant(items.get(0)));
-
-                        Toast.makeText(MainActivity.this, "modifié", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-    );
-
-*/
 
 
 
@@ -144,28 +62,15 @@ public class MainActivity extends FragmentActivity {
 
         initStorage();
 
-
-
-        mainFragment = new MainFragment();
+        MainFragment mainFragment = new MainFragment();
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .add(R.id.fragmentContainerView, mainFragment)
                 .commit();
+
+
     }
-
-
-
-    public static void addItem(Alarm alarm, int position){
-        items.add(position, alarm);
-        listView.setAdapter(adapter);
-    }
-
-    public static void removeItem(int position){
-        items.remove(position);
-        listView.setAdapter(adapter);
-    }
-
 
 
 
@@ -185,11 +90,11 @@ public class MainActivity extends FragmentActivity {
         Trie.ListActifInit();
         Trie.ListInactifInit();
         Trie.ListSortId();
-        Trie.ListItems();
+        items = Trie.ListItems();
     }
 
 
-    private void initAjout(Alarm currentAlarm) {
+    public void addAlarm(Alarm currentAlarm) {
 
         MapIdAlarm.put(currentAlarm.id, currentAlarm);
         MapIdDate.put(currentAlarm.id, Trie.dateProchaineSonnerie(currentAlarm));
@@ -197,7 +102,36 @@ public class MainActivity extends FragmentActivity {
         Trie.ListActifChange(currentAlarm.id);
         Trie.ListSortId();
 
+
+
+        items.add(ListSortId.indexOf(currentAlarm.id), currentAlarm);
+
+        //ajout Alarm a AlarmManger
+        AlertHelper.add(currentAlarm, this);
+
+        StorageUtils.writeObject(MainActivity.this, MapIdAlarm, StorageUtils.alarmsFile);
+
     }
 
+    public void modifAlarm(Alarm currentAlarm) {
+
+        items.remove(MapIdAlarm.get(currentAlarm.id));
+
+        MapIdAlarm.put(currentAlarm.id, currentAlarm);
+        MapIdDate.put(currentAlarm.id, Trie.dateProchaineSonnerie(currentAlarm));
+
+        ListActif.remove(currentAlarm.id);
+        ListInactif.remove(currentAlarm.id);
+        Trie.ListActifChange(currentAlarm.id);
+        Trie.ListSortId();
+
+        items.add(ListSortId.indexOf(currentAlarm.id), currentAlarm);
+
+        //ajout Alarm a AlarmManger
+        AlertHelper.add(currentAlarm, this);
+
+        StorageUtils.writeObject(MainActivity.this, MapIdAlarm, StorageUtils.alarmsFile);
+        Toast.makeText(MainActivity.this, "modifié", Toast.LENGTH_SHORT).show();
+    }
 
 }

@@ -68,12 +68,18 @@ public class AddFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static AlarmFragment newInstance(boolean modifSouce, Alarm alarm) {
-        AlarmFragment fragment = new AlarmFragment();
+    public static AddFragment newInstance(boolean modif, @Nullable Alarm alarm) {
+        AddFragment fragment = new AddFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        isModif = modifSouce;
-        currentAlarm = alarm;
+
+        isModif = modif;
+        if(isModif){
+            currentAlarm = alarm;
+        }
+        else {
+            currentAlarm = new Alarm();
+        }
 
         return fragment;
     }
@@ -92,7 +98,6 @@ public class AddFragment extends Fragment {
             modifAlarmHelper();
         }
         else{
-            currentAlarm = new Alarm();
             currentAlarm.id = new Random().nextLong();
         }
 
@@ -209,12 +214,16 @@ public class AddFragment extends Fragment {
                 AddAlarmHelper.add(currentAlarm);
             }
 
-            MainActivity.MapIdAlarm.put(currentAlarm.id, currentAlarm);
-            StorageUtils.writeObject(requireContext(), MainActivity.MapIdAlarm, StorageUtils.alarmsFile);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("currentAlarm", currentAlarm);
+
+            MainFragment mainFragment = MainFragment.newInstance(true, isModif);
+            mainFragment.setArguments(bundle);
 
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerView, new MainFragment())
+                    .replace(R.id.fragmentContainerView, mainFragment)
                     .commit();
+
         });
 
 

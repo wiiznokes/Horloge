@@ -1,5 +1,7 @@
 package fr.wiiznokes.horloge11.utils.affichage;
 
+import static fr.wiiznokes.horloge11.app.MainActivity.items;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -25,31 +27,28 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
     public MainActivity mainActivity;
     public InteractHelper interactHelper;
 
-    public static ArrayList<Alarm> list;
 
-    public ListView listView;
 
-    public ModelAlarmeAdapter(Context context, ArrayList<Alarm> items, TextView activeAlarmTextView, TextView timeLeftTextView, ListView listView){
-        super(context, R.layout.alarme_affichage, items);
-        this.mainActivity = (MainActivity) context;
-        list = items;
-        this.listView = listView;
-        this.interactHelper = new InteractHelper(context, activeAlarmTextView, timeLeftTextView);
+
+    public ModelAlarmeAdapter(MainActivity mainActivity, TextView activeAlarmTextView, TextView timeLeftTextView, ListView listView){
+        super(mainActivity, R.layout.alarme_affichage, items);
+        this.mainActivity = mainActivity;
+        this.interactHelper = new InteractHelper(mainActivity, activeAlarmTextView, timeLeftTextView, listView);
     }
 
     @Override
     public int getCount() {
-        return list.size();
+        return items.size();
     }
 
     @Override
     public Alarm getItem(int index) {
-        return list.get(index);
+        return items.get(index);
     }
 
     @Override
     public long getItemId(int index) {
-        return list.get(index).id;
+        return items.get(index).id;
     }
 
 

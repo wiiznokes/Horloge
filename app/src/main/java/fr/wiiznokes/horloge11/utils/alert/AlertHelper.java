@@ -11,23 +11,10 @@ import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
 public class AlertHelper {
 
-    Context context;
-    AlarmManager alarmManager;
+    static AlarmManager alarmManager;
 
 
-
-    public AlertHelper(Context context){
-        this.context = context;
-        this.alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-    }
-
-
-
-
-
-
-    public void add(Alarm currentAlarm){
+    public static void add(Alarm currentAlarm, Context context){
         //creation du pending intent
         Intent intent = new Intent(
                 context,
@@ -39,10 +26,12 @@ public class AlertHelper {
         //recuperation de la date de sonnerie
         long time = MainActivity.MapIdDate.get(currentAlarm.id).getTimeInMillis();
 
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+        getAlarmManager(context).setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent);
     }
 
-    public void remove(Alarm currentAlarm){
+
+
+    public static void remove(Alarm currentAlarm, Context context){
         Intent intent = new Intent(
                 context,
                 AlertReceiver.class
@@ -50,8 +39,15 @@ public class AlertHelper {
         intent.putExtra("alarm", currentAlarm);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 11, intent, PendingIntent.FLAG_IMMUTABLE);
 
-        alarmManager.cancel(pendingIntent);
+        getAlarmManager(context).cancel(pendingIntent);
 
+    }
+
+    public static AlarmManager getAlarmManager(Context context) {
+        if(alarmManager == null){
+            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        }
+        return alarmManager;
     }
 
 

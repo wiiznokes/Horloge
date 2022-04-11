@@ -21,7 +21,6 @@ public class StorageUtils {
     public static final String paramsFile = "params.txt";
 
 
-
     public static void writeObject(Context context, Object object, String fileName){
         try {
             FileOutputStream output = context.openFileOutput(fileName, MODE_PRIVATE);
