@@ -34,10 +34,10 @@ public class MainFragment extends Fragment {
     public ImageButton addAlarmButton;
 
 
-    public static TextView activeAlarmTextView;
-    public static TextView timeLeftTextView;
+    public TextView activeAlarmTextView;
+    public TextView timeLeftTextView;
 
-    public static ListView listView;
+    public ListView listView;
     public static ModelAlarmeAdapter adapter;
 
     private static boolean isNewAlarm;
@@ -115,7 +115,7 @@ public class MainFragment extends Fragment {
         }
 
         //list view
-        adapter = new ModelAlarmeAdapter((MainActivity) requireContext(), activeAlarmTextView, timeLeftTextView);
+        adapter = new ModelAlarmeAdapter((MainActivity) requireContext(), activeAlarmTextView, timeLeftTextView, listView);
         listView.setAdapter(adapter);
 
 

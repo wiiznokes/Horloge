@@ -66,7 +66,7 @@ public class MainActivity extends FragmentActivity {
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
-                .add(R.id.fragmentContainerView, mainFragment)
+                .replace(R.id.fragmentContainerView, mainFragment)
                 .commit();
 
 

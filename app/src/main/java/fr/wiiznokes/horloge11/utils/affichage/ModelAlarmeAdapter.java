@@ -27,13 +27,14 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
     public MainActivity mainActivity;
     public InteractHelper interactHelper;
 
+    private ListView listView;
 
 
-
-    public ModelAlarmeAdapter(MainActivity mainActivity, TextView activeAlarmTextView, TextView timeLeftTextView){
+    public ModelAlarmeAdapter(MainActivity mainActivity, TextView activeAlarmTextView, TextView timeLeftTextView, ListView listV){
         super(mainActivity, R.layout.alarme_affichage, items);
         this.mainActivity = mainActivity;
         this.interactHelper = new InteractHelper(mainActivity, activeAlarmTextView, timeLeftTextView);
+        this.listView = listV;
     }
 
     @Override
@@ -59,6 +60,7 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
             LayoutInflater layoutInflater = (LayoutInflater) mainActivity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.alarme_affichage, null);
             Alarm currentAlarm = getItem(position);
+
 
             TextView hours = convertView.findViewById(R.id.hours);
             hours.setText(currentAlarm.hoursText);
