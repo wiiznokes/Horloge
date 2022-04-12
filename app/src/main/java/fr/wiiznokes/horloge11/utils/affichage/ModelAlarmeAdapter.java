@@ -30,10 +30,10 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 
 
 
-    public ModelAlarmeAdapter(MainActivity mainActivity, TextView activeAlarmTextView, TextView timeLeftTextView, ListView listView){
+    public ModelAlarmeAdapter(MainActivity mainActivity, TextView activeAlarmTextView, TextView timeLeftTextView){
         super(mainActivity, R.layout.alarme_affichage, items);
         this.mainActivity = mainActivity;
-        this.interactHelper = new InteractHelper(mainActivity, activeAlarmTextView, timeLeftTextView, listView);
+        this.interactHelper = new InteractHelper(mainActivity, activeAlarmTextView, timeLeftTextView);
     }
 
     @Override

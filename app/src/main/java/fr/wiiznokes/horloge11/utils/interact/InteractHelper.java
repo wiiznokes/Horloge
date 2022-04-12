@@ -22,23 +22,21 @@ import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 import fr.wiiznokes.horloge11.utils.storage.Trie;
 
 public class InteractHelper {
-
+/*
     private final TextView activeAlarmTextView;
     private final TextView timeLeftTextView;
-    private final ListView listView;
     private final MainActivity mainActivity;
 
+*/
 
 
 
 
 
-
-    public InteractHelper(MainActivity mainActivity, TextView activeAlarmTextView, TextView timeLeftTextView, ListView listView){
+    public InteractHelper(MainActivity mainActivity, TextView activeAlarmTextView, TextView timeLeftTextView){/*
         this.activeAlarmTextView = activeAlarmTextView;
         this.timeLeftTextView = timeLeftTextView;
-        this.listView = listView;
-        this.mainActivity = mainActivity;
+        this.mainActivity = mainActivity;*/
     }
 
     public void switchHelper(Alarm currentAlarm){
