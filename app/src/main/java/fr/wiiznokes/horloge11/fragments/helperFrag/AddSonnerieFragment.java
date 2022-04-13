@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -14,14 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.fragments.app.AddFragment;
-import fr.wiiznokes.horloge11.fragments.app.SettingFragment;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
 

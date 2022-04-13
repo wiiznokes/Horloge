@@ -1,15 +1,10 @@
 package fr.wiiznokes.horloge11.utils.affichage;
 
 
-
-import android.content.Context;
-import android.content.res.Resources;
-
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.Calendar;
 
-import fr.wiiznokes.horloge11.R;
-import fr.wiiznokes.horloge11.app.MainActivity;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 import fr.wiiznokes.horloge11.utils.storage.Trie;
 

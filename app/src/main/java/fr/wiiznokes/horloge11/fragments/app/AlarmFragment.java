@@ -1,12 +1,11 @@
 package fr.wiiznokes.horloge11.fragments.app;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
 
 import fr.wiiznokes.horloge11.R;
 
