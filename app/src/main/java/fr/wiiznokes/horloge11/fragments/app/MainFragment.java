@@ -1,6 +1,7 @@
 package fr.wiiznokes.horloge11.fragments.app;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +33,8 @@ public class MainFragment extends Fragment {
     public ListView listView;
     public static ModelAlarmeAdapter adapter;
 
-    private static boolean isNewAlarm;
-    private static boolean isModif;
+    private static boolean isNewAlarm = false;
+    private static boolean isModif ;
 
 
 
@@ -67,6 +68,27 @@ public class MainFragment extends Fragment {
         }
 
         initAffichage();
+
+        System.out.println("Map Id Alarm:");
+        for(Alarm alarm: MainActivity.MapIdAlarm.values()){
+            System.out.println(alarm.alarmName + " : " + alarm.id);
+        }
+
+        System.out.println("ListSortId:");
+        for(Long id:MainActivity.ListSortId){
+            System.out.println(id);
+        }
+
+        System.out.println("ListActif:");
+        for(Long id:MainActivity.ListActif){
+            System.out.println(id);
+        }
+
+        System.out.println("ListItems");
+        for(Alarm alarm: MainActivity.items){
+            System.out.println(alarm.alarmName + " : " + alarm.id);
+        }
+
 
     }
 
