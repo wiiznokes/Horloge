@@ -33,62 +33,17 @@ public class MainFragment extends Fragment {
     public ListView listView;
     public static ModelAlarmeAdapter adapter;
 
-    private static boolean isNewAlarm = false;
-    private static boolean isModif ;
-
 
 
     public MainFragment() {
 
     }
 
-    public static MainFragment newInstance(boolean newAlarm, boolean modif){
-        MainFragment fragment = new MainFragment();
-
-        isNewAlarm = newAlarm;
-        isModif = modif;
-
-        return fragment;
-    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(isNewAlarm){
-            Bundle bundle = getArguments();
-            Alarm currentAlarm = (Alarm) bundle.getSerializable("currentAlarm");
-
-            if(isModif){
-                ((MainActivity) requireContext()).modifAlarm(currentAlarm);
-            }
-            else{
-                ((MainActivity) requireContext()).addAlarm(currentAlarm);
-            }
-        }
-
         initAffichage();
-
-        System.out.println("Map Id Alarm:");
-        for(Alarm alarm: MainActivity.MapIdAlarm.values()){
-            System.out.println(alarm.alarmName + " : " + alarm.id);
-        }
-
-        System.out.println("ListSortId:");
-        for(Long id:MainActivity.ListSortId){
-            System.out.println(id);
-        }
-
-        System.out.println("ListActif:");
-        for(Long id:MainActivity.ListActif){
-            System.out.println(id);
-        }
-
-        System.out.println("ListItems");
-        for(Alarm alarm: MainActivity.items){
-            System.out.println(alarm.alarmName + " : " + alarm.id);
-        }
-
 
     }
 

@@ -82,44 +82,6 @@ public class MainActivity extends FragmentActivity {
     }
 
 
-    public void addAlarm(Alarm currentAlarm) {
 
-        MapIdAlarm.put(currentAlarm.id, currentAlarm);
-        MapIdDate.put(currentAlarm.id, Trie.dateProchaineSonnerie(currentAlarm));
-
-        Trie.ListActifChange(currentAlarm.id);
-        Trie.ListSortId();
-
-
-
-        items.add(ListSortId.indexOf(currentAlarm.id), currentAlarm);
-
-        //ajout Alarm a AlarmManger
-        AlertHelper.add(currentAlarm, this);
-
-        StorageUtils.writeObject(MainActivity.this, MapIdAlarm, StorageUtils.alarmsFile);
-
-    }
-
-    public void modifAlarm(Alarm currentAlarm) {
-
-        items.remove(MapIdAlarm.get(currentAlarm.id));
-
-        MapIdAlarm.put(currentAlarm.id, currentAlarm);
-        MapIdDate.put(currentAlarm.id, Trie.dateProchaineSonnerie(currentAlarm));
-
-        ListActif.remove(currentAlarm.id);
-        ListInactif.remove(currentAlarm.id);
-        Trie.ListActifChange(currentAlarm.id);
-        Trie.ListSortId();
-
-        items.add(ListSortId.indexOf(currentAlarm.id), currentAlarm);
-
-        //ajout Alarm a AlarmManger
-        AlertHelper.add(currentAlarm, this);
-
-        StorageUtils.writeObject(MainActivity.this, MapIdAlarm, StorageUtils.alarmsFile);
-        Toast.makeText(MainActivity.this, "modifié", Toast.LENGTH_SHORT).show();
-    }
 
 }

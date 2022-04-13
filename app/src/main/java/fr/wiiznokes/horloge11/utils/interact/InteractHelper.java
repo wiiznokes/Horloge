@@ -131,6 +131,9 @@ public class InteractHelper {
         //ecriture
         StorageUtils.writeObject(mainActivity, MainActivity.MapIdAlarm, StorageUtils.alarmsFile);
 
+        //maj affichage
+        MainFragment.adapter.notifyDataSetChanged();
+
     }
 
     public void modifier(Alarm currentAlarm, View v){

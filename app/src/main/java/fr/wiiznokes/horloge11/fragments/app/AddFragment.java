@@ -21,6 +21,7 @@ import java.util.Random;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.fragments.helperFrag.AddSonnerieFragment;
+import fr.wiiznokes.horloge11.utils.storage.AddAlarmHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
 
@@ -202,15 +203,15 @@ public class AddFragment extends Fragment {
 
             currentAlarm.vibreur = vibrateCheckBox.isChecked();
 
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("currentAlarm", currentAlarm);
-
-            MainFragment mainFragment = MainFragment.newInstance(true, isModif);
-            mainFragment.setArguments(bundle);
-
+            if(isModif){
+                AddAlarmHelper.modifAlarm(currentAlarm, requireContext());
+            }
+            else{
+                AddAlarmHelper.addAlarm(currentAlarm, requireContext());
+            }
 
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerView, mainFragment)
+                    .replace(R.id.fragmentContainerView, new MainFragment())
                     .commit();
 
         });
