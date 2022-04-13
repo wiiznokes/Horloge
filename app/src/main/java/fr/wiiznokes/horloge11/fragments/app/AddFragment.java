@@ -21,7 +21,6 @@ import java.util.Random;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.fragments.helperFrag.AddSonnerieFragment;
-import fr.wiiznokes.horloge11.utils.storage.AddAlarmHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
 
@@ -58,7 +57,7 @@ public class AddFragment extends Fragment {
     private ImageButton saveButton;
 
 
-    private static boolean isModif = false;
+    private static boolean isModif;
 
     public AddFragment() {
         // Required empty public constructor
@@ -203,18 +202,12 @@ public class AddFragment extends Fragment {
 
             currentAlarm.vibreur = vibrateCheckBox.isChecked();
 
-            if(isModif){
-                AddAlarmHelper.replace(currentAlarm);
-            }
-            else{
-                AddAlarmHelper.add(currentAlarm);
-            }
-
             Bundle bundle = new Bundle();
             bundle.putSerializable("currentAlarm", currentAlarm);
 
             MainFragment mainFragment = MainFragment.newInstance(true, isModif);
             mainFragment.setArguments(bundle);
+
 
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainerView, mainFragment)
