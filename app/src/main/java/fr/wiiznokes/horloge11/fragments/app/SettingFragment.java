@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -11,14 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.fragments.helperFrag.AddSonnerieFragment;
+import fr.wiiznokes.horloge11.utils.storage.Setting;
+import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 
 
 public class SettingFragment extends Fragment {
 
-    private static boolean modifchek = false;
 
     ImageButton returnButton;
 
@@ -26,6 +29,8 @@ public class SettingFragment extends Fragment {
     ConstraintLayout increaseTemporaly;
     ConstraintLayout timeRing;
     ConstraintLayout apparenceApp;
+
+    CheckBox buttonVolume;
 
 
 
@@ -48,13 +53,14 @@ public class SettingFragment extends Fragment {
                     .commit();
         });
 
-        boolean silence = false;
+        buttonVolume.setChecked(Setting.buttonToSnooze);
 
-        silence = getArguments().getBoolean("silence");
+        buttonVolume.setOnClickListener(v -> {
+            Setting.buttonToSnooze = buttonVolume.isChecked();
+            StorageUtils.writeObject(requireContext(), new Setting(), StorageUtils.settingFile);
+        });
 
-        if(silence){
-            Toast.makeText(requireContext(), "helloooo", Toast.LENGTH_SHORT).show();
-        }
+
     }
 
     @Override
@@ -74,6 +80,7 @@ public class SettingFragment extends Fragment {
         addSonnerieDefault = view.findViewById(R.id.addSonnerieDefaultCL);
         increaseTemporaly = view.findViewById(R.id.increaseTemporalyCL);
         timeRing = view.findViewById(R.id.timeRingCL);
+        buttonVolume = view.findViewById(R.id.checkBox);
         apparenceApp = view.findViewById(R.id.apparenceAppCL);
 
         return view;

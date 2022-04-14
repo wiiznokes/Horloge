@@ -1,5 +1,7 @@
 package fr.wiiznokes.horloge11.fragments.helperFrag;
 
+import static fr.wiiznokes.horloge11.app.MainActivity.setting;
+
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -19,17 +21,20 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import fr.wiiznokes.horloge11.R;
+import fr.wiiznokes.horloge11.app.MainActivity;
 import fr.wiiznokes.horloge11.fragments.app.AddFragment;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
+import fr.wiiznokes.horloge11.utils.storage.Setting;
+import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 
 
 public class AddSonnerieFragment extends Fragment {
 
 
-    public static boolean isDefault;
+    public static boolean sourceSetting;
 
     private static Alarm currentAlarm;
-    private static String uri;
+    private static String uri = "";
     private static boolean silence;
 
 
@@ -64,8 +69,8 @@ public class AddSonnerieFragment extends Fragment {
     public static AddSonnerieFragment newInstance(boolean setting, @Nullable Alarm alarm) {
         AddSonnerieFragment fragment = new AddSonnerieFragment();
 
-        isDefault = setting;
-        if(!isDefault) {
+        sourceSetting = setting;
+        if(!sourceSetting) {
             currentAlarm = alarm;
         }
 
@@ -77,9 +82,6 @@ public class AddSonnerieFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         returnButton.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("modif", false);
-            setArguments(bundle);
             getParentFragmentManager().popBackStack();
         });
 
@@ -126,22 +128,16 @@ public class AddSonnerieFragment extends Fragment {
 
     private void returnHelper(){
 
-        if(isDefault){
-            Bundle bundle = new Bundle();
-            if(silence) {
-                bundle.putBoolean("silence", silence);
-            }
-            else{
-                bundle.putString("uri", uri);
-            }
-            bundle.putBoolean("modif", true);
-            setArguments(bundle);
+        if(sourceSetting){
+            Setting.defaultRing = uri;
+            Setting.silence = silence;
+            StorageUtils.writeObject(requireContext(), new Setting(), StorageUtils.settingFile);
             getParentFragmentManager().popBackStack();
         }
         else {
             AddFragment.currentAlarm = currentAlarm;
-            getParentFragmentManager().popBackStack();
         }
+        getParentFragmentManager().popBackStack();
     }
 
 

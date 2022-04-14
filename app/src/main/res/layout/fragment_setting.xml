@@ -158,17 +158,16 @@
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/optionButton3"/>
+            app:layout_constraintBottom_toBottomOf="@id/checkBox"/>
 
-        <Button
-            android:id="@+id/optionButton3"
+        <CheckBox
+            android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/icon_plus"
+            android:text=""
 
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:contentDescription="@string/desciptionAjout"/>
+            app:layout_constraintRight_toRightOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -223,10 +222,10 @@
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/checkBox"/>
+            app:layout_constraintBottom_toBottomOf="@id/checkBox2"/>
 
         <CheckBox
-            android:id="@+id/checkBox"
+            android:id="@+id/checkBox2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""

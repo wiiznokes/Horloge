@@ -18,7 +18,7 @@ import fr.wiiznokes.horloge11.app.MainActivity;
 public class StorageUtils {
 
     public static final String alarmsFile = "alarms.txt";
-    public static final String paramsFile = "params.txt";
+    public static final String settingFile = "setting.txt";
 
 
     public static void writeObject(Context context, Object object, String fileName){

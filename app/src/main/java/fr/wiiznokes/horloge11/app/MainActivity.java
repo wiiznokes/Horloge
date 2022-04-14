@@ -16,14 +16,17 @@ import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.fragments.app.MainFragment;
 import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
+import fr.wiiznokes.horloge11.utils.storage.Setting;
 import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 import fr.wiiznokes.horloge11.utils.storage.Trie;
 
 public class MainActivity extends FragmentActivity {
 
-
+    //stockage device
     //dictionnaire key:id valeur:Alarm
     static public Map<Long, Alarm> MapIdAlarm;
+    static public Setting setting;
+
     //dictionnaire key:id valeur:dateSonnerie
     static public Map<Long, Calendar> MapIdDate;
     //liste id alarm actif triée
@@ -71,14 +74,21 @@ public class MainActivity extends FragmentActivity {
             //ecriture
             StorageUtils.writeObject(this, MapIdAlarmInit, StorageUtils.alarmsFile);
         }
+        //creation du fichier parametre
+        if(StorageUtils.readObject(this, StorageUtils.settingFile) == null) {
+            //ecriture
+            StorageUtils.writeObject(this, new Setting(), StorageUtils.settingFile);
+        }
 
-
+        setting = (Setting) StorageUtils.readObject(this, StorageUtils.settingFile);
         MapIdAlarm = (Map<Long, Alarm>) StorageUtils.readObject(this, StorageUtils.alarmsFile);
         Trie.MapIdDate();
         Trie.ListActifInit();
         Trie.ListInactifInit();
         Trie.ListSortId();
         items = Trie.ListItems();
+
+
     }
 
 
