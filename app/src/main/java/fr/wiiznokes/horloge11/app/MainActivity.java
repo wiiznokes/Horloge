@@ -1,21 +1,10 @@
 package fr.wiiznokes.horloge11.app;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.fragment.app.FragmentActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,19 +13,20 @@ import java.util.List;
 import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
-import fr.wiiznokes.horloge11.utils.affichage.Affichage;
-import fr.wiiznokes.horloge11.utils.affichage.ModelAlarmeAdapter;
+import fr.wiiznokes.horloge11.fragments.app.MainFragment;
 import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
+import fr.wiiznokes.horloge11.utils.storage.Setting;
 import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 import fr.wiiznokes.horloge11.utils.storage.Trie;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {
 
-
-
+    //stockage device
     //dictionnaire key:id valeur:Alarm
     static public Map<Long, Alarm> MapIdAlarm;
+    static public Setting setting;
+
     //dictionnaire key:id valeur:dateSonnerie
     static public Map<Long, Calendar> MapIdDate;
     //liste id alarm actif triée
@@ -47,66 +37,8 @@ public class MainActivity extends AppCompatActivity {
     static public List<Long> ListSortId;
 
 
-    //ajout alarme
-    public ImageButton addAlarm;
-    public EditText addAlarmText;
-
-    //element interactif
-    public TextView textViewTempsRestant;
-    public TextView textViewAlarmeActive;
-
-
-    //listview
+    //list pour le listView
     public static ArrayList<Alarm> items;
-    public static ListView listView;
-    public static ModelAlarmeAdapter adapter;
-
-
-
-
-
-    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @SuppressLint("ClickableViewAccessibility")
-                @Override
-                public void onActivityResult(ActivityResult result) {
-
-                    //bouton save addActivity
-                    if(result.getResultCode() == 0){
-
-                        addAlarmText.setVisibility(View.INVISIBLE);
-
-                        //recuperation de l'objet Alarm
-                        Alarm currentAlarm = AddActivity.currentAlarm;
-
-                        //creation de tous les objets
-                        initAjout(currentAlarm);
-
-                        //maj listView
-                        MainActivity.addItem(currentAlarm, ListSortId.indexOf(currentAlarm.id));
-                        //ajout Alarm a AlarmManger
-                        new AlertHelper(MainActivity.this).add(currentAlarm);
-
-                        StorageUtils.write(MainActivity.this, MapIdAlarm);
-
-
-
-                        //maj nb alarmes actives
-                        textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(ListActif.size()));
-                        //maj temps restant
-                        textViewTempsRestant.setText(Affichage.tempsRestant(items.get(0)));
-
-
-                    }
-                    //bouton retour addActivity
-                    if(result.getResultCode() == 11){
-                        addAlarmText.setVisibility(View.INVISIBLE);
-                    }
-
-                }
-            }
-    );
 
 
 
@@ -118,68 +50,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         initStorage();
 
-        initAffichage();
-
-        adapter = new ModelAlarmeAdapter(this, items, textViewTempsRestant, textViewAlarmeActive, listView);
-        listView.setAdapter(adapter);
-
-
-
-
+        MainFragment mainFragment = new MainFragment();
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .replace(R.id.fragmentContainerView, mainFragment)
+                .commit();
 
 
-        addAlarm.setOnClickListener(view -> {
-            //si l'edit text est deja visible et que l'on click sur le + et que l'on a donné une nom à l'alarme
-            if (addAlarmText.getVisibility() == View.VISIBLE) {
-                if(addAlarmText.length() != 0){
-                    //lancement de AddActivity
-                    //creation de l'intention à partir du context et du fichier .class à ouvrir
-                    Intent intent = new Intent(
-                            MainActivity.this,
-                            AddActivity.class
-                    );
-                    //ajout d'information dans l'intention
-                    intent.putExtra("alarmName", addAlarmText.getText().toString());
-
-                    //lancement de addActivity avec un id de lancement
-                    activityResultLauncher.launch(intent);
-                }
-            }
-            else{
-                //edit text visible
-                addAlarmText.setVisibility(View.VISIBLE);
-                //demande du focus
-                addAlarmText.requestFocus();
-                //demande du clavier
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-                //on regarde un changement de focus
-                addAlarmText.setOnFocusChangeListener((view1, hasFocus) -> {
-                    if (!hasFocus) {
-                        //si plus de focus
-                        addAlarmText.setVisibility(View.INVISIBLE);
-                        addAlarmText.setText("");
-                        InputMethodManager imm1 = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm1.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-                    }
-                });
-            }
-        });
     }
-
-
-    public static void addItem(Alarm alarm, int position){
-        items.add(position, alarm);
-        listView.setAdapter(adapter);
-    }
-
-    public static void removeItem(int position){
-        items.remove(position);
-        listView.setAdapter(adapter);
-    }
-
 
 
 
@@ -187,47 +69,29 @@ public class MainActivity extends AppCompatActivity {
 
     private void initStorage(){
         //creation du fichier si il n'existe pas avec un tableau vide
-        if(StorageUtils.read(this)== 1) {
+        if(StorageUtils.readObject(this, StorageUtils.alarmsFile) == null) {
             Map<Long, Alarm> MapIdAlarmInit = new HashMap<>();
             //ecriture
-            StorageUtils.write(this, MapIdAlarmInit);
+            StorageUtils.writeObject(this, MapIdAlarmInit, StorageUtils.alarmsFile);
+        }
+        //creation du fichier parametre
+        if(StorageUtils.readObject(this, StorageUtils.settingFile) == null) {
+            //ecriture
+            StorageUtils.writeObject(this, new Setting(), StorageUtils.settingFile);
         }
 
-
-        StorageUtils.read(this);
+        setting = (Setting) StorageUtils.readObject(this, StorageUtils.settingFile);
+        MapIdAlarm = (Map<Long, Alarm>) StorageUtils.readObject(this, StorageUtils.alarmsFile);
         Trie.MapIdDate();
         Trie.ListActifInit();
         Trie.ListInactifInit();
         Trie.ListSortId();
-        Trie.ListItems();
+        items = Trie.ListItems();
+
+
     }
 
-    private void initAffichage(){
-        //recuperation des vues pour affichage
-        this.addAlarm = findViewById(R.id.floatingActionButton4);
-        this.addAlarmText = findViewById(R.id.editTextTextPersonName);
-        this.textViewTempsRestant = findViewById(R.id.textView4);
-        this.textViewAlarmeActive = findViewById(R.id.textView2);
-        listView = findViewById(R.id.list_view1);
 
 
-        //affichage du nombre d'alarmes actives
-        textViewAlarmeActive.setText(Affichage.NombreAlarmsActives(ListActif.size()));
-        //affichage du temps restant
-        if(ListActif.size() > 0){
-            textViewTempsRestant.setText(Affichage.tempsRestant(MapIdAlarm.get(ListActif.get(0))));
-        }
-        else{
-            textViewTempsRestant.setText(R.string.tempsRestant0alarm);
-        }
-    }
 
-    private void initAjout(Alarm currentAlarm) {
-        MapIdAlarm.put(currentAlarm.id, currentAlarm);
-        MapIdDate.put(currentAlarm.id, Trie.dateProchaineSonnerie(currentAlarm));
-
-        Trie.ListActifChange(currentAlarm.id);
-        Trie.ListSortId();
-
-    }
 }

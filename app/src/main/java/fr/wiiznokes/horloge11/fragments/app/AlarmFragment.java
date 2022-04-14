@@ -1,21 +1,20 @@
-package fr.wiiznokes.horloge11.fragments;
+package fr.wiiznokes.horloge11.fragments.app;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
 
 import fr.wiiznokes.horloge11.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link silenceFragment#newInstance} factory method to
+ * Use the {@link AlarmFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class silenceFragment extends Fragment {
+public class AlarmFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +25,7 @@ public class silenceFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public silenceFragment() {
+    public AlarmFragment() {
         // Required empty public constructor
     }
 
@@ -36,11 +35,11 @@ public class silenceFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment silenceFragment.
+     * @return A new instance of fragment AlarmeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static silenceFragment newInstance(String param1, String param2) {
-        silenceFragment fragment = new silenceFragment();
+    public static AlarmFragment newInstance(String param1, String param2) {
+        AlarmFragment fragment = new AlarmFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,6 +60,6 @@ public class silenceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_silence, container, false);
+        return inflater.inflate(R.layout.fragment_alarm, container, false);
     }
 }

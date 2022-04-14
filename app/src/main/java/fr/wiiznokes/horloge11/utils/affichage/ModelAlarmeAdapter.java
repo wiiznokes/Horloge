@@ -1,8 +1,9 @@
 package fr.wiiznokes.horloge11.utils.affichage;
 
+import static fr.wiiznokes.horloge11.app.MainActivity.items;
+
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,43 +14,39 @@ import android.widget.Toast;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import java.util.ArrayList;
-
 import fr.wiiznokes.horloge11.R;
+import fr.wiiznokes.horloge11.app.MainActivity;
 import fr.wiiznokes.horloge11.utils.interact.InteractHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
 public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 
-    public Context context;
-
+    public MainActivity mainActivity;
     public InteractHelper interactHelper;
 
-    public ArrayList<Alarm> list;
+    private ListView listView;
 
-    public ListView listView;
 
-    public ModelAlarmeAdapter(Context context, ArrayList<Alarm> items, TextView textViewTempsRestant, TextView textViewAlarmeActive, ListView listView){
-        super(context, R.layout.alarme_affichage, items);
-        this.context = context;
-        this.list = items;
-        this.listView = listView;
-        this.interactHelper = new InteractHelper(textViewTempsRestant, textViewAlarmeActive, context);
+    public ModelAlarmeAdapter(MainActivity mainActivity, TextView activeAlarmTextView, TextView timeLeftTextView, ListView listV){
+        super(mainActivity, R.layout.alarme_affichage, items);
+        this.mainActivity = mainActivity;
+        this.interactHelper = new InteractHelper(mainActivity, activeAlarmTextView, timeLeftTextView);
+        this.listView = listV;
     }
 
     @Override
     public int getCount() {
-        return list.size();
+        return items.size();
     }
 
     @Override
     public Alarm getItem(int index) {
-        return list.get(index);
+        return items.get(index);
     }
 
     @Override
     public long getItemId(int index) {
-        return list.get(index).id;
+        return items.get(index).id;
     }
 
 
@@ -57,9 +54,10 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
 
-            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) mainActivity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.alarme_affichage, null);
             Alarm currentAlarm = getItem(position);
+
 
             TextView hours = convertView.findViewById(R.id.hours);
             hours.setText(currentAlarm.hoursText);
@@ -77,17 +75,16 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
             });
 
             //item Listener
-            convertView.setOnLongClickListener(v -> {
-                AlertDialog.Builder popUp = new AlertDialog.Builder(context);
+            convertView.setOnLongClickListener((View v) -> {
+                AlertDialog.Builder popUp = new AlertDialog.Builder(mainActivity);
                 popUp.setPositiveButton("MODIFIER", ((dialog, which) -> {
-                    Toast.makeText(context, "modifié", Toast.LENGTH_SHORT).show();
+                    interactHelper.modifier(currentAlarm, v);
+                    Toast.makeText(mainActivity, "modifié", Toast.LENGTH_SHORT).show();
                 }));
 
                 popUp.setNegativeButton("EFFACER", (dialog, which) -> {
-
                     interactHelper.effacer(currentAlarm);
-
-                    Toast.makeText(context, "effacé", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mainActivity, "effacé", Toast.LENGTH_SHORT).show();
                 });
                 popUp.show();
                 return true;

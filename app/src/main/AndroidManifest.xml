@@ -16,17 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Horloge11">
         <activity
-            android:name=".app.addSonnerieActivity"
-            android:exported="false" />
+            android:name=".temp.addSonnerieActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
         <activity
-            android:name=".app.NotifActivity"
+            android:name=".app.AlarmActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:showOnLockScreen="true"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".app.AddActivity"
-            android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".app.MainActivity"

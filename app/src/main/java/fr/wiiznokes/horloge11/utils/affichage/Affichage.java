@@ -1,8 +1,8 @@
 package fr.wiiznokes.horloge11.utils.affichage;
 
 
-
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.Calendar;
 
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
@@ -49,13 +49,14 @@ public class Affichage extends AppCompatActivity {
         }
 
         String tempsRestant;
+
         if(jour > 0){
             if(jour == 1) {
                 if(heure == 1 || heure == 0){
-                    tempsRestant = "Temps restant : " + jour + " jour et " + heure + "heure";
+                    tempsRestant = "Temps restant : " + jour + " jours et " + heure + " heures";
                 }
                 else{
-                    tempsRestant = "Temps restant : " + jour + " jour et " + heure + "heures";
+                    tempsRestant = "Temps restant : " + jour + " jours et " + heure + "heures";
                 }
             }
             else{

@@ -1,10 +1,83 @@
 <resources>
+
+
     <string name="app_name">Horloge1.1</string>
     <string name="home_next_alarme">"00:00"</string>
+
     <string name="parametre">parametre</string>
     <string name="nom_de_l_alarme">Nom de l\'alarme</string>
     <string name="tempsRestant0alarm">Temps restant : Aucune alarme active</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="desciption_return_Button">Bouton retour</string>
+    <string name="desciption_save_button" />
+    <string name="vibration">vibration</string>
+    <string name="sonnerie_button">Sonnerie</string>
+
+    <string name="all_days_text">Tous les jours</string>
+
+    <string-array name="days_in_week_text">
+        <item>lun</item>
+        <item>mar</item>
+        <item>mer</item>
+        <item>jeu</item>
+        <item>ven</item>
+        <item>sam</item>
+        <item>dim</item>
+    </string-array>
+
+
+    <string name="lundi">L</string>
+    <string name="mardi">M</string>
+    <string name="mercredi">M</string>
+    <string name="jeudi">J</string>
+    <string name="vendredi">V</string>
+    <string name="samedi">S</string>
+    <string name="dimanche">D</string>
+
+    <string name="description_add_button">add alarm button</string>
+
+    <string name="active_alarme">Alarme active : </string>
+
+    <string name="temps_restant">Temps restant :</string>
+    <string name="settingTV">Paramètre</string>
+
+    <string name="chooseSonnerie">Son de l\'alarme</string>
+
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="choose_son_alarm">Son de l\'alarme</string>
+    <string name="description_ajout_sonnerie">ajouter une sonnerie par defaut</string>
+    <string name="ajout_sonnerie_defaut">Son de l\'alarme par defaut</string>
+    <string name="mySong">Mes sons</string>
+    <string name="desciptionAjout">ajoutSonnerie</string>
+    <string name="add">Ajouter</string>
+    <string name="androidSong">Sons d\'Android</string>
+    <string name="silence">Alarme silencieuse</string>
+    <string name="desciptionInutile">inutile</string>
+    <string name="settingTextView">Paramètre</string>
+    <string name="alarmSettingTV">Paramètre d\'alarme</string>
+    <string name="addAlarmDefaultTV">Ajouter une sonnerie par défaut</string>
+    <string name="volumeTV">Volume de l\'alarme</string>
+    <string name="increaseTemporalyTV">Augmenter progressivement</string>
+    <string name="timeSonnerieTV">Temps de sonnerie</string>
+    <string name="optionButtonVolumeTV">Touche volume</string>
+    <string name="appSettingTV">Paramètre de l\'App</string>
+    <string name="appThemeTV">Thème de l\'App</string>
+    <string name="notifTV">Notification</string>
 
 </resources>

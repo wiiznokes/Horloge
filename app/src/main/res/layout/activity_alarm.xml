@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".app.MainActivity"
-    android:orientation="vertical">
-
+    tools:context=".app.AlarmActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
-        android:name="fr.wiiznokes.horloge11.fragments.app.MainFragment"
+        android:id="@+id/fragmentContainerView2"
+        android:name="fr.wiiznokes.horloge11.fragments.app.AlarmFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_main" />
-
+        tools:layout="@layout/fragment_alarm" />
 </FrameLayout>
