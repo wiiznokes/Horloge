@@ -71,7 +71,7 @@
     <string name="desciptionInutile">inutile</string>
     <string name="settingTextView">Paramètre</string>
     <string name="alarmSettingTV">Paramètre d\'alarme</string>
-    <string name="addAlarmDefaultTV">Ajouter une alarme par défaut</string>
+    <string name="addAlarmDefaultTV">Ajouter une sonnerie par défaut</string>
     <string name="volumeTV">Volume de l\'alarme</string>
     <string name="increaseTemporalyTV">Augmenter progressivement</string>
     <string name="timeSonnerieTV">Temps de sonnerie</string>

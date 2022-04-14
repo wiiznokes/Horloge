@@ -26,12 +26,11 @@ import fr.wiiznokes.horloge11.utils.storage.Alarm;
 public class AddSonnerieFragment extends Fragment {
 
 
-    private static final String sourceAddAlarm = "addAlarm";
-    private static final String sourceSetting = "setting";
+    public static boolean isDefault;
 
-
-    private static String currentSource;
     private static Alarm currentAlarm;
+    private static String uri;
+    private static boolean silence;
 
 
     private ImageButton returnButton;
@@ -46,13 +45,10 @@ public class AddSonnerieFragment extends Fragment {
                 public void onActivityResult(ActivityResult result) {
 
                     if (result.getData() != null) {
-                        Uri uri;
-                        uri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-                        if (uri == null) {
-                            uri = result.getData().getData();
+                        uri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI).toString();
+                        if (uri.isEmpty()) {
+                            uri = result.getData().getData().toString();
                         }
-                        currentAlarm.uriSonnerie = uri.toString();
-                        currentAlarm.silence = false;
                         returnHelper();
                     }
                 }
@@ -65,12 +61,13 @@ public class AddSonnerieFragment extends Fragment {
 
 
 
-    public static AddSonnerieFragment newInstance(String source, Alarm alarm) {
+    public static AddSonnerieFragment newInstance(boolean setting, @Nullable Alarm alarm) {
         AddSonnerieFragment fragment = new AddSonnerieFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        currentSource = source;
-        currentAlarm = alarm;
+
+        isDefault = setting;
+        if(!isDefault) {
+            currentAlarm = alarm;
+        }
 
         return fragment;
     }
@@ -80,6 +77,9 @@ public class AddSonnerieFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         returnButton.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("modif", false);
+            setArguments(bundle);
             getParentFragmentManager().popBackStack();
         });
 
@@ -99,7 +99,7 @@ public class AddSonnerieFragment extends Fragment {
 
         //silence
         silenceSong.setOnClickListener(v -> {
-            currentAlarm.silence = true;
+            silence = true;
             returnHelper();
         });
     }
@@ -126,12 +126,20 @@ public class AddSonnerieFragment extends Fragment {
 
     private void returnHelper(){
 
-        if(currentSource.equals(sourceAddAlarm)){
-            AddFragment.currentAlarm = currentAlarm;
+        if(isDefault){
+            Bundle bundle = new Bundle();
+            if(silence) {
+                bundle.putBoolean("silence", silence);
+            }
+            else{
+                bundle.putString("uri", uri);
+            }
+            bundle.putBoolean("modif", true);
+            setArguments(bundle);
             getParentFragmentManager().popBackStack();
         }
         else {
-
+            AddFragment.currentAlarm = currentAlarm;
             getParentFragmentManager().popBackStack();
         }
     }

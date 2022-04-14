@@ -43,6 +43,7 @@
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/addSonnerieDefaultCL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -88,6 +89,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/increaseTemporalyCL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -116,6 +118,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/timeRingCL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -142,6 +145,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttonVolumeCL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -178,6 +182,7 @@
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/apparenceAppCL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

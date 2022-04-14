@@ -153,7 +153,7 @@ public class AddFragment extends Fragment {
         addSonnerieButton.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
                     .addToBackStack(null)
-                    .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance("addAlarm", currentAlarm))
+                    .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance(false, currentAlarm))
                     .commit();
         });
 
