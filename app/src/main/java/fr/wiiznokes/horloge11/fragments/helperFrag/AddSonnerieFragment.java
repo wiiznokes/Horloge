@@ -45,17 +45,14 @@ public class AddSonnerieFragment extends Fragment {
 
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
+            result -> {
 
-                    if (result.getData() != null) {
-                        uri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI).toString();
-                        if (uri.isEmpty()) {
-                            uri = result.getData().getData().toString();
-                        }
-                        returnHelper();
+                if (result.getData() != null) {
+                    uri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI).toString();
+                    if (uri.isEmpty()) {
+                        uri = result.getData().getData().toString();
                     }
+                    returnHelper();
                 }
             }
     );
@@ -132,12 +129,12 @@ public class AddSonnerieFragment extends Fragment {
             Setting.defaultRing = uri;
             Setting.silence = silence;
             StorageUtils.writeObject(requireContext(), new Setting(), StorageUtils.settingFile);
-            getParentFragmentManager().popBackStack();
+            //getParentFragmentManager().popBackStack();
         }
         else {
             AddFragment.currentAlarm = currentAlarm;
+            getParentFragmentManager().popBackStack();
         }
-        getParentFragmentManager().popBackStack();
     }
 
 
