@@ -63,10 +63,10 @@ public class AddSonnerieFragment extends Fragment {
 
 
 
-    public static AddSonnerieFragment newInstance(boolean setting, @Nullable Alarm alarm) {
+    public static AddSonnerieFragment newInstance(boolean isSetting, @Nullable Alarm alarm) {
         AddSonnerieFragment fragment = new AddSonnerieFragment();
 
-        sourceSetting = setting;
+        sourceSetting = isSetting;
         if(!sourceSetting) {
             currentAlarm = alarm;
         }
@@ -129,10 +129,14 @@ public class AddSonnerieFragment extends Fragment {
             Setting.defaultRing = uri;
             Setting.silence = silence;
             StorageUtils.writeObject(requireContext(), new Setting(), StorageUtils.settingFile);
-            //getParentFragmentManager().popBackStack();
+            getParentFragmentManager().popBackStack();
         }
         else {
-            AddFragment.currentAlarm = currentAlarm;
+            if(!uri.isEmpty()){
+                AddFragment.currentAlarm.uriSonnerie = uri;
+            }
+            AddFragment.currentAlarm.silence = silence;
+
             getParentFragmentManager().popBackStack();
         }
     }

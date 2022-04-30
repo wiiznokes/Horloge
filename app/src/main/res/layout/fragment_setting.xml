@@ -105,7 +105,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/optionButton1"/>
         
-        <Button
+        <ImageButton
             android:id="@+id/optionButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/optionButton2"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/optionButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -196,7 +196,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/optionButton4"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/optionButton4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
