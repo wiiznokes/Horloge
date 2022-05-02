@@ -38,6 +38,8 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_notif.xml" value="0.2" />
         <entry key="app/src/main/res/layout/alarme_affichage.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_alarm.xml" value="0.3736413043478261" />
+        <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.5" />
       </map>
     </option>
   </component>

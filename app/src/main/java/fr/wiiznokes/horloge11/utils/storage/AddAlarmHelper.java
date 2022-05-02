@@ -7,6 +7,7 @@ import static fr.wiiznokes.horloge11.app.MainActivity.MapIdAlarm;
 import static fr.wiiznokes.horloge11.app.MainActivity.MapIdDate;
 import static fr.wiiznokes.horloge11.app.MainActivity.items;
 
+import android.app.AlarmManager;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class AddAlarmHelper {
         AlertHelper.add(currentAlarm, context);
 
         StorageUtils.writeObject(context, MapIdAlarm, StorageUtils.alarmsFile);
+        Toast.makeText(context, "ajouté", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -47,7 +49,8 @@ public class AddAlarmHelper {
 
         items.add(ListSortId.indexOf(currentAlarm.id), currentAlarm);
 
-        //ajout Alarm a AlarmManger
+        //AlarmManger
+        AlertHelper.remove(currentAlarm, context);
         AlertHelper.add(currentAlarm, context);
 
         StorageUtils.writeObject(context, MapIdAlarm, StorageUtils.alarmsFile);

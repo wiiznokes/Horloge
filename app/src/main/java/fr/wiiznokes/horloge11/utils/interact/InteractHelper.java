@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -133,6 +134,10 @@ public class InteractHelper {
 
         //maj affichage
         MainFragment.adapter.notifyDataSetChanged();
+        
+        AlertHelper.remove(currentAlarm, mainActivity);
+
+        Toast.makeText(mainActivity, "effacé", Toast.LENGTH_SHORT).show();
 
     }
 

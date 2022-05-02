@@ -33,7 +33,6 @@ public class AddSonnerieFragment extends Fragment {
 
     public static boolean sourceSetting;
 
-    private static Alarm currentAlarm;
     private static String uri = "";
     private static boolean silence;
 
@@ -45,34 +44,26 @@ public class AddSonnerieFragment extends Fragment {
 
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
+            result -> {
 
-                    if (result.getData() != null) {
-                        uri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI).toString();
-                        if (uri.isEmpty()) {
-                            uri = result.getData().getData().toString();
-                        }
-                        returnHelper();
+                if (result.getData() != null) {
+                    uri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI).toString();
+                    if (uri.isEmpty()) {
+                        uri = result.getData().getData().toString();
                     }
+                    returnHelper();
                 }
             }
     );
 
-    public AddSonnerieFragment() {
-        // Required empty public constructor
-    }
+    public AddSonnerieFragment() {}
 
 
 
-    public static AddSonnerieFragment newInstance(boolean setting, @Nullable Alarm alarm) {
+    public static AddSonnerieFragment newInstance(boolean isSetting, @Nullable Alarm alarm) {
         AddSonnerieFragment fragment = new AddSonnerieFragment();
 
-        sourceSetting = setting;
-        if(!sourceSetting) {
-            currentAlarm = alarm;
-        }
+        sourceSetting = isSetting;
 
         return fragment;
     }
@@ -135,9 +126,13 @@ public class AddSonnerieFragment extends Fragment {
             getParentFragmentManager().popBackStack();
         }
         else {
-            AddFragment.currentAlarm = currentAlarm;
+            if(!uri.isEmpty()){
+                AddFragment.currentAlarm.uriSonnerie = uri;
+            }
+            AddFragment.currentAlarm.silence = silence;
+
+            getParentFragmentManager().popBackStack();
         }
-        getParentFragmentManager().popBackStack();
     }
 
 
