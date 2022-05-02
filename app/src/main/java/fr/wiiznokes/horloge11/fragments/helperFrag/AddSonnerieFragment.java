@@ -33,7 +33,6 @@ public class AddSonnerieFragment extends Fragment {
 
     public static boolean sourceSetting;
 
-    private static Alarm currentAlarm;
     private static String uri = "";
     private static boolean silence;
 
@@ -57,9 +56,7 @@ public class AddSonnerieFragment extends Fragment {
             }
     );
 
-    public AddSonnerieFragment() {
-        // Required empty public constructor
-    }
+    public AddSonnerieFragment() {}
 
 
 
@@ -67,9 +64,6 @@ public class AddSonnerieFragment extends Fragment {
         AddSonnerieFragment fragment = new AddSonnerieFragment();
 
         sourceSetting = isSetting;
-        if(!sourceSetting) {
-            currentAlarm = alarm;
-        }
 
         return fragment;
     }

@@ -21,7 +21,7 @@ public class AlertHelper {
                 AlertReceiver.class
         );
         intent.putExtra("alarm", currentAlarm);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 11, intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) currentAlarm.id, intent, PendingIntent.FLAG_IMMUTABLE);
 
         //recuperation de la date de sonnerie
         long time = MainActivity.MapIdDate.get(currentAlarm.id).getTimeInMillis();
@@ -36,8 +36,7 @@ public class AlertHelper {
                 context,
                 AlertReceiver.class
         );
-        intent.putExtra("alarm", currentAlarm);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 11, intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) currentAlarm.id, intent, PendingIntent.FLAG_IMMUTABLE);
 
         getAlarmManager(context).cancel(pendingIntent);
 
