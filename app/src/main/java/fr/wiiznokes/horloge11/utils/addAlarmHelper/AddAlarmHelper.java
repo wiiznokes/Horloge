@@ -26,18 +26,20 @@ public class AddAlarmHelper{
 
         String futurHeure = "";
         String futurMinute = "";
-        int futurSelection = 0;
+        int futurSelection = -1;
 
 
         if ((currentText.contains(":"))){
 
             //init
-            futurHeure = currentText.substring(0, currentText.indexOf(':'));
-            futurMinute = currentText.substring(currentText.indexOf(':') + 1);
+            if(currentText.indexOf(':') > 0)
+                futurHeure = currentText.substring(0, currentText.indexOf(':'));
+            if(currentText.length() - currentText.indexOf(':') > 1)
+                futurMinute = currentText.substring(currentText.indexOf(':') + 1);
             if(futurHeure.length() > 2)
                 futurHeure = currentText.substring(0,2);
             if(futurMinute.length() > 2)
-                futurMinute = currentText.substring(currentText.indexOf(':') + 1);
+                futurMinute = currentText.substring(currentText.indexOf(':') + 1, currentText.indexOf(':') + 3);
 
 
 
@@ -61,16 +63,18 @@ public class AddAlarmHelper{
                 //minute = "9" -> ""          "77" -> ""
                 if((Integer.parseInt(futurMinute) < 10 && Integer.parseInt(futurMinute) > 5) || Integer.parseInt(futurMinute) > 59){
                     futurMinute = "";
-                    futurSelection = futurMinute.length() + 1;
+                    futurSelection = futurHeure.length() + 1;
                 }
             }
         }
 
         //selection a la fin si les heures passe a deux
         if(previousHoursLenght < 2 && futurHeure.length() == 2){
-            futurSelection = 3;
+            //futurSelection = 3;
         }
 
+
+        System.out.println("selection:" + futurSelection);
 
         Bundle bundle = new Bundle();
         bundle.putString("futureText", futurHeure + ":" + futurMinute);

@@ -120,8 +120,10 @@ public class AddFragment extends Fragment {
             public void afterTextChanged(Editable editable) {
                 System.out.println("hellllooo");
                 bundle = AddAlarmHelper.alarmHoursHelper(alarmHoursEditText.getText().toString(), previousHoursLength);
-                alarmHoursEditText.setText(bundle.getString("futureText"));
-                alarmHoursEditText.setSelection(bundle.getInt("futureSelection"));
+                if(!alarmHoursEditText.getText().toString().equals(bundle.getString("futureText")))
+                    alarmHoursEditText.setText(bundle.getString("futureText"));
+                if(bundle.getInt("futureSelection") != -1)
+                    alarmHoursEditText.setSelection(bundle.getInt("futureSelection"));
                 previousHoursLength = bundle.getInt("previousHoursLength");
             }
         });
