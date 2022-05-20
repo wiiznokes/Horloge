@@ -1,5 +1,8 @@
 package fr.wiiznokes.horloge11.fragments.app;
 
+import static fr.wiiznokes.horloge11.app.MainActivity.ListActif;
+import static fr.wiiznokes.horloge11.app.MainActivity.MapIdAlarm;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -74,17 +77,18 @@ public class MainFragment extends Fragment {
 
     public void initAffichage(){
 
-        //nb alarm active et temps restant init
+        //number active alarm
         activeAlarmTextView.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
-        if(MainActivity.ListActif.size() > 0){
-            timeLeftTextView.setText(Affichage.tempsRestant(MainActivity.MapIdAlarm.get(MainActivity.ListActif.get(0))));
-        }
-        else{
-            timeLeftTextView.setText(R.string.tempsRestant0alarm);
+
+        //time left
+        try {
+            timeLeftTextView.setText(Affichage.tempsRestant(MapIdAlarm.get(ListActif.get(0))));
+        }catch (Exception e){
+            timeLeftTextView.setText(Affichage.tempsRestant(null));
         }
 
         //list view
-        adapter = new ModelAlarmeAdapter((MainActivity) requireContext(), activeAlarmTextView, timeLeftTextView, listView);
+        adapter = new ModelAlarmeAdapter((MainActivity) requireContext(), activeAlarmTextView, timeLeftTextView);
         listView.setAdapter(adapter);
 
 

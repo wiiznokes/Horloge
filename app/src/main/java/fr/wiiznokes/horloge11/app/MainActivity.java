@@ -79,14 +79,14 @@ public class MainActivity extends FragmentActivity {
             //ecriture
             StorageUtils.writeObject(this, new Setting(), StorageUtils.settingFile);
         }
-
-        setting = (Setting) StorageUtils.readObject(this, StorageUtils.settingFile);
         MapIdAlarm = (Map<Long, Alarm>) StorageUtils.readObject(this, StorageUtils.alarmsFile);
+        setting = (Setting) StorageUtils.readObject(this, StorageUtils.settingFile);
+
         Trie.MapIdDate();
         Trie.ListActifInit();
         Trie.ListInactifInit();
         Trie.ListSortId();
-        items = Trie.ListItems();
+        Trie.ListItems();
 
 
     }

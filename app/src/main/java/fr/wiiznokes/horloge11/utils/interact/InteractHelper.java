@@ -1,6 +1,11 @@
 package fr.wiiznokes.horloge11.utils.interact;
 
 
+import static fr.wiiznokes.horloge11.app.MainActivity.ListActif;
+import static fr.wiiznokes.horloge11.app.MainActivity.ListInactif;
+import static fr.wiiznokes.horloge11.app.MainActivity.ListSortId;
+import static fr.wiiznokes.horloge11.app.MainActivity.MapIdAlarm;
+import static fr.wiiznokes.horloge11.app.MainActivity.MapIdDate;
 import static fr.wiiznokes.horloge11.app.MainActivity.items;
 
 import android.content.Context;
@@ -46,18 +51,8 @@ public class InteractHelper {
         if(currentAlarm.active){
             currentAlarm.active = false;
 
-            //si l'alarm etait la première, affichage temps restant modifié
-            if (currentAlarm.id == MainActivity.ListActif.get(0)){
-                if(MainActivity.ListActif.size() >= 2){
-                    timeLeftTextView.setText(Affichage.tempsRestant(MainActivity.MapIdAlarm.get(MainActivity.ListActif.get(1))));
-                }
-                else{
-                    timeLeftTextView.setText(R.string.tempsRestant0alarm);
-                }
-            }
-            MainActivity.ListActif.remove(currentAlarm.id);
+            ListActif.remove(currentAlarm.id);
             Trie.ListInactifChange(currentAlarm.id);
-
 
             //remove Alarm de AlarmManager
             AlertHelper.remove(currentAlarm, mainActivity);
@@ -66,29 +61,31 @@ public class InteractHelper {
         else {
             currentAlarm.active = true;
 
-            MainActivity.ListInactif.remove(currentAlarm.id);
+            ListInactif.remove(currentAlarm.id);
             Trie.ListActifChange(currentAlarm.id);
 
-            //si l'alarm devient la première, affichage temps restant modifié
-            if (currentAlarm.id == MainActivity.ListActif.get(0)){
-                timeLeftTextView.setText(Affichage.tempsRestant(currentAlarm));
-            }
+
             //ajout de l'alarm au AlarmManager
             AlertHelper.add(currentAlarm, mainActivity);
         }
 
-        items.remove(MainActivity.ListSortId.indexOf(currentAlarm.id));
 
-        MainActivity.MapIdAlarm.put(currentAlarm.id, currentAlarm);
+        MapIdAlarm.put(currentAlarm.id, currentAlarm);
         Trie.ListSortId();
 
-        activeAlarmTextView.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
+        //time left
+        try {
+            timeLeftTextView.setText(Affichage.tempsRestant(MapIdAlarm.get(ListActif.get(0))));
+        }catch (Exception e){
+            timeLeftTextView.setText(Affichage.tempsRestant(null));
+        }
+        activeAlarmTextView.setText(Affichage.NombreAlarmsActives(ListActif.size()));
 
         //ecriture
-        StorageUtils.writeObject(mainActivity, MainActivity.MapIdAlarm, StorageUtils.alarmsFile);
+        StorageUtils.writeObject(mainActivity, MapIdAlarm, StorageUtils.alarmsFile);
 
         //maj affichage
-        items.add(MainActivity.ListSortId.indexOf(currentAlarm.id), currentAlarm);
+        Trie.ListItems();
         MainFragment.adapter.notifyDataSetChanged();
     }
 
@@ -99,38 +96,32 @@ public class InteractHelper {
 
         long id = currentAlarm.id;
 
-        //si alarm est la premiere
-        if(MainActivity.ListActif.size() > 0){
-            if(MainActivity.ListActif.get(0) == id){
-
-
-                if(MainActivity.ListActif.size() > 1){
-                    timeLeftTextView.setText(Affichage.tempsRestant(items.get(1)));
-                }
-                else {
-                    timeLeftTextView.setText(R.string.tempsRestant0alarm);
-                }
-            }
+        //time left
+        try {
+            timeLeftTextView.setText(Affichage.tempsRestant(MapIdAlarm.get(ListActif.get(0))));
+        }catch (Exception e){
+            timeLeftTextView.setText(Affichage.tempsRestant(null));
         }
 
-        MainActivity.MapIdAlarm.remove(id);
-        MainActivity.MapIdDate.remove(id);
 
-        if(MainActivity.ListActif.contains(id)){
-            MainActivity.ListActif.remove((Object) id);
+        MapIdAlarm.remove(id);
+        MapIdDate.remove(id);
+
+        if(ListActif.contains(id)){
+            ListActif.remove(id);
         }
         else{
-            MainActivity.ListInactif.remove((Object) id);
+            ListInactif.remove(id);
         }
 
-        items.remove(MainActivity.ListSortId.indexOf(id));
+        items.remove(ListSortId.indexOf(id));
         Trie.ListSortId();
 
         //maj nb alarm active
-        activeAlarmTextView.setText(Affichage.NombreAlarmsActives(MainActivity.ListActif.size()));
+        activeAlarmTextView.setText(Affichage.NombreAlarmsActives(ListActif.size()));
 
         //ecriture
-        StorageUtils.writeObject(mainActivity, MainActivity.MapIdAlarm, StorageUtils.alarmsFile);
+        StorageUtils.writeObject(mainActivity, MapIdAlarm, StorageUtils.alarmsFile);
 
         //maj affichage
         MainFragment.adapter.notifyDataSetChanged();
@@ -147,6 +138,27 @@ public class InteractHelper {
         activity.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainerView, AddFragment.newInstance(true, currentAlarm))
                 .commit();
+    }
+
+    public void actualiser(){
+        Trie.MapIdDate();
+        Trie.ListActifInit();
+        Trie.ListInactifInit();
+        Trie.ListSortId();
+        Trie.ListItems();
+
+        //time left
+        try {
+            timeLeftTextView.setText(Affichage.tempsRestant(MapIdAlarm.get(ListActif.get(0))));
+        }catch (Exception e){
+            timeLeftTextView.setText(Affichage.tempsRestant(null));
+        }
+
+        MainFragment.adapter.notifyDataSetChanged();
+
+        //nuber active alarm
+        activeAlarmTextView.setText(Affichage.NombreAlarmsActives(ListActif.size()));
+
     }
 
 

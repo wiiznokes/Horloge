@@ -21,7 +21,7 @@ import java.util.Random;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.fragments.helperFrag.AddSonnerieFragment;
-import fr.wiiznokes.horloge11.utils.storage.AddAlarmHelper;
+import fr.wiiznokes.horloge11.utils.addAlarmHelper.AddAlarmHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
 
@@ -104,13 +104,19 @@ public class AddFragment extends Fragment {
         alarmNameEditText.requestFocus();
 
         alarmHoursEditText.addTextChangedListener(new TextWatcher() {
+            Bundle bundle;
+            int previousHoursLenght = 0;
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
             @Override
             public void afterTextChanged(Editable editable) {
-                alarmHoursHelper();
+                bundle = AddAlarmHelper.alarmHoursHelper(alarmHoursEditText.getText().toString(), previousHoursLenght);
+                alarmHoursEditText.setText(bundle.getString("futurText"));
+                alarmHoursEditText.setSelection(bundle.getInt("futurSelection"));
+                previousHoursLenght = bundle.getInt("previousHoursLenght");
             }
         });
 
@@ -266,67 +272,4 @@ public class AddFragment extends Fragment {
         vibrateCheckBox.setChecked(currentAlarm.vibreur);
     }
 
-    private void alarmHoursHelper(){
-
-        //recuperation du texte sous type String
-        String alarmHoursTxt = alarmHoursEditText.getText().toString();
-
-        //si suppression de ":", remise à 0
-        if (!(alarmHoursTxt.contains(":"))) {
-            alarmHoursEditText.setText(":");
-        }
-        else{
-            //remise a 0 si taille depasse 5
-            if (alarmHoursTxt.length() > 5) {
-                alarmHoursEditText.setText(":");
-            }
-
-            //remplacement de la premiere case par 0 quand elle est pas égale a 1 ou 2 et quand il y a au moins un caractère avant ":"
-            if (alarmHoursTxt.indexOf(":") > 0) {
-                //verif
-                for (String number:numberList) {
-                    if (alarmHoursTxt.substring(0, 1).contains(number)) {
-                        alarmHoursEditText.setText("0" + alarmHoursTxt.substring(0, 1) + ":" + alarmHoursTxt.substring(alarmHoursTxt.indexOf(":") + 1, alarmHoursTxt.length()));
-
-                        //mettre la selection à la fin
-                        alarmHoursTxt = alarmHoursEditText.getText().toString();
-                        alarmHoursEditText.setSelection(alarmHoursTxt.length());
-                    }
-                }
-            }
-
-
-
-            //heure < 23
-            if (alarmHoursTxt.indexOf(":") > 0) {
-                if (Integer.parseInt(alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":"))) > 23){
-                    alarmHoursEditText.setText("2:"+alarmHoursTxt.substring(alarmHoursTxt.indexOf(":")+1, alarmHoursTxt.length()));
-                    //mettre selection avant :
-                    alarmHoursTxt = alarmHoursEditText.getText().toString();
-                    alarmHoursEditText.setSelection(alarmHoursTxt.indexOf(":"));
-                }
-            }
-            //condition si des minutes sont écrites
-            if(alarmHoursTxt.length() - alarmHoursTxt.indexOf(":") -1 > 0){
-                //chiffre des dizaine < 5
-                if (Integer.parseInt(alarmHoursTxt.substring(alarmHoursTxt.indexOf(":")+1, alarmHoursTxt.indexOf(":")+2)) > 5){
-                    alarmHoursEditText.setText(alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":")) + ":");
-                    //mettre selection après ":"
-                    alarmHoursTxt = alarmHoursEditText.getText().toString();
-                    alarmHoursEditText.setSelection(alarmHoursTxt.indexOf(":")+1);
-                }
-            }
-
-            //si nombre de minutes > 2 chiffres, supprime dernier chiffre
-            if(alarmHoursTxt.length() - alarmHoursTxt.indexOf(":") -1 > 2) {
-                alarmHoursEditText.setText(alarmHoursTxt.substring(0, alarmHoursTxt.length() - 1));
-            }
-
-            //selcetion à la fin si heure = 2 chiffres et si changement
-            if(alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":")).length() == 2 && nbChiffreDesHeures < 2){
-                alarmHoursEditText.setSelection(alarmHoursTxt.length());
-            }
-            nbChiffreDesHeures = alarmHoursTxt.substring(0, alarmHoursTxt.indexOf(":")).length();
-        }
-    }
 }

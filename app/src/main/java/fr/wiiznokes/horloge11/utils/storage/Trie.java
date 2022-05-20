@@ -228,13 +228,13 @@ public class Trie {
     }
 
 
-    public static ArrayList<Alarm> ListItems(){
+    public static void ListItems(){
 
         ArrayList<Alarm> ListSortAlarm = new ArrayList<>();
         for(Long id : MainActivity.ListSortId){
             ListSortAlarm.add(MainActivity.MapIdAlarm.get(id));
         }
 
-        return ListSortAlarm;
+        MainActivity.items = ListSortAlarm;
     }
 }
