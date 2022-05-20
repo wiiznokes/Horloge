@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.app.MainActivity;
@@ -34,7 +35,7 @@ public class AddSonnerieFragment extends Fragment {
     public static boolean sourceSetting;
 
     private static String uri = "";
-    private static boolean silence;
+    private static boolean silence = false;
 
 
     private ImageButton returnButton;
@@ -60,12 +61,9 @@ public class AddSonnerieFragment extends Fragment {
 
 
 
-    public static AddSonnerieFragment newInstance(boolean isSetting, @Nullable Alarm alarm) {
-        AddSonnerieFragment fragment = new AddSonnerieFragment();
+    public static AddSonnerieFragment newInstance() {
 
-        sourceSetting = isSetting;
-
-        return fragment;
+        return new AddSonnerieFragment();
     }
 
     @Override
@@ -117,22 +115,14 @@ public class AddSonnerieFragment extends Fragment {
         return view;
     }
 
+
     private void returnHelper(){
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("silence", silence);
+        bundle.putString("uri", uri);
 
-        if(sourceSetting){
-            Setting.defaultRing = uri;
-            Setting.silence = silence;
-            StorageUtils.writeObject(requireContext(), new Setting(), StorageUtils.settingFile);
-            getParentFragmentManager().popBackStack();
-        }
-        else {
-            if(!uri.isEmpty()){
-                AddFragment.currentAlarm.uriSonnerie = uri;
-            }
-            AddFragment.currentAlarm.silence = silence;
-
-            getParentFragmentManager().popBackStack();
-        }
+        getParentFragmentManager().setFragmentResult("data", bundle);
+        getParentFragmentManager().popBackStack();
     }
 
 

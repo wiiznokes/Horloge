@@ -13,8 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 
 import fr.wiiznokes.horloge11.R;
+import fr.wiiznokes.horloge11.app.MainActivity;
 import fr.wiiznokes.horloge11.fragments.helperFrag.AddSonnerieFragment;
 import fr.wiiznokes.horloge11.utils.storage.Setting;
 import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
@@ -34,8 +36,26 @@ public class SettingFragment extends Fragment {
 
 
 
-    public SettingFragment() {
-        // Required empty public constructor
+    public SettingFragment() {    }
+
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                boolean silence = bundle.getBoolean("silence");
+                String uri = bundle.getString("uri");
+
+                Setting.silence = silence;
+                if(!uri.isEmpty())
+                    Setting.defaultUri = uri;
+            }
+        });
+
     }
 
     @Override
@@ -49,7 +69,7 @@ public class SettingFragment extends Fragment {
         addSonnerieDefault.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
                     .addToBackStack(null)
-                    .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance(true, null))
+                    .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance())
                     .commit();
         });
 
@@ -59,15 +79,6 @@ public class SettingFragment extends Fragment {
             Setting.buttonToSnooze = buttonVolume.isChecked();
             StorageUtils.writeObject(requireContext(), new Setting(), StorageUtils.settingFile);
         });
-
-
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
     }
 
     @Override

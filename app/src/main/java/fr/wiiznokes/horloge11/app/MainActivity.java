@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,6 +45,8 @@ public class MainActivity extends FragmentActivity {
 
 
 
+
+
     @SuppressLint({"ClickableViewAccessibility", "ResourceType"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class MainActivity extends FragmentActivity {
 
 
         initStorage();
+
 
         MainFragment mainFragment = new MainFragment();
         getSupportFragmentManager().beginTransaction()

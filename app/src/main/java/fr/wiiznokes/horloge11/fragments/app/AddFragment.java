@@ -16,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 
 import java.util.Random;
 
@@ -31,10 +33,11 @@ public class AddFragment extends Fragment {
     public static Alarm currentAlarm;
 
     private ImageButton returnButton;
-
     private EditText alarmNameEditText;
-
     private EditText alarmHoursEditText;
+    private ImageButton saveButton;
+    private Button addSonnerieButton;
+    private CheckBox vibrateCheckBox;
 
     private RadioButton monday;
     private RadioButton tuesday;
@@ -44,13 +47,9 @@ public class AddFragment extends Fragment {
     private RadioButton saturday;
     private RadioButton sunday;
 
-    private Button addSonnerieButton;
-    private CheckBox vibrateCheckBox;
-
-    private ImageButton saveButton;
-
-
     private static boolean isModif;
+
+
 
     public AddFragment() {
         // Required empty public constructor
@@ -76,11 +75,25 @@ public class AddFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                boolean silence = bundle.getBoolean("silence");
+                String uri = bundle.getString("uri");
+
+                currentAlarm.silence = silence;
+                if(!uri.isEmpty())
+                    currentAlarm.uriSonnerie = uri;
+            }
+        });
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
 
         if(isModif){
             modifAlarmHelper();
@@ -97,7 +110,7 @@ public class AddFragment extends Fragment {
 
         alarmHoursEditText.addTextChangedListener(new TextWatcher() {
             Bundle bundle;
-            int previousHoursLenght = 0;
+            int previousHoursLength = 0;
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
@@ -106,10 +119,10 @@ public class AddFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 System.out.println("hellllooo");
-                bundle = AddAlarmHelper.alarmHoursHelper(alarmHoursEditText.getText().toString(), previousHoursLenght);
+                bundle = AddAlarmHelper.alarmHoursHelper(alarmHoursEditText.getText().toString(), previousHoursLength);
                 alarmHoursEditText.setText(bundle.getString("futureText"));
                 alarmHoursEditText.setSelection(bundle.getInt("futureSelection"));
-                previousHoursLenght = bundle.getInt("previousHoursLength");
+                previousHoursLength = bundle.getInt("previousHoursLength");
             }
         });
 
@@ -119,7 +132,7 @@ public class AddFragment extends Fragment {
         addSonnerieButton.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
                     .addToBackStack(null)
-                    .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance(false, currentAlarm))
+                    .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance())
                     .commit();
         });
 
