@@ -24,13 +24,13 @@ public class Alarm implements Serializable{
 
 
     public boolean week;
-    public boolean monday;
-    public boolean tuesday;
-    public boolean wednesday;
-    public boolean thursday;
-    public boolean friday;
-    public boolean saturday;
-    public boolean sunday;
+    public boolean monday = false;
+    public boolean tuesday = false;
+    public boolean wednesday = false;
+    public boolean thursday = false;
+    public boolean friday = false;
+    public boolean saturday = false;
+    public boolean sunday = false;
 
 
     public long id;

@@ -9,8 +9,6 @@ import static fr.wiiznokes.horloge11.app.MainActivity.items;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Pair;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
 import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
@@ -18,17 +16,9 @@ import fr.wiiznokes.horloge11.utils.storage.Alarm;
 import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 import fr.wiiznokes.horloge11.utils.storage.Trie;
 
-public class AddAlarmHelper {
+public class AddAlarmHelper{
 
 
-
-    public Boolean mondayState = false;
-    public Boolean tuesdayState = false;
-    public Boolean wednesdayState = false;
-    public Boolean thursdayState = false;
-    public Boolean fridayState = false;
-    public Boolean saturdayState = false;
-    public Boolean sundayState = false;
 
 
     public static Bundle alarmHoursHelper(String currentText, int previousHoursLenght){
@@ -88,6 +78,28 @@ public class AddAlarmHelper {
         bundle.putInt("previousHoursLenght", futurHeure.length());
 
         return bundle;
+    }
+
+    public static boolean isWeek(Alarm currentAlarm){
+        return (currentAlarm.monday && currentAlarm.tuesday && currentAlarm.wednesday && currentAlarm.thursday && currentAlarm.friday && currentAlarm.saturday && currentAlarm.sunday)
+                || (!currentAlarm.monday && !currentAlarm.tuesday && !currentAlarm.wednesday && !currentAlarm.thursday && !currentAlarm.friday && !currentAlarm.saturday && !currentAlarm.sunday);
+    }
+
+    public static String daysActives(Alarm currentAlarm, String allDaysText, String[] daysInWeekArray){
+        String text = "";
+        if(currentAlarm.week){
+            text = allDaysText;
+        }
+        else {
+            if(currentAlarm.monday){text = daysInWeekArray[0] + " ";}
+            if(currentAlarm.tuesday){text = text + daysInWeekArray[1] + " ";}
+            if(currentAlarm.wednesday){text = text + daysInWeekArray[2] + " ";}
+            if(currentAlarm.thursday){text = text + daysInWeekArray[3] + " ";}
+            if(currentAlarm.friday){text = text + daysInWeekArray[4] + " ";}
+            if(currentAlarm.saturday){text = text + daysInWeekArray[5] + " ";}
+            if(currentAlarm.sunday){text = text + daysInWeekArray[6] + " ";}
+        }
+        return text;
     }
 
 

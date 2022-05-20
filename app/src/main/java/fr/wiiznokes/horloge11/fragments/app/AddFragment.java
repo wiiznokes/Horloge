@@ -34,23 +34,14 @@ public class AddFragment extends Fragment {
     private EditText alarmNameEditText;
 
     private EditText alarmHoursEditText;
-    private final String[] numberList = {"3","4","5","6","7","8","9"};
-    int nbChiffreDesHeures = 0;
 
     private RadioButton monday;
-    private Boolean mondayState = false;
     private RadioButton tuesday;
-    private Boolean tuesdayState = false;
     private RadioButton wednesday;
-    private Boolean wednesdayState = false;
     private RadioButton thursday;
-    private Boolean thursdayState = false;
     private RadioButton friday;
-    private Boolean fridayState = false;
     private RadioButton saturday;
-    private Boolean saturdayState = false;
     private RadioButton sunday;
-    private Boolean sundayState = false;
 
     private Button addSonnerieButton;
     private CheckBox vibrateCheckBox;
@@ -120,40 +111,7 @@ public class AddFragment extends Fragment {
             }
         });
 
-        monday.setOnClickListener(v -> {
-            mondayState = !mondayState;
-            monday.setChecked(mondayState);
-        });
-
-        tuesday.setOnClickListener(v -> {
-            tuesdayState = !tuesdayState;
-            tuesday.setChecked(tuesdayState);
-        });
-
-        wednesday.setOnClickListener(v -> {
-            wednesdayState = !wednesdayState;
-            wednesday.setChecked(wednesdayState);
-        });
-
-        thursday.setOnClickListener(v -> {
-            thursdayState = !thursdayState;
-            thursday.setChecked(thursdayState);
-        });
-
-        friday.setOnClickListener(v -> {
-            fridayState = !fridayState;
-            friday.setChecked(fridayState);
-        });
-
-        saturday.setOnClickListener(v -> {
-            saturdayState = !saturdayState;
-            saturday.setChecked(saturdayState);
-        });
-
-        sunday.setOnClickListener(v -> {
-            sundayState = !sundayState;
-            sunday.setChecked(sundayState);
-        });
+        initDaysListener();
 
         //sonnerie
         addSonnerieButton.setOnClickListener(v -> {
@@ -165,65 +123,34 @@ public class AddFragment extends Fragment {
 
         //save
         saveButton.setOnClickListener(v -> {
-            if(alarmHoursEditText.length() != 5){
-                Toast.makeText(getContext(), "Heure de l'alarme invalide", Toast.LENGTH_SHORT).show();
-                return;
+            if(saveVerif()){
+                currentAlarm.alarmName = alarmNameEditText.getText().toString();
+
+                currentAlarm.hoursText = alarmHoursEditText.getText().toString();
+                currentAlarm.hours = Integer.parseInt(alarmHoursEditText.getText().toString().substring(0, 2));
+                currentAlarm.minute = Integer.parseInt(alarmHoursEditText.getText().toString().substring(3, 5));
+
+                currentAlarm.week = AddAlarmHelper.isWeek(currentAlarm);
+                currentAlarm.jourSonnerieText = AddAlarmHelper.daysActives(currentAlarm, getString(R.string.all_days_text), getResources().getStringArray(R.array.days_in_week_text));
+
+                currentAlarm.vibreur = vibrateCheckBox.isChecked();
+
+                if(isModif){
+                    AddAlarmHelper.modifAlarm(currentAlarm, requireContext());
+                }
+                else{
+                    AddAlarmHelper.addAlarm(currentAlarm, requireContext());
+                }
+
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.fragmentContainerView, new MainFragment())
+                        .commit();
+
             }
-            if(!currentAlarm.silence && currentAlarm.uriSonnerie == null){
-                Toast.makeText(getContext(), "Veuillez choisir un sonnerie", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-
-            currentAlarm.alarmName = alarmNameEditText.getText().toString();
-
-            currentAlarm.hoursText = alarmHoursEditText.getText().toString();
-            currentAlarm.hours = Integer.parseInt(alarmHoursEditText.getText().toString().substring(0, 2));
-            currentAlarm.minute = Integer.parseInt(alarmHoursEditText.getText().toString().substring(3, 5));
-
-            //texte jours actifs
-            String joursActif = "";
-            if ((mondayState && tuesdayState && wednesdayState && thursdayState && fridayState && saturdayState && sundayState) ||
-                    (!mondayState && !tuesdayState && !wednesdayState && !thursdayState && !fridayState && !saturdayState && !sundayState)){
-                currentAlarm.week = true;
-                joursActif = this.getString(R.string.all_days_text);
-            } else {
-                String[] daysInWeekArray = getResources().getStringArray(R.array.days_in_week_text);
-                if(mondayState){joursActif = joursActif + daysInWeekArray[0] + " ";}
-                if(tuesdayState){joursActif = joursActif + daysInWeekArray[1] + " ";}
-                if(wednesdayState){joursActif = joursActif + daysInWeekArray[2] + " ";}
-                if(thursdayState){joursActif = joursActif + daysInWeekArray[3] + " ";}
-                if(fridayState){joursActif = joursActif + daysInWeekArray[4] + " ";}
-                if(saturdayState){joursActif = joursActif + daysInWeekArray[5] + " ";}
-                if(sundayState){joursActif = joursActif + daysInWeekArray[6] + " ";}
-                currentAlarm.week = false;
-            }
-            currentAlarm.monday = mondayState;
-            currentAlarm.tuesday = tuesdayState;
-            currentAlarm.wednesday = wednesdayState;
-            currentAlarm.thursday = thursdayState;
-            currentAlarm.friday = fridayState;
-            currentAlarm.saturday = saturdayState;
-            currentAlarm.sunday = sundayState;
-            currentAlarm.jourSonnerieText = joursActif;
-
-            currentAlarm.vibreur = vibrateCheckBox.isChecked();
-
-            if(isModif){
-                AddAlarmHelper.modifAlarm(currentAlarm, requireContext());
-            }
-            else{
-                AddAlarmHelper.addAlarm(currentAlarm, requireContext());
-            }
-
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerView, new MainFragment())
-                    .commit();
-
         });
+        }
 
 
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -234,6 +161,56 @@ public class AddFragment extends Fragment {
 
         return view;
 
+    }
+
+    private void initDaysListener(){
+        monday.setOnClickListener(v -> {
+            currentAlarm.monday = !currentAlarm.monday;
+            monday.setChecked(currentAlarm.monday);
+        });
+
+        tuesday.setOnClickListener(v -> {
+            currentAlarm.tuesday = !currentAlarm.tuesday;
+            tuesday.setChecked(currentAlarm.tuesday);
+        });
+
+        wednesday.setOnClickListener(v -> {
+            currentAlarm.wednesday = !currentAlarm.wednesday;
+            wednesday.setChecked(currentAlarm.wednesday);
+        });
+
+        thursday.setOnClickListener(v -> {
+            currentAlarm.thursday = !currentAlarm.thursday;
+            thursday.setChecked(currentAlarm.thursday);
+        });
+
+        friday.setOnClickListener(v -> {
+            currentAlarm.friday = !currentAlarm.friday;
+            friday.setChecked(currentAlarm.friday);
+        });
+
+        saturday.setOnClickListener(v -> {
+            currentAlarm.saturday = !currentAlarm.saturday;
+            saturday.setChecked(currentAlarm.saturday);
+        });
+
+        sunday.setOnClickListener(v -> {
+            currentAlarm.sunday = !currentAlarm.sunday;
+            sunday.setChecked(currentAlarm.sunday);
+        });
+    }
+
+    private boolean saveVerif(){
+        if(alarmHoursEditText.length() != 5){
+            Toast.makeText(getContext(), "Heure de l'alarme invalide", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(!currentAlarm.silence && currentAlarm.uriSonnerie == null){
+            Toast.makeText(getContext(), "Veuillez choisir un sonnerie", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
 
@@ -261,6 +238,7 @@ public class AddFragment extends Fragment {
     private void modifAlarmHelper(){
         alarmNameEditText.setText(currentAlarm.alarmName);
         alarmHoursEditText.setText(currentAlarm.hoursText);
+
         monday.setChecked(currentAlarm.monday);
         tuesday.setChecked(currentAlarm.tuesday);
         wednesday.setChecked(currentAlarm.wednesday);
