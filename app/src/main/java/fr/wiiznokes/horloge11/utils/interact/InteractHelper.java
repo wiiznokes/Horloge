@@ -52,7 +52,7 @@ public class InteractHelper {
             currentAlarm.active = false;
 
             ListActif.remove(currentAlarm.id);
-            Trie.ListInactifChange(currentAlarm.id);
+            Trie.listInactifChange(currentAlarm.id);
 
             //remove Alarm de AlarmManager
             AlertHelper.remove(currentAlarm, mainActivity);
@@ -62,7 +62,7 @@ public class InteractHelper {
             currentAlarm.active = true;
 
             ListInactif.remove(currentAlarm.id);
-            Trie.ListActifChange(currentAlarm.id);
+            Trie.listActifChange(currentAlarm.id);
 
 
             //ajout de l'alarm au AlarmManager
@@ -71,7 +71,7 @@ public class InteractHelper {
 
 
         MapIdAlarm.put(currentAlarm.id, currentAlarm);
-        Trie.ListSortId();
+        Trie.listSortId();
 
         //time left
         try {
@@ -85,7 +85,7 @@ public class InteractHelper {
         StorageUtils.writeObject(mainActivity, MapIdAlarm, StorageUtils.alarmsFile);
 
         //maj affichage
-        Trie.ListItems();
+        Trie.listItems();
         MainFragment.adapter.notifyDataSetChanged();
     }
 
@@ -115,7 +115,7 @@ public class InteractHelper {
         }
 
         items.remove(ListSortId.indexOf(id));
-        Trie.ListSortId();
+        Trie.listSortId();
 
         //maj nb alarm active
         activeAlarmTextView.setText(Affichage.NombreAlarmsActives(ListActif.size()));
@@ -141,11 +141,7 @@ public class InteractHelper {
     }
 
     public void actualiser(){
-        Trie.MapIdDate();
-        Trie.ListActifInit();
-        Trie.ListInactifInit();
-        Trie.ListSortId();
-        Trie.ListItems();
+        Trie.actualiser();
 
         //time left
         try {

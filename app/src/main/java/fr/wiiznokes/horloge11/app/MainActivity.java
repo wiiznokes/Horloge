@@ -82,11 +82,11 @@ public class MainActivity extends FragmentActivity {
         MapIdAlarm = (Map<Long, Alarm>) StorageUtils.readObject(this, StorageUtils.alarmsFile);
         setting = (Setting) StorageUtils.readObject(this, StorageUtils.settingFile);
 
-        Trie.MapIdDate();
-        Trie.ListActifInit();
-        Trie.ListInactifInit();
-        Trie.ListSortId();
-        Trie.ListItems();
+        Trie.mapIdDate();
+        Trie.listActifInit();
+        Trie.listInactifInit();
+        Trie.listSortId();
+        Trie.listItems();
 
 
     }

@@ -73,9 +73,9 @@ public class AddAlarmHelper{
 
 
         Bundle bundle = new Bundle();
-        bundle.putString("futurText", futurHeure + ":" + futurMinute);
-        bundle.putInt("futurSelection", futurSelection);
-        bundle.putInt("previousHoursLenght", futurHeure.length());
+        bundle.putString("futureText", futurHeure + ":" + futurMinute);
+        bundle.putInt("futureSelection", futurSelection);
+        bundle.putInt("previousHoursLength", futurHeure.length());
 
         return bundle;
     }
@@ -106,36 +106,19 @@ public class AddAlarmHelper{
     public static void addAlarm(Alarm currentAlarm, Context context) {
 
         MapIdAlarm.put(currentAlarm.id, currentAlarm);
-        MapIdDate.put(currentAlarm.id, Trie.dateProchaineSonnerie(currentAlarm));
-
-        Trie.ListActifChange(currentAlarm.id);
-        Trie.ListSortId();
-
-
-
-        items.add(ListSortId.indexOf(currentAlarm.id), currentAlarm);
 
         //ajout Alarm a AlarmManger
         AlertHelper.add(currentAlarm, context);
 
         StorageUtils.writeObject(context, MapIdAlarm, StorageUtils.alarmsFile);
+
         Toast.makeText(context, "ajouté", Toast.LENGTH_SHORT).show();
 
     }
 
     public static void modifAlarm(Alarm currentAlarm, Context context) {
 
-        items.remove(MapIdAlarm.get(currentAlarm.id));
-
         MapIdAlarm.put(currentAlarm.id, currentAlarm);
-        MapIdDate.put(currentAlarm.id, Trie.dateProchaineSonnerie(currentAlarm));
-
-        ListActif.remove(currentAlarm.id);
-        ListInactif.remove(currentAlarm.id);
-        Trie.ListActifChange(currentAlarm.id);
-        Trie.ListSortId();
-
-        items.add(ListSortId.indexOf(currentAlarm.id), currentAlarm);
 
         //AlarmManger
         AlertHelper.remove(currentAlarm, context);

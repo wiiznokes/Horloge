@@ -14,7 +14,7 @@ import fr.wiiznokes.horloge11.app.MainActivity;
 public class Trie {
 
 
-    public static void MapIdDate(){
+    public static void mapIdDate(){
         Map<Long, Calendar> MapIdDate = new HashMap<>();
         for(fr.wiiznokes.horloge11.utils.storage.Alarm Alarm : MainActivity.MapIdAlarm.values()){
             MapIdDate.put(Alarm.id, dateProchaineSonnerie(Alarm));
@@ -104,7 +104,7 @@ public class Trie {
     }
 
 
-    public static void ListActifInit(){
+    public static void listActifInit(){
 
         List<Long> ListActifInit = new ArrayList<>();
 
@@ -133,7 +133,7 @@ public class Trie {
         MainActivity.ListActif = ListActifInit;
     }
 
-    public static void ListInactifInit(){
+    public static void listInactifInit(){
 
         List<Long> ListInactifInit = new ArrayList<>();
 
@@ -164,7 +164,7 @@ public class Trie {
 
 
 
-    public static void ListSortId(){
+    public static void listSortId(){
         MainActivity.ListSortId = Stream.concat(MainActivity.ListActif.stream(), MainActivity.ListInactif.stream()).collect(Collectors.toList());
     }
 
@@ -175,7 +175,7 @@ public class Trie {
 
 
     //inserer un id au bon endroit dans la ListTrie des alarmes actives
-    public static void ListActifChange(Long id){
+    public static void listActifChange(Long id){
         Calendar dateSonnerie = MainActivity.MapIdDate.get(id);
         int i = 0;
         //condition pour savoir si ListActif est vide
@@ -203,7 +203,7 @@ public class Trie {
         }
     }
     //inserer un id au bon endroit dans la ListTrie des alarmes Inactives
-    public static void ListInactifChange(Long id){
+    public static void listInactifChange(Long id){
         Calendar dateSonnerie = MainActivity.MapIdDate.get(id);
         int i = 0;
         //condition pour savoir si ListInactif est vide
@@ -228,7 +228,7 @@ public class Trie {
     }
 
 
-    public static void ListItems(){
+    public static void listItems(){
 
         ArrayList<Alarm> ListSortAlarm = new ArrayList<>();
         for(Long id : MainActivity.ListSortId){
@@ -236,5 +236,13 @@ public class Trie {
         }
 
         MainActivity.items = ListSortAlarm;
+    }
+
+    public static void actualiser(){
+        mapIdDate();
+        listActifInit();
+        listInactifInit();
+        listSortId();
+        listItems();
     }
 }

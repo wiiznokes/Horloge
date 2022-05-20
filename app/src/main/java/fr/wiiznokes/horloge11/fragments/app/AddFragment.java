@@ -23,6 +23,7 @@ import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.fragments.helperFrag.AddSonnerieFragment;
 import fr.wiiznokes.horloge11.utils.addAlarmHelper.AddAlarmHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
+import fr.wiiznokes.horloge11.utils.storage.Trie;
 
 
 public class AddFragment extends Fragment {
@@ -104,10 +105,11 @@ public class AddFragment extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
             @Override
             public void afterTextChanged(Editable editable) {
+                System.out.println("hellllooo");
                 bundle = AddAlarmHelper.alarmHoursHelper(alarmHoursEditText.getText().toString(), previousHoursLenght);
-                alarmHoursEditText.setText(bundle.getString("futurText"));
-                alarmHoursEditText.setSelection(bundle.getInt("futurSelection"));
-                previousHoursLenght = bundle.getInt("previousHoursLenght");
+                alarmHoursEditText.setText(bundle.getString("futureText"));
+                alarmHoursEditText.setSelection(bundle.getInt("futureSelection"));
+                previousHoursLenght = bundle.getInt("previousHoursLength");
             }
         });
 
@@ -141,6 +143,7 @@ public class AddFragment extends Fragment {
                 else{
                     AddAlarmHelper.addAlarm(currentAlarm, requireContext());
                 }
+                Trie.actualiser();
 
                 getParentFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainerView, new MainFragment())
