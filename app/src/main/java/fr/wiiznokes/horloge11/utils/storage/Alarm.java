@@ -35,7 +35,7 @@ public class Alarm implements Serializable{
 
     public long id;
 
-    public String hoursText;
+
     public String jourSonnerieText;
 
 }

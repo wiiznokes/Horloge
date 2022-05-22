@@ -34,7 +34,8 @@ public class AddFragment extends Fragment {
 
     private ImageButton returnButton;
     private EditText alarmNameEditText;
-    private EditText alarmHoursEditText;
+    private EditText hoursEditText;
+    private EditText minutesEditText;
     private ImageButton saveButton;
     private Button addSonnerieButton;
     private CheckBox vibrateCheckBox;
@@ -108,25 +109,94 @@ public class AddFragment extends Fragment {
 
         alarmNameEditText.requestFocus();
 
-        alarmHoursEditText.addTextChangedListener(new TextWatcher() {
-            Bundle bundle;
-            int previousHoursLength = 0;
+
+
+        hoursEditText.addTextChangedListener(new TextWatcher() {
+            String textBefore;
+
 
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                textBefore = hoursEditText.getText().toString();
+            }
+
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
             @Override
-            public void afterTextChanged(Editable editable) {
-                System.out.println("hellllooo");
-                bundle = AddAlarmHelper.alarmHoursHelper(alarmHoursEditText.getText().toString(), previousHoursLength);
-                if(!alarmHoursEditText.getText().toString().equals(bundle.getString("futureText")))
-                    alarmHoursEditText.setText(bundle.getString("futureText"));
-                if(bundle.getInt("futureSelection") != -1)
-                    alarmHoursEditText.setSelection(bundle.getInt("futureSelection"));
-                previousHoursLength = bundle.getInt("previousHoursLength");
+            public void afterTextChanged(Editable s) {
+
+                String futureText = hoursEditText.getText().toString();
+
+                if(!futureText.isEmpty()){
+                    int hoursINint = Integer.parseInt(futureText);
+
+                    if(hoursEditText.length() > 2) {
+                        futureText = textBefore;
+                    }
+                    //9h -> 09h
+                    if(hoursINint < 10 && hoursINint > 2 && hoursEditText.length() < 2){
+                        futureText = '0' + hoursEditText.getText().toString();
+                        minutesEditText.requestFocus();
+                    }
+
+                    //heure < 23
+                    if(hoursINint > 23) {
+                        futureText = "2";
+                    }
+                }
+
+                if(!hoursEditText.getText().toString().equals(futureText))
+                    hoursEditText.setText(futureText);
+
+                hoursEditText.setSelection(hoursEditText.length());
             }
         });
+
+
+        minutesEditText.addTextChangedListener(new TextWatcher() {
+
+            String textBefore;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                textBefore = minutesEditText.getText().toString();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                String futureText = minutesEditText.getText().toString();
+
+                if(!futureText.isEmpty()){
+                    int minuteInint = Integer.parseInt(futureText);
+
+
+                    if(minutesEditText.length() > 2) {
+                        futureText = textBefore;
+                    }
+
+                    //minute = "9" -> ""          "77" -> ""
+                    if(minuteInint < 10 && minuteInint > 5){
+                        futureText = "";
+                    }
+                }
+
+                if(!minutesEditText.getText().toString().equals(futureText))
+                    minutesEditText.setText(futureText);
+
+                minutesEditText.setSelection(minutesEditText.length());
+
+            }
+        });
+
 
         initDaysListener();
 
@@ -143,9 +213,8 @@ public class AddFragment extends Fragment {
             if(saveVerif()){
                 currentAlarm.alarmName = alarmNameEditText.getText().toString();
 
-                currentAlarm.hoursText = alarmHoursEditText.getText().toString();
-                currentAlarm.hours = Integer.parseInt(alarmHoursEditText.getText().toString().substring(0, 2));
-                currentAlarm.minute = Integer.parseInt(alarmHoursEditText.getText().toString().substring(3, 5));
+                currentAlarm.hours = Integer.parseInt(hoursEditText.getText().toString().substring(0, 2));
+                currentAlarm.minute = Integer.parseInt(minutesEditText.getText().toString().substring(3, 5));
 
                 currentAlarm.week = AddAlarmHelper.isWeek(currentAlarm);
                 currentAlarm.jourSonnerieText = AddAlarmHelper.daysActives(currentAlarm, getString(R.string.all_days_text), getResources().getStringArray(R.array.days_in_week_text));
@@ -219,7 +288,7 @@ public class AddFragment extends Fragment {
     }
 
     private boolean saveVerif(){
-        if(alarmHoursEditText.length() != 5){
+        if(hoursEditText.length() != 2 && minutesEditText.length() != 2){
             Toast.makeText(getContext(), "Heure de l'alarme invalide", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -236,7 +305,8 @@ public class AddFragment extends Fragment {
         returnButton = view.findViewById(R.id.returnButton);
 
         alarmNameEditText = view.findViewById(R.id.alarmNameEditText);
-        alarmHoursEditText = view.findViewById(R.id.alarmHoursEditText);
+        hoursEditText = view.findViewById(R.id.hoursEditText);
+        minutesEditText = view.findViewById(R.id.minutesEditText);
 
         monday = view.findViewById(R.id.radioButton);
         tuesday = view.findViewById(R.id.radioButton2);
@@ -255,7 +325,8 @@ public class AddFragment extends Fragment {
 
     private void modifAlarmHelper(){
         alarmNameEditText.setText(currentAlarm.alarmName);
-        alarmHoursEditText.setText(currentAlarm.hoursText);
+        hoursEditText.setText(currentAlarm.hours);
+        minutesEditText.setText(currentAlarm.minute);
 
         monday.setChecked(currentAlarm.monday);
         tuesday.setChecked(currentAlarm.tuesday);
