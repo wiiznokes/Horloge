@@ -58,6 +58,7 @@ public class MainActivity extends FragmentActivity {
 
 
         MainFragment mainFragment = new MainFragment();
+
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .addToBackStack(null)

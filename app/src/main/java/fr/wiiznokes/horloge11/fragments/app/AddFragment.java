@@ -80,8 +80,6 @@ public class AddFragment extends Fragment {
 
         getParentFragmentManager().setFragmentResultListener("data", this, (requestKey, bundle) -> {
 
-            Log.d("log Bundle after", String.valueOf(bundle.getBoolean("silence")));
-
             currentAlarm.silence = bundle.getBoolean("silence");
             String uri = bundle.getString("uri");
 

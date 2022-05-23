@@ -48,11 +48,19 @@ public class MainFragment extends Fragment {
 
         initAffichage();
 
+        if(savedInstanceState != null)
+            System.out.println("log state non null");
+        else
+            System.out.println("log state null");
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
 
     }
 
@@ -61,6 +69,8 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        System.out.println("onCreateView");
 
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
