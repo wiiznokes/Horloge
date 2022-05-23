@@ -211,15 +211,8 @@ public class AddFragment extends Fragment {
         //save
         saveButton.setOnClickListener(v -> {
             if(saveVerif()){
-                currentAlarm.alarmName = alarmNameEditText.getText().toString();
 
-                currentAlarm.hours = Integer.parseInt(hoursEditText.getText().toString());
-                currentAlarm.minute = Integer.parseInt(minutesEditText.getText().toString());
-
-                currentAlarm.week = AddAlarmHelper.isWeek(currentAlarm);
-                currentAlarm.jourSonnerieText = AddAlarmHelper.daysActives(currentAlarm, getString(R.string.all_days_text), getResources().getStringArray(R.array.days_in_week_text));
-
-                currentAlarm.vibreur = vibrateCheckBox.isChecked();
+                getDataView();
 
                 if(isModif){
                     AddAlarmHelper.modifAlarm(currentAlarm, requireContext());
@@ -249,6 +242,27 @@ public class AddFragment extends Fragment {
 
         return view;
 
+    }
+
+    private void getDataView(){
+        currentAlarm.alarmName = alarmNameEditText.getText().toString();
+
+        currentAlarm.hours = Integer.parseInt(hoursEditText.getText().toString());
+        currentAlarm.minute = Integer.parseInt(minutesEditText.getText().toString());
+
+        currentAlarm.active = true;
+
+        currentAlarm.vibreur = vibrateCheckBox.isChecked();
+        currentAlarm.week = AddAlarmHelper.isWeek(currentAlarm);
+        currentAlarm.monday = monday.isChecked();
+        currentAlarm.tuesday = monday.isChecked();
+        currentAlarm.wednesday = monday.isChecked();
+        currentAlarm.thursday = monday.isChecked();
+        currentAlarm.friday = monday.isChecked();
+        currentAlarm.saturday = monday.isChecked();
+        currentAlarm.sunday = monday.isChecked();
+
+        currentAlarm.jourSonnerieText = AddAlarmHelper.daysActives(currentAlarm, getString(R.string.all_days_text), getResources().getStringArray(R.array.days_in_week_text));
     }
 
     private void initDaysListener(){
@@ -326,9 +340,8 @@ public class AddFragment extends Fragment {
 
     private void modifAlarmHelper(){
         alarmNameEditText.setText(currentAlarm.alarmName);
-        hoursEditText.setText(currentAlarm.hours);
-        minutesEditText.setText(currentAlarm.minute);
-
+        hoursEditText.setText(String.valueOf(currentAlarm.hours));
+        minutesEditText.setText(String.valueOf(currentAlarm.minute));
         monday.setChecked(currentAlarm.monday);
         tuesday.setChecked(currentAlarm.tuesday);
         wednesday.setChecked(currentAlarm.wednesday);
