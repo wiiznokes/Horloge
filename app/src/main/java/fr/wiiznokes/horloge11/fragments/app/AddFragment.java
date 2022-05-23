@@ -3,6 +3,7 @@ package fr.wiiznokes.horloge11.fragments.app;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,16 +78,15 @@ public class AddFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
-                boolean silence = bundle.getBoolean("silence");
-                String uri = bundle.getString("uri");
+        getParentFragmentManager().setFragmentResultListener("data", this, (requestKey, bundle) -> {
 
-                currentAlarm.silence = silence;
-                if(!uri.isEmpty())
-                    currentAlarm.uriSonnerie = uri;
-            }
+            Log.d("log Bundle after", String.valueOf(bundle.getBoolean("silence")));
+
+            currentAlarm.silence = bundle.getBoolean("silence");
+            String uri = bundle.getString("uri");
+
+            if(!uri.isEmpty())
+                currentAlarm.uriSonnerie = uri;
         });
     }
 
@@ -213,8 +213,8 @@ public class AddFragment extends Fragment {
             if(saveVerif()){
                 currentAlarm.alarmName = alarmNameEditText.getText().toString();
 
-                currentAlarm.hours = Integer.parseInt(hoursEditText.getText().toString().substring(0, 2));
-                currentAlarm.minute = Integer.parseInt(minutesEditText.getText().toString().substring(3, 5));
+                currentAlarm.hours = Integer.parseInt(hoursEditText.getText().toString());
+                currentAlarm.minute = Integer.parseInt(minutesEditText.getText().toString());
 
                 currentAlarm.week = AddAlarmHelper.isWeek(currentAlarm);
                 currentAlarm.jourSonnerieText = AddAlarmHelper.daysActives(currentAlarm, getString(R.string.all_days_text), getResources().getStringArray(R.array.days_in_week_text));
@@ -227,6 +227,7 @@ public class AddFragment extends Fragment {
                 else{
                     AddAlarmHelper.addAlarm(currentAlarm, requireContext());
                 }
+
                 Trie.actualiser();
 
                 getParentFragmentManager().beginTransaction()

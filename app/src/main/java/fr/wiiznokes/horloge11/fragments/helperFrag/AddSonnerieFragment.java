@@ -32,7 +32,6 @@ import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 public class AddSonnerieFragment extends Fragment {
 
 
-    public static boolean sourceSetting;
 
     private static String uri = "";
     private static boolean silence = false;

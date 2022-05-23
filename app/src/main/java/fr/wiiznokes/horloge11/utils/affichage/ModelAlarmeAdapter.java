@@ -57,7 +57,8 @@ public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
 
 
             TextView hours = convertView.findViewById(R.id.hours);
-            hours.setText(currentAlarm.hours + ':' + currentAlarm.minute);
+            String text = String.valueOf(currentAlarm.hours) + ':' + currentAlarm.minute;
+            hours.setText(text);
             SwitchMaterial switch1 = convertView.findViewById(R.id.switch1);
             switch1.setChecked(currentAlarm.active);
             TextView alarmName = convertView.findViewById(R.id.alarmeName);

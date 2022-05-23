@@ -48,7 +48,7 @@ public class AddAlarmHelper{
         MapIdAlarm.put(currentAlarm.id, currentAlarm);
 
         //ajout Alarm a AlarmManger
-        AlertHelper.add(currentAlarm, context);
+        AlertHelper.add(currentAlarm, context, Trie.dateProchaineSonnerie(currentAlarm).getTimeInMillis());
 
         StorageUtils.writeObject(context, MapIdAlarm, StorageUtils.alarmsFile);
 
@@ -62,7 +62,7 @@ public class AddAlarmHelper{
 
         //AlarmManger
         AlertHelper.remove(currentAlarm, context);
-        AlertHelper.add(currentAlarm, context);
+        AlertHelper.add(currentAlarm, context, Trie.dateProchaineSonnerie(currentAlarm).getTimeInMillis());
 
         StorageUtils.writeObject(context, MapIdAlarm, StorageUtils.alarmsFile);
         Toast.makeText(context, "modifié", Toast.LENGTH_SHORT).show();

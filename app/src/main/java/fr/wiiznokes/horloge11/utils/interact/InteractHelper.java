@@ -66,7 +66,7 @@ public class InteractHelper {
 
 
             //ajout de l'alarm au AlarmManager
-            AlertHelper.add(currentAlarm, mainActivity);
+            AlertHelper.add(currentAlarm, mainActivity, MapIdDate.get(currentAlarm.id).getTimeInMillis());
         }
 
 

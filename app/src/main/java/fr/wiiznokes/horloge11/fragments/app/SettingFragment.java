@@ -44,16 +44,13 @@ public class SettingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
-                boolean silence = bundle.getBoolean("silence");
-                String uri = bundle.getString("uri");
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            boolean silence = bundle.getBoolean("silence");
+            String uri = bundle.getString("uri");
 
-                Setting.silence = silence;
-                if(!uri.isEmpty())
-                    Setting.defaultUri = uri;
-            }
+            Setting.silence = silence;
+            if(!uri.isEmpty())
+                Setting.defaultUri = uri;
         });
 
     }

@@ -14,7 +14,7 @@ public class AlertHelper {
     static AlarmManager alarmManager;
 
 
-    public static void add(Alarm currentAlarm, Context context){
+    public static void add(Alarm currentAlarm, Context context, long time){
         //creation du pending intent
         Intent intent = new Intent(
                 context,
@@ -22,9 +22,6 @@ public class AlertHelper {
         );
         intent.putExtra("alarm", currentAlarm);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) currentAlarm.id, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        //recuperation de la date de sonnerie
-        long time = MainActivity.MapIdDate.get(currentAlarm.id).getTimeInMillis();
 
         getAlarmManager(context).setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent);
     }
