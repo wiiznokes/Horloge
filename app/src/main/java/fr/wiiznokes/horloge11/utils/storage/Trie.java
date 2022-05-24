@@ -238,6 +238,15 @@ public class Trie {
         MainActivity.items = ListSortAlarm;
     }
 
+    public static void itemsRemove(long id){
+        for(int i = 0; i < MainActivity.items.size(); i++){
+            if(MainActivity.items.get(i).id == id){
+                MainActivity.items.remove(i);
+                break;
+            }
+        }
+    }
+
     public static void actualiser(){
         mapIdDate();
         listActifInit();

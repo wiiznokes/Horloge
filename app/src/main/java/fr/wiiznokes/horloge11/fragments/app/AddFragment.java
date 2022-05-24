@@ -78,11 +78,10 @@ public class AddFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //recupération des uris de sonnerie
         getParentFragmentManager().setFragmentResultListener("data", this, (requestKey, bundle) -> {
-
             currentAlarm.silence = bundle.getBoolean("silence");
             String uri = bundle.getString("uri");
-
             if(!uri.isEmpty())
                 currentAlarm.uriSonnerie = uri;
         });
@@ -91,8 +90,6 @@ public class AddFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
 
         if(isModif){
             modifAlarmHelper();
@@ -111,21 +108,15 @@ public class AddFragment extends Fragment {
 
         hoursEditText.addTextChangedListener(new TextWatcher() {
             String textBefore;
-
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 textBefore = hoursEditText.getText().toString();
             }
-
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
-
                 String futureText = hoursEditText.getText().toString();
 
                 if(!futureText.isEmpty()){
@@ -155,22 +146,15 @@ public class AddFragment extends Fragment {
 
 
         minutesEditText.addTextChangedListener(new TextWatcher() {
-
             String textBefore;
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 textBefore = minutesEditText.getText().toString();
             }
-
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
-
                 String futureText = minutesEditText.getText().toString();
 
                 if(!futureText.isEmpty()){
@@ -186,15 +170,12 @@ public class AddFragment extends Fragment {
                         futureText = "";
                     }
                 }
-
                 if(!minutesEditText.getText().toString().equals(futureText))
                     minutesEditText.setText(futureText);
 
                 minutesEditText.setSelection(minutesEditText.length());
-
             }
         });
-
 
         initDaysListener();
 

@@ -84,8 +84,13 @@ public class InteractHelper {
         //ecriture
         StorageUtils.writeObject(mainActivity, MapIdAlarm, StorageUtils.alarmsFile);
 
+
+
         //maj affichage
         Trie.listItems();
+        for(int i = 0; i < MainActivity.items.size(); i++){
+            System.out.println(items.get(i).id);
+        }
         MainFragment.adapter.notifyDataSetChanged();
     }
 
@@ -95,13 +100,6 @@ public class InteractHelper {
     public void effacer(Alarm currentAlarm){
 
         long id = currentAlarm.id;
-
-        //time left
-        try {
-            timeLeftTextView.setText(Affichage.tempsRestant(MapIdAlarm.get(ListActif.get(0))));
-        }catch (Exception e){
-            timeLeftTextView.setText(Affichage.tempsRestant(null));
-        }
 
 
         MapIdAlarm.remove(id);
@@ -114,16 +112,25 @@ public class InteractHelper {
             ListInactif.remove(id);
         }
 
-        items.remove(ListSortId.indexOf(id));
+
+
         Trie.listSortId();
 
         //maj nb alarm active
         activeAlarmTextView.setText(Affichage.NombreAlarmsActives(ListActif.size()));
 
+        //time left
+        try {
+            timeLeftTextView.setText(Affichage.tempsRestant(MapIdAlarm.get(ListActif.get(0))));
+        }catch (Exception e){
+            timeLeftTextView.setText(Affichage.tempsRestant(null));
+        }
+
         //ecriture
         StorageUtils.writeObject(mainActivity, MapIdAlarm, StorageUtils.alarmsFile);
 
         //maj affichage
+        Trie.itemsRemove(currentAlarm.id);
         MainFragment.adapter.notifyDataSetChanged();
         
         AlertHelper.remove(currentAlarm, mainActivity);
@@ -143,6 +150,9 @@ public class InteractHelper {
     public void actualiser(){
         Trie.actualiser();
 
+        //number active alarm
+        activeAlarmTextView.setText(Affichage.NombreAlarmsActives(ListActif.size()));
+
         //time left
         try {
             timeLeftTextView.setText(Affichage.tempsRestant(MapIdAlarm.get(ListActif.get(0))));
@@ -151,10 +161,6 @@ public class InteractHelper {
         }
 
         MainFragment.adapter.notifyDataSetChanged();
-
-        //nuber active alarm
-        activeAlarmTextView.setText(Affichage.NombreAlarmsActives(ListActif.size()));
-
     }
 
 

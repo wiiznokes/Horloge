@@ -46,12 +46,7 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initAffichage();
 
-        if(savedInstanceState != null)
-            System.out.println("log state non null");
-        else
-            System.out.println("log state null");
 
     }
 
@@ -70,9 +65,6 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        System.out.println("onCreateView");
-
-
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         this.settingButton = view.findViewById(R.id.settingButton);
@@ -81,7 +73,7 @@ public class MainFragment extends Fragment {
         this.activeAlarmTextView = view.findViewById(R.id.activeAlarmTextView);
         this.timeLeftTextView = view.findViewById(R.id.timeLeftTextView);
         this.listView = view.findViewById(R.id.list_view);
-
+        initAffichage();
         return view;
     }
 
