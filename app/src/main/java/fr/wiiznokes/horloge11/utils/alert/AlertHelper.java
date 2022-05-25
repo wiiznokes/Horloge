@@ -15,15 +15,24 @@ public class AlertHelper {
 
 
     public static void add(Alarm currentAlarm, Context context, long time){
-        //creation du pending intent
-        Intent intent = new Intent(
+        Intent alertIntent = new Intent(
                 context,
                 AlertReceiver.class
         );
-        intent.putExtra("alarm", currentAlarm);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) currentAlarm.id, intent, PendingIntent.FLAG_IMMUTABLE);
+        alertIntent.putExtra("alarm", currentAlarm);
+        PendingIntent alertPendingIntent = PendingIntent.getBroadcast(context, (int) currentAlarm.id, alertIntent, PendingIntent.FLAG_IMMUTABLE);
 
-        getAlarmManager(context).setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+        //intent pour le system
+        Intent showIntent = new Intent(
+                context,
+                MainActivity.class
+        );
+        PendingIntent showPendingIntent = PendingIntent.getBroadcast(context, (int) currentAlarm.id, showIntent, PendingIntent.FLAG_IMMUTABLE);
+
+        //info sur la date et l'action de modif du system
+        AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(time, showPendingIntent);
+        //setAlarm
+        getAlarmManager(context).setAlarmClock(alarmClockInfo, alertPendingIntent);
     }
 
 
@@ -34,7 +43,6 @@ public class AlertHelper {
                 AlertReceiver.class
         );
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) currentAlarm.id, intent, PendingIntent.FLAG_IMMUTABLE);
-
         getAlarmManager(context).cancel(pendingIntent);
 
     }

@@ -15,15 +15,15 @@ public class Alarm implements Serializable{
     public int hours;
     public int minute;
 
-    public boolean active;
+    public boolean active = true;
 
     //sonnerie
     public String uriSonnerie = null;
-    public boolean vibreur;
+    public boolean vibreur = false;
     public boolean silence = false;
 
 
-    public boolean week;
+    public boolean week = true;
     public boolean monday = false;
     public boolean tuesday = false;
     public boolean wednesday = false;
