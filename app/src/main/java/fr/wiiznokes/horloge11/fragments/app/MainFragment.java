@@ -4,7 +4,6 @@ import static fr.wiiznokes.horloge11.app.MainActivity.ListActif;
 import static fr.wiiznokes.horloge11.app.MainActivity.MapIdAlarm;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.app.MainActivity;
 import fr.wiiznokes.horloge11.utils.affichage.Affichage;
 import fr.wiiznokes.horloge11.utils.affichage.ModelAlarmeAdapter;
-import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
 
 public class MainFragment extends Fragment {

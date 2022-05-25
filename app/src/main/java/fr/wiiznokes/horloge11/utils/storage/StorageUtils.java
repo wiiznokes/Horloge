@@ -4,15 +4,11 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
 
-import java.io.IOException;
-import java.util.Map;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
-import fr.wiiznokes.horloge11.app.MainActivity;
 
 
 public class StorageUtils {

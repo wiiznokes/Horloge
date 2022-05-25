@@ -2,10 +2,8 @@ package fr.wiiznokes.horloge11.app;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,7 +13,6 @@ import java.util.Map;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.fragments.app.MainFragment;
-import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 import fr.wiiznokes.horloge11.utils.storage.Setting;
 import fr.wiiznokes.horloge11.utils.storage.StorageUtils;

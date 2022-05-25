@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Calendar;
 
-import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 import fr.wiiznokes.horloge11.utils.storage.Trie;
 

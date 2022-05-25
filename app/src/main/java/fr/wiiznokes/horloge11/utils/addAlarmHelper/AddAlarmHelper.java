@@ -1,14 +1,8 @@
 package fr.wiiznokes.horloge11.utils.addAlarmHelper;
 
-import static fr.wiiznokes.horloge11.app.MainActivity.ListActif;
-import static fr.wiiznokes.horloge11.app.MainActivity.ListInactif;
-import static fr.wiiznokes.horloge11.app.MainActivity.ListSortId;
 import static fr.wiiznokes.horloge11.app.MainActivity.MapIdAlarm;
-import static fr.wiiznokes.horloge11.app.MainActivity.MapIdDate;
-import static fr.wiiznokes.horloge11.app.MainActivity.items;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.widget.Toast;
 
 import fr.wiiznokes.horloge11.utils.alert.AlertHelper;

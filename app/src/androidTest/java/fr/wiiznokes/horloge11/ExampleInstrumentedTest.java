@@ -2,8 +2,6 @@ package fr.wiiznokes.horloge11;
 
 import android.app.AlarmManager;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -19,12 +17,6 @@ import java.util.Random;
 import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 import fr.wiiznokes.horloge11.utils.storage.Trie;
-
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
 
 
 @RunWith(AndroidJUnit4.class)

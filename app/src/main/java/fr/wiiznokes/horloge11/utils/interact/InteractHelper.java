@@ -3,19 +3,13 @@ package fr.wiiznokes.horloge11.utils.interact;
 
 import static fr.wiiznokes.horloge11.app.MainActivity.ListActif;
 import static fr.wiiznokes.horloge11.app.MainActivity.ListInactif;
-import static fr.wiiznokes.horloge11.app.MainActivity.ListSortId;
 import static fr.wiiznokes.horloge11.app.MainActivity.MapIdAlarm;
 import static fr.wiiznokes.horloge11.app.MainActivity.MapIdDate;
 import static fr.wiiznokes.horloge11.app.MainActivity.items;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.app.MainActivity;
