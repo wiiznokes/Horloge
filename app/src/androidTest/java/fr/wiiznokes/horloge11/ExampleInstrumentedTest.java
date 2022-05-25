@@ -28,7 +28,7 @@ public class ExampleInstrumentedTest {
     AlarmManager.AlarmClockInfo alarmClockInfo;
 
     Alarm alarm1 = newAlarm(11,31);
-    Alarm alarm2 = newAlarm(5,31);
+    Alarm alarm2 = newAlarm(5,56);
 
     long time1 = Trie.dateProchaineSonnerie(alarm1).getTimeInMillis();
     long time2 = Trie.dateProchaineSonnerie(alarm2).getTimeInMillis();
@@ -55,9 +55,14 @@ public class ExampleInstrumentedTest {
         AlertHelper.add(alarm1, appContext, time1);
         AlertHelper.add(alarm2, appContext, time1);
 
+        AlertHelper.remove(alarm2, appContext);
         //derniere alarme
         alarmClockInfo = alarmManager.getNextAlarmClock();
+        assertEquals(alarmClockInfo.getTriggerTime(), time1);
 
+        AlertHelper.remove(alarm1, appContext);
+        alarmClockInfo = alarmManager.getNextAlarmClock();
+        assertNull(alarmClockInfo);
     }
 
     @Test
