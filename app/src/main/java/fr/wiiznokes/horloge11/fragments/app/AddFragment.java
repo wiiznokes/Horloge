@@ -1,5 +1,6 @@
 package fr.wiiznokes.horloge11.fragments.app;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,8 +22,10 @@ import androidx.fragment.app.Fragment;
 import java.util.Random;
 
 import fr.wiiznokes.horloge11.R;
+import fr.wiiznokes.horloge11.app.MainActivity;
 import fr.wiiznokes.horloge11.fragments.helperFrag.AddSonnerieFragment;
 import fr.wiiznokes.horloge11.utils.addAlarmHelper.AddAlarmHelper;
+import fr.wiiznokes.horloge11.utils.notif.SoundHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 import fr.wiiznokes.horloge11.utils.storage.Trie;
 
@@ -37,6 +41,10 @@ public class AddFragment extends Fragment {
     private ImageButton saveButton;
     private Button addSonnerieButton;
     private CheckBox vibrateCheckBox;
+
+    private MediaPlayer mediaPlayer;
+    private Button playButton;
+    private TextView ringNameTextView;
 
     private RadioButton monday;
     private RadioButton tuesday;
@@ -75,12 +83,16 @@ public class AddFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //recupération des uris de sonnerie
+        //get data for ringTones
         getParentFragmentManager().setFragmentResultListener("data", this, (requestKey, bundle) -> {
-            currentAlarm.silence = bundle.getBoolean("silence");
-            String uri = bundle.getString("uri");
-            if(!uri.isEmpty())
-                currentAlarm.uriSonnerie = uri;
+            currentAlarm.type = bundle.getInt("type");
+            if(currentAlarm.type == 2){
+                String uri = bundle.getString("uri");
+                if(uri.isEmpty())
+                    currentAlarm.uriSonnerie = null;
+                else
+                    currentAlarm.uriSonnerie = uri;
+            }
         });
     }
 
@@ -184,6 +196,18 @@ public class AddFragment extends Fragment {
                     .commit();
         });
 
+        mediaPlayer = MediaPlayer.create(getContext(), SoundHelper.uriAlarm(currentAlarm, MainActivity.setting));
+        //playRing
+        ringNameTextView.setText(SoundHelper.ringName(currentAlarm, MainActivity.setting));
+        playButton.setOnClickListener(v -> {
+            if(mediaPlayer.isPlaying()){
+                mediaPlayer.pause();
+                mediaPlayer.seekTo(0);
+            }
+            else
+                mediaPlayer.start();
+        });
+
         //save
         saveButton.setOnClickListener(v -> {
             if(saveVerif()){
@@ -283,7 +307,7 @@ public class AddFragment extends Fragment {
             Toast.makeText(getContext(), "Heure de l'alarme invalide", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(!currentAlarm.silence && currentAlarm.uriSonnerie == null){
+        if(currentAlarm.type == 2 && currentAlarm.uriSonnerie == null){
             Toast.makeText(getContext(), "Veuillez choisir un sonnerie", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -307,8 +331,11 @@ public class AddFragment extends Fragment {
         saturday = view.findViewById(R.id.radioButton6);
         sunday = view.findViewById(R.id.radioButton7);
 
+        //ring
         addSonnerieButton = view.findViewById(R.id.sonnerieButton);
         vibrateCheckBox = view.findViewById(R.id.vibrationCheckBox);
+        playButton = view.findViewById(R.id.playButton);
+        ringNameTextView = view.findViewById(R.id.ringNameTextView);
 
         saveButton = view.findViewById(R.id.saveButton);
 

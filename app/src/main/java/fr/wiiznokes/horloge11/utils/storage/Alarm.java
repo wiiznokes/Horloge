@@ -20,8 +20,11 @@ public class Alarm implements Serializable{
     //sonnerie
     public String uriSonnerie = null;
     public boolean vibreur = false;
-    public boolean silence = false;
 
+    //0 -> default
+    //1 -> silence
+    //2 -> uriSonnerie
+    public int type = 0;
 
     public boolean week = true;
     public boolean monday = false;

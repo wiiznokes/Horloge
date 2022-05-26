@@ -284,5 +284,24 @@
         app:srcCompat="@android:drawable/ic_menu_save"
         tools:ignore="SpeakableTextPresentCheck" />
 
+    <Button
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lire"
+        app:layout_constraintEnd_toEndOf="@+id/sonnerieButton"
+        app:layout_constraintStart_toStartOf="@+id/sonnerieButton"
+        app:layout_constraintTop_toBottomOf="@+id/sonnerieButton" />
+
+    <TextView
+        android:id="@+id/ringNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="@+id/playButton"
+        app:layout_constraintEnd_toEndOf="@+id/vibrationCheckBox"
+        app:layout_constraintStart_toStartOf="@+id/vibrationCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/sonnerieButton" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

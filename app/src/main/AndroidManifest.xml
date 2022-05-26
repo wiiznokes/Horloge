@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".utils.alert.AlertReceiver" />
+        <receiver android:name=".utils.notif.alert.AlertReceiver" />
     </application>
 
 </manifest>

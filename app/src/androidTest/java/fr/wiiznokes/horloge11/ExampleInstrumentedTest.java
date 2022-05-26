@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Random;
 
-import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
+import fr.wiiznokes.horloge11.utils.notif.alert.AlertHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 import fr.wiiznokes.horloge11.utils.storage.Trie;
 

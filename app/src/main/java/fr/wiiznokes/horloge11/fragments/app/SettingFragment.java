@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import fr.wiiznokes.horloge11.R;
+import fr.wiiznokes.horloge11.app.MainActivity;
 import fr.wiiznokes.horloge11.fragments.helperFrag.AddSonnerieFragment;
 import fr.wiiznokes.horloge11.utils.storage.Setting;
 import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
@@ -30,8 +31,6 @@ public class SettingFragment extends Fragment {
 
     CheckBox buttonVolume;
 
-
-
     public SettingFragment() {    }
 
 
@@ -40,13 +39,16 @@ public class SettingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             boolean silence = bundle.getBoolean("silence");
             String uri = bundle.getString("uri");
 
-            Setting.silence = silence;
+            MainActivity.setting.silence = silence;
             if(!uri.isEmpty())
-                Setting.defaultUri = uri;
+                MainActivity.setting.defaultUri = uri;
+            StorageUtils.writeObject(requireContext(), new Setting(), StorageUtils.settingFile);
         });
 
     }
@@ -66,10 +68,10 @@ public class SettingFragment extends Fragment {
                     .commit();
         });
 
-        buttonVolume.setChecked(Setting.buttonToSnooze);
+        buttonVolume.setChecked(MainActivity.setting.buttonToSnooze);
 
         buttonVolume.setOnClickListener(v -> {
-            Setting.buttonToSnooze = buttonVolume.isChecked();
+            MainActivity.setting.buttonToSnooze = buttonVolume.isChecked();
             StorageUtils.writeObject(requireContext(), new Setting(), StorageUtils.settingFile);
         });
     }

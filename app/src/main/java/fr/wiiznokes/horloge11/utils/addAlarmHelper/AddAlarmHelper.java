@@ -5,7 +5,7 @@ import static fr.wiiznokes.horloge11.app.MainActivity.MapIdAlarm;
 import android.content.Context;
 import android.widget.Toast;
 
-import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
+import fr.wiiznokes.horloge11.utils.notif.alert.AlertHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 import fr.wiiznokes.horloge11.utils.storage.Trie;

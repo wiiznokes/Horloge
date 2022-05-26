@@ -1,4 +1,4 @@
-package fr.wiiznokes.horloge11.utils.interact;
+package fr.wiiznokes.horloge11.utils.affichage;
 
 
 import static fr.wiiznokes.horloge11.app.MainActivity.ListActif;
@@ -16,7 +16,7 @@ import fr.wiiznokes.horloge11.app.MainActivity;
 import fr.wiiznokes.horloge11.fragments.app.AddFragment;
 import fr.wiiznokes.horloge11.fragments.app.MainFragment;
 import fr.wiiznokes.horloge11.utils.affichage.Affichage;
-import fr.wiiznokes.horloge11.utils.alert.AlertHelper;
+import fr.wiiznokes.horloge11.utils.notif.alert.AlertHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 import fr.wiiznokes.horloge11.utils.storage.StorageUtils;
 import fr.wiiznokes.horloge11.utils.storage.Trie;

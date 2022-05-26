@@ -1,4 +1,4 @@
-package fr.wiiznokes.horloge11.utils.alert;
+package fr.wiiznokes.horloge11.utils.notif.alert;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

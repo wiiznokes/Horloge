@@ -21,9 +21,12 @@ import fr.wiiznokes.horloge11.R;
 public class AddSonnerieFragment extends Fragment {
 
 
-
+    private static int type;
+    //0 -> default
+    //1 -> silence
+    //2 -> uriSonnerie
     private static String uri = "";
-    private static boolean silence = false;
+
 
 
     private ImageButton returnButton;
@@ -34,12 +37,12 @@ public class AddSonnerieFragment extends Fragment {
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-
                 if (result.getData() != null) {
                     uri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI).toString();
                     if (uri.isEmpty()) {
                         uri = result.getData().getData().toString();
                     }
+                    type = 2;
                     returnHelper();
                 }
             }
@@ -78,7 +81,7 @@ public class AddSonnerieFragment extends Fragment {
 
         //silence
         silenceSong.setOnClickListener(v -> {
-            silence = true;
+            type = 1;
             returnHelper();
         });
     }
@@ -106,8 +109,9 @@ public class AddSonnerieFragment extends Fragment {
 
     private void returnHelper(){
         Bundle bundle = new Bundle();
-        bundle.putBoolean("silence", silence);
-        bundle.putString("uri", uri);
+        bundle.putInt("type", type);
+        if(type == 2)
+            bundle.putString("uri", uri);
 
         getParentFragmentManager().setFragmentResult("data", bundle);
         getParentFragmentManager().popBackStack();

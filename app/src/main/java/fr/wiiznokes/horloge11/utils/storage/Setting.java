@@ -8,15 +8,16 @@ public class Setting implements Serializable {
 
     }
 
-    public static String defaultUri;
-    public static List<String> uriHistory;
-    public static boolean silence = false;
+    public String defaultUri = null;
+    public List<String> uriHistory;
+    public boolean silence = true;
 
-    public static int increaseGradually = 0;
-    public static int timeRing = 300;
-    public static boolean buttonToSnooze = true;
+    public long timeSnooze = 240000;
+    public boolean increaseGradually = false;
+    public long timeRing = 240000;
+    public boolean buttonToSnooze = true;
 
-    public static int themeApp = 0;
-    public static boolean notif = false;
+    public int themeApp = 0;
+    public boolean notif = false;
 
 }

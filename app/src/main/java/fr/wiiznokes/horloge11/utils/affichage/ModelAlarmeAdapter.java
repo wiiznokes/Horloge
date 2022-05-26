@@ -15,7 +15,6 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import fr.wiiznokes.horloge11.R;
 import fr.wiiznokes.horloge11.app.MainActivity;
-import fr.wiiznokes.horloge11.utils.interact.InteractHelper;
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 
 public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {
