@@ -40,14 +40,14 @@ public class AddSonnerieFragment extends Fragment {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
 
-                Intent intent = result.getData();
+                Intent data = result.getData();
                 try {
-                    System.out.println("hello" + intent.getExtras().getParcelable(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI));
+                    System.out.println("hello" + data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI));
                 }catch (Exception ignored){
 
                 }
                 try {
-                    System.out.println(intent.getExtras().getParcelable(RingtoneManager.EXTRA_RINGTONE_PICKED_URI));
+
                 }catch (Exception ignored){
 
                 }
