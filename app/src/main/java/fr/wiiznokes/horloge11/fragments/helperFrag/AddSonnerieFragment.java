@@ -40,22 +40,18 @@ public class AddSonnerieFragment extends Fragment {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
 
-                if (result.getData() != null) {
-                    String action = result.getData().getAction();
+                Intent intent = result.getData();
+                try {
+                    System.out.println("hello" + intent.getExtras().getParcelable(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI));
+                }catch (Exception ignored){
 
-                    if(action.equals("mySong")){
-
-                    }
-                    else if(action.equals("androidSong")){
-                        uri = result.getData().getData(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
-                    }
-                    uri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI).toString();
-                    if (uri.isEmpty()) {
-                        uri = result.getData().getData().toString();
-                    }
-                    type = 2;
-                    returnHelper();
                 }
+                try {
+                    System.out.println(intent.getExtras().getParcelable(RingtoneManager.EXTRA_RINGTONE_PICKED_URI));
+                }catch (Exception ignored){
+
+                }
+
             }
     );
 
@@ -91,14 +87,12 @@ public class AddSonnerieFragment extends Fragment {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("audio/*");
-            intent.setAction("mySong");
             activityResultLauncher.launch(intent);
         });
 
         //androidSong
         androidSong.setOnClickListener(v -> {
             Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-            intent.setAction("androidSong");
             activityResultLauncher.launch(intent);
         });
 
