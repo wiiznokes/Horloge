@@ -1,13 +1,22 @@
 package fr.wiiznokes.horloge11.utils.notif;
 
+import android.content.Context;
+import android.media.MediaPlayer;
 import android.net.Uri;
 
 import fr.wiiznokes.horloge11.utils.storage.Alarm;
 import fr.wiiznokes.horloge11.utils.storage.Setting;
 
 public class SoundHelper {
+    private final Context context;
+    private static MediaPlayer mediaPlayer;
+    private static Setting setting;
 
-    public static Uri uriAlarm(Alarm currentAlarm, Setting setting){
+    public SoundHelper(Context context) {
+        this.context = context;
+    }
+
+    public static Uri uriAlarm(Alarm currentAlarm){
         switch (currentAlarm.type){
             //0 -> default
             //1 -> silence
@@ -24,9 +33,12 @@ public class SoundHelper {
         }
     }
 
-    public static String ringName(Alarm currentAlarm, Setting setting){
+    public static String ringName(Alarm currentAlarm){
         String text = "";
         switch (currentAlarm.type){
+            //0 -> default
+            //1 -> silence
+            //2 -> uriSonnerie
             case 0:
                 text = "default";
                 if(setting.silence)
@@ -45,5 +57,21 @@ public class SoundHelper {
         return text;
     }
 
-    public static void lire
+    public static void setSetting(Setting setting) {
+        SoundHelper.setting = setting;
+    }
+
+    public void setMediaPlayer(Uri uri) {
+        mediaPlayer = MediaPlayer.create(context, uri);
+    }
+
+    public void playTest() {
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+            mediaPlayer.seekTo(0);
+        }
+        else
+            mediaPlayer.start();
+
+    }
 }

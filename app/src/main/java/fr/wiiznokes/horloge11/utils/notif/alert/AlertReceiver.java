@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -62,6 +63,8 @@ public class AlertReceiver extends BroadcastReceiver {
         }
 
         Setting setting = (Setting) StorageUtils.readObject(context, StorageUtils.settingFile);
+        SoundHelper.setSetting(setting);
+        Uri uri = SoundHelper.uriAlarm(currentAlarm);
 
         //creation de la notification
         assert setting != null;
@@ -73,7 +76,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 .setFullScreenIntent(fullScreenPendingIntent, true)
                 .setContentIntent(fullScreenPendingIntent)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setSound(SoundHelper.uriAlarm(currentAlarm, setting))
+                .setSound(uri)
                 .setTimeoutAfter(setting.timeRing)
                 .addAction(R.drawable.ic_launcher_foreground, "reporter", snoozePendingIntent)
                 .addAction(R.drawable.ic_launcher_foreground, "effacer", removePendingIntent);

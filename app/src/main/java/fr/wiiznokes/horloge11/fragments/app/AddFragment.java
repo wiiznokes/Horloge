@@ -1,6 +1,7 @@
 package fr.wiiznokes.horloge11.fragments.app;
 
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,19 +34,25 @@ import fr.wiiznokes.horloge11.utils.storage.Trie;
 public class AddFragment extends Fragment {
 
     public static Alarm currentAlarm;
-
+    private static boolean isModif;
+    //main UI
     private ImageButton returnButton;
+    private ImageButton saveButton;
+
+    //alarm UI
     private EditText alarmNameEditText;
     private EditText hoursEditText;
     private EditText minutesEditText;
-    private ImageButton saveButton;
+
     private Button addSonnerieButton;
     private CheckBox vibrateCheckBox;
 
-    private MediaPlayer mediaPlayer;
+    //play song test
+    private SoundHelper soundHelper;
     private Button playButton;
     private TextView ringNameTextView;
 
+    //days UI
     private RadioButton monday;
     private RadioButton tuesday;
     private RadioButton wednesday;
@@ -54,19 +61,11 @@ public class AddFragment extends Fragment {
     private RadioButton saturday;
     private RadioButton sunday;
 
-    private static boolean isModif;
 
-
-
-    public AddFragment() {
-        // Required empty public constructor
-    }
+    public AddFragment() {}
 
     public static AddFragment newInstance(boolean modif, @Nullable Alarm alarm) {
         AddFragment fragment = new AddFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-
         isModif = modif;
         if(isModif){
             currentAlarm = alarm;
@@ -74,10 +73,8 @@ public class AddFragment extends Fragment {
         else {
             currentAlarm = new Alarm();
         }
-
         return fragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,26 +91,80 @@ public class AddFragment extends Fragment {
                     currentAlarm.uriSonnerie = uri;
             }
         });
+
+        soundHelper = new SoundHelper(getContext());
+        SoundHelper.setSetting(MainActivity.setting);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_add, container, false);
+        //findViewById
+        init(view);
 
         if(isModif){
+            //set alarm attribute
             modifAlarmHelper();
         }
         else{
             currentAlarm.id = new Random().nextLong();
         }
 
-        returnButton.setOnClickListener(v -> {
-            getParentFragmentManager().popBackStack();
+        //listener
+        returnButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
+        alarmHoursAI();
+        initDaysListener();
+
+        //add ring listener
+        addSonnerieButton.setOnClickListener(v -> {
+            getParentFragmentManager().beginTransaction()
+                    .addToBackStack(null)
+                    .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance())
+                    .commit();
         });
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         alarmNameEditText.requestFocus();
 
+        //play song test
+        ringNameTextView.setText(SoundHelper.ringName(currentAlarm));
+        Uri uri = SoundHelper.uriAlarm(currentAlarm);
+        if(uri != null){
+            soundHelper.setMediaPlayer(uri);
+            playButton.setOnClickListener(v -> soundHelper.playTest());
+        }
 
+
+
+        //save
+        saveButton.setOnClickListener(v -> {
+            if(saveVerif()){
+                getDataView();
+                if(isModif){
+                    AddAlarmHelper.modifAlarm(currentAlarm, requireContext());
+                }
+                else{
+                    AddAlarmHelper.addAlarm(currentAlarm, requireContext());
+                }
+                Trie.actualiser();
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.fragmentContainerView, new MainFragment())
+                        .commit();
+            }
+        });
+        }
+
+
+
+    private void alarmHoursAI(){
 
         hoursEditText.addTextChangedListener(new TextWatcher() {
             String textBefore;
@@ -185,63 +236,19 @@ public class AddFragment extends Fragment {
                 minutesEditText.setSelection(minutesEditText.length());
             }
         });
+    }
 
-        initDaysListener();
-
-        //sonnerie
-        addSonnerieButton.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .addToBackStack(null)
-                    .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance())
-                    .commit();
-        });
-
-        mediaPlayer = MediaPlayer.create(getContext(), SoundHelper.uriAlarm(currentAlarm, MainActivity.setting));
-        //playRing
-        ringNameTextView.setText(SoundHelper.ringName(currentAlarm, MainActivity.setting));
-        playButton.setOnClickListener(v -> {
-            if(mediaPlayer.isPlaying()){
-                mediaPlayer.pause();
-                mediaPlayer.seekTo(0);
-            }
-            else
-                mediaPlayer.start();
-        });
-
-        //save
-        saveButton.setOnClickListener(v -> {
-            if(saveVerif()){
-
-                getDataView();
-
-                if(isModif){
-                    AddAlarmHelper.modifAlarm(currentAlarm, requireContext());
-                }
-                else{
-                    AddAlarmHelper.addAlarm(currentAlarm, requireContext());
-                }
-
-                Trie.actualiser();
-
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragmentContainerView, new MainFragment())
-                        .commit();
-
-            }
-        });
+    private boolean saveVerif(){
+        if(hoursEditText.length() != 2 && minutesEditText.length() != 2){
+            Toast.makeText(getContext(), "Heure de l'alarme invalide", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(currentAlarm.type == 2 && currentAlarm.uriSonnerie == null){
+            Toast.makeText(getContext(), "Veuillez choisir un sonnerie", Toast.LENGTH_SHORT).show();
+            return false;
         }
 
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_add, container, false);
-        init(view);
-
-        return view;
-
+        return true;
     }
 
     private void getDataView(){
@@ -302,19 +309,21 @@ public class AddFragment extends Fragment {
         });
     }
 
-    private boolean saveVerif(){
-        if(hoursEditText.length() != 2 && minutesEditText.length() != 2){
-            Toast.makeText(getContext(), "Heure de l'alarme invalide", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if(currentAlarm.type == 2 && currentAlarm.uriSonnerie == null){
-            Toast.makeText(getContext(), "Veuillez choisir un sonnerie", Toast.LENGTH_SHORT).show();
-            return false;
-        }
 
-        return true;
+    private void modifAlarmHelper(){
+        alarmNameEditText.setText(currentAlarm.alarmName);
+        hoursEditText.setText(String.valueOf(currentAlarm.hours));
+        minutesEditText.setText(String.valueOf(currentAlarm.minute));
+        monday.setChecked(currentAlarm.monday);
+        tuesday.setChecked(currentAlarm.tuesday);
+        wednesday.setChecked(currentAlarm.wednesday);
+        thursday.setChecked(currentAlarm.thursday);
+        friday.setChecked(currentAlarm.friday);
+        saturday.setChecked(currentAlarm.saturday);
+        sunday.setChecked(currentAlarm.sunday);
+
+        vibrateCheckBox.setChecked(currentAlarm.vibreur);
     }
-
 
     private void init(View view){
         returnButton = view.findViewById(R.id.returnButton);
@@ -339,21 +348,6 @@ public class AddFragment extends Fragment {
 
         saveButton = view.findViewById(R.id.saveButton);
 
-    }
-
-    private void modifAlarmHelper(){
-        alarmNameEditText.setText(currentAlarm.alarmName);
-        hoursEditText.setText(String.valueOf(currentAlarm.hours));
-        minutesEditText.setText(String.valueOf(currentAlarm.minute));
-        monday.setChecked(currentAlarm.monday);
-        tuesday.setChecked(currentAlarm.tuesday);
-        wednesday.setChecked(currentAlarm.wednesday);
-        thursday.setChecked(currentAlarm.thursday);
-        friday.setChecked(currentAlarm.friday);
-        saturday.setChecked(currentAlarm.saturday);
-        sunday.setChecked(currentAlarm.sunday);
-
-        vibrateCheckBox.setChecked(currentAlarm.vibreur);
     }
 
 }
