@@ -3,6 +3,7 @@ package fr.wiiznokes.horloge11.fragments.helperFrag;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.os.Bundle;
+import android.os.Trace;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,18 +41,16 @@ public class AddSonnerieFragment extends Fragment {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
 
-                Intent data = result.getData();
-                try {
-                    System.out.println("hello" + data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI));
-                }catch (Exception ignored){
-
+                Intent intent = result.getData();
+                if(intent != null){
+                    try {
+                        uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI).toString();
+                    } catch (Exception e){
+                        uri = intent.getData().toString();
+                    }
+                    type = 2;
+                    returnHelper();
                 }
-                try {
-
-                }catch (Exception ignored){
-
-                }
-
             }
     );
 
@@ -114,8 +113,6 @@ public class AddSonnerieFragment extends Fragment {
 
 
     private void returnHelper(){
-        System.out.println("type = " + type);
-        System.out.println("uri = " + uri);
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
         if(type == 2)
