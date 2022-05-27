@@ -2,6 +2,7 @@ package fr.wiiznokes.horloge.fragments.helperFrag;
 
 import android.content.Intent;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +15,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 import fr.wiiznokes.horloge.R;
+import fr.wiiznokes.horloge.app.MainActivity;
+import fr.wiiznokes.horloge.utils.addAlarmHelper.AddRingHelper;
+import fr.wiiznokes.horloge.utils.addAlarmHelper.CustomAdapterAddRing;
+import fr.wiiznokes.horloge.utils.notif.SoundHelper;
+import fr.wiiznokes.horloge.utils.storage.Setting;
+import fr.wiiznokes.horloge.utils.storage.StorageUtils;
 
 
 public class AddSonnerieFragment extends Fragment {
+
+    public static final int settingSource = 0;
+    public static final int addAlarmSource = 1;
+    private static int source;
+
+
     //type utilisation
     //0 -> default
     //1 -> silence
@@ -27,11 +44,13 @@ public class AddSonnerieFragment extends Fragment {
 
     private static String uri = "";
 
-    //UI
-    private ImageButton returnButton;
-    private ConstraintLayout mySong;
-    private ConstraintLayout androidSong;
-    private ConstraintLayout silenceSong;
+    //recyclerView
+    protected List<String> dataset;
+    public static List<Uri> listUri;
+    public static List<Boolean> listSelect;
+    protected RecyclerView recyclerView;
+    protected CustomAdapterAddRing adapter;
+    protected RecyclerView.LayoutManager layoutManager;
 
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -50,15 +69,32 @@ public class AddSonnerieFragment extends Fragment {
             }
     );
 
-    public AddSonnerieFragment() {}
 
-    public static AddSonnerieFragment newInstance() {
+    public static AddSonnerieFragment newInstance(int sourceP) {
+        source = sourceP;
         return new AddSonnerieFragment();
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //default case
+        if(source == settingSource){
+            dataset.add(AddRingHelper.defaultRingText(MainActivity.setting.type, MainActivity.setting.defaultUri));
+            listUri.add(AddRingHelper.defaultRing(MainActivity.setting.type, MainActivity.setting.defaultUri));
+            listSelect.add(false);
+        }
+        //silence case
+        dataset.add("Silence");
+        listUri.add(null);
+        listSelect.add(false);
+        //history
+        dataset.addAll(MainActivity.setting.ringNameHistory);
+        listUri.addAll(MainActivity.setting.uriHistory);
+
+
 
     }
 
@@ -68,16 +104,24 @@ public class AddSonnerieFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_add_sonnerie, container, false);
 
-        returnButton = view.findViewById(R.id.returnButton);
-        mySong = view.findViewById(R.id.mySongCL);
-        androidSong = view.findViewById(R.id.androidSongCL);
-        silenceSong = view.findViewById(R.id.silenceSongCL);
+        recyclerView = view.findViewById(R.id.recyclerView2);
+        //organise les views
+        layoutManager = new LinearLayoutManager(requireContext());
+        //relie les datas et les views
+        adapter = new CustomAdapterAddRing(dataset, source);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
 
+
+        //return
+        //UI
+        ImageButton returnButton = view.findViewById(R.id.returnButton);
         returnButton.setOnClickListener(v -> {
             getParentFragmentManager().popBackStack();
         });
 
         //mySong
+        ConstraintLayout mySong = view.findViewById(R.id.mySongCL);
         mySong.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -86,15 +130,16 @@ public class AddSonnerieFragment extends Fragment {
         });
 
         //androidSong
+        ConstraintLayout androidSong = view.findViewById(R.id.androidSongCL);
         androidSong.setOnClickListener(v -> {
             Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
             activityResultLauncher.launch(intent);
         });
 
-        //silence
-        silenceSong.setOnClickListener(v -> {
-            type = 1;
-            returnHelper();
+        //save
+        ImageButton saveRingButton = view.findViewById(R.id.saveRingButton);
+        saveRingButton.setOnClickListener(v -> {
+
         });
 
         return view;
@@ -111,8 +156,13 @@ public class AddSonnerieFragment extends Fragment {
     private void returnHelper(){
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
-        if(type == 2)
+        if(type == 2){
             bundle.putString("uri", uri);
+            //save uri for history
+            MainActivity.setting.uriHistory.add(uri);
+            if(source != settingSource)
+                StorageUtils.writeObject(requireContext(), MainActivity.setting, StorageUtils.settingFile);
+        }
 
         getParentFragmentManager().setFragmentResult("data", bundle);
         getParentFragmentManager().popBackStack();

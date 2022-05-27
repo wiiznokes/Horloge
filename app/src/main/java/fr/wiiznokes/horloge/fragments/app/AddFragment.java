@@ -91,7 +91,7 @@ public class AddFragment extends Fragment {
                 if(uri.isEmpty())
                     currentAlarm.uriSonnerie = null;
                 else
-                    currentAlarm.uriSonnerie = uri;
+                    currentAlarm.uriSonnerie = Uri.parse(uri);
             }
             //maj Media Player
             SoundHelper.setMediaPlayer(requireContext(), SoundHelper.uriAlarm(currentAlarm));
@@ -130,7 +130,7 @@ public class AddFragment extends Fragment {
         //add ring listener
         addSonnerieButton.setOnClickListener(v -> getParentFragmentManager().beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance())
+                .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance(AddSonnerieFragment.addAlarmSource))
                 .commit());
 
         //play song test

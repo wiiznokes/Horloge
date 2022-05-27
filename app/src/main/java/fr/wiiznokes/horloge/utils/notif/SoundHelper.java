@@ -24,12 +24,12 @@ public class SoundHelper {
             //1 -> silence
             //2 -> uriSonnerie
             case 0:
-                if(setting.silence)
+                if(setting.type == 1)
                     return null;
-                else
-                    return Uri.parse(setting.defaultUri);
+                if(setting.type == 2)
+                    return setting.defaultUri;
             case 2:
-                return Uri.parse(currentAlarm.uriSonnerie);
+                return currentAlarm.uriSonnerie;
             default:
                 return null;
         }
@@ -43,21 +43,27 @@ public class SoundHelper {
             //2 -> uriSonnerie
             case 0:
                 text = "default";
-                if(setting.silence)
+                if(setting.type == 1)
                     text = text + " : " + "silence";
-                else
-                    text = text + " : " + setting.defaultUri;
+                else if (setting.type == 2)
+                    text = text + " : " + uriName(setting.defaultUri);
                 break;
 
             case 1:
                 text = "silence";
                 break;
             case 2:
-                text = currentAlarm.uriSonnerie;
+                text = uriName(currentAlarm.uriSonnerie);
                 break;
         }
         return text;
     }
+
+    public static String uriName(Uri uri){
+        String name = uri.toString();
+        return name;
+    }
+
 
     public static void setSetting(Setting setting) {
         SoundHelper.setting = setting;

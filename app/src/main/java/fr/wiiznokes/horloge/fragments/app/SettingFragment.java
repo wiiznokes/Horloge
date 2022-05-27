@@ -42,13 +42,7 @@ public class SettingFragment extends Fragment {
 
 
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            boolean silence = bundle.getBoolean("silence");
-            String uri = bundle.getString("uri");
 
-            MainActivity.setting.silence = silence;
-            if(!uri.isEmpty())
-                MainActivity.setting.defaultUri = uri;
-            StorageUtils.writeObject(requireContext(), new Setting(), StorageUtils.settingFile);
         });
 
     }
@@ -64,7 +58,7 @@ public class SettingFragment extends Fragment {
         addSonnerieDefault.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
                     .addToBackStack(null)
-                    .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance())
+                    .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance(AddSonnerieFragment.settingSource))
                     .commit();
         });
 
