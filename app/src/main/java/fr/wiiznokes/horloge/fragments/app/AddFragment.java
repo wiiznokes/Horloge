@@ -19,18 +19,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.io.IOException;
 import java.util.Random;
 
-import fr.wiiznokes.horloge.R;
 import fr.wiiznokes.horloge.app.MainActivity;
 import fr.wiiznokes.horloge.fragments.helperFrag.AddSonnerieFragment;
 import fr.wiiznokes.horloge.utils.addAlarmHelper.AddAlarmHelper;
 import fr.wiiznokes.horloge.utils.notif.SoundHelper;
 import fr.wiiznokes.horloge.utils.storage.Alarm;
 import fr.wiiznokes.horloge.utils.storage.Trie;
+import fr.wiiznokes.horloge.R;
 
 
 public class AddFragment extends Fragment {
+
+
 
     public static Alarm currentAlarm;
     private static boolean isModif;
@@ -81,6 +84,7 @@ public class AddFragment extends Fragment {
 
         //get data for ringTones
         getParentFragmentManager().setFragmentResultListener("data", this, (requestKey, bundle) -> {
+
             currentAlarm.type = bundle.getInt("type");
             if(currentAlarm.type == 2){
                 String uri = bundle.getString("uri");
@@ -89,10 +93,17 @@ public class AddFragment extends Fragment {
                 else
                     currentAlarm.uriSonnerie = uri;
             }
+            //maj Media Player
+            SoundHelper.setMediaPlayer(requireContext(), SoundHelper.uriAlarm(currentAlarm));
+
+            //maj ring name
+            ringNameTextView.setText(SoundHelper.ringName(currentAlarm));
         });
 
-        soundHelper = new SoundHelper(getContext());
+        soundHelper = new SoundHelper();
         SoundHelper.setSetting(MainActivity.setting);
+        SoundHelper.setMediaPlayer(requireContext(), SoundHelper.uriAlarm(currentAlarm));
+
     }
 
     @Override
@@ -117,12 +128,14 @@ public class AddFragment extends Fragment {
         initDaysListener();
 
         //add ring listener
-        addSonnerieButton.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .addToBackStack(null)
-                    .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance())
-                    .commit();
-        });
+        addSonnerieButton.setOnClickListener(v -> getParentFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance())
+                .commit());
+
+        //play song test
+        ringNameTextView.setText(SoundHelper.ringName(currentAlarm));
+        playButton.setOnClickListener(v -> soundHelper.playTest());
 
         return view;
     }
@@ -132,15 +145,6 @@ public class AddFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         alarmNameEditText.requestFocus();
-
-        //play song test
-        ringNameTextView.setText(SoundHelper.ringName(currentAlarm));
-        Uri uri = SoundHelper.uriAlarm(currentAlarm);
-        if(uri != null){
-            soundHelper.setMediaPlayer(uri);
-            playButton.setOnClickListener(v -> soundHelper.playTest());
-        }
-
 
 
         //save

@@ -1,20 +1,22 @@
 package fr.wiiznokes.horloge.utils.notif;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+
+import java.io.IOException;
 
 import fr.wiiznokes.horloge.utils.storage.Alarm;
 import fr.wiiznokes.horloge.utils.storage.Setting;
 
 public class SoundHelper {
-    private final Context context;
     private static MediaPlayer mediaPlayer;
     private static Setting setting;
 
-    public SoundHelper(Context context) {
-        this.context = context;
+    public SoundHelper() {
     }
+
 
     public static Uri uriAlarm(Alarm currentAlarm){
         switch (currentAlarm.type){
@@ -61,17 +63,31 @@ public class SoundHelper {
         SoundHelper.setting = setting;
     }
 
-    public void setMediaPlayer(Uri uri) {
-        mediaPlayer = MediaPlayer.create(context, uri);
+
+    public static void setMediaPlayer(Context context, Uri uri) {
+        mediaPlayer = new MediaPlayer();
+        try {
+            if(uri != null && !uri.toString().isEmpty()){
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+                mediaPlayer.setDataSource(context, uri);
+                mediaPlayer.prepare();
+                System.out.println("succes");
+                System.out.println(uri);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void playTest() {
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
-            mediaPlayer.seekTo(0);
+        try {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+                mediaPlayer.prepare();
+            } else
+                mediaPlayer.start();
+        } catch (Exception e){
+            e.printStackTrace();
         }
-        else
-            mediaPlayer.start();
-
     }
 }

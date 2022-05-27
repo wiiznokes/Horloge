@@ -15,10 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import fr.wiiznokes.horloge.R;
+
 import fr.wiiznokes.horloge.app.MainActivity;
 import fr.wiiznokes.horloge.utils.affichage.Affichage;
 import fr.wiiznokes.horloge.utils.affichage.ModelAlarmeAdapter;
+import fr.wiiznokes.horloge.R;
 
 
 public class MainFragment extends Fragment {
@@ -40,13 +41,6 @@ public class MainFragment extends Fragment {
 
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
-
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +67,12 @@ public class MainFragment extends Fragment {
         this.listView = view.findViewById(R.id.list_view);
         initAffichage();
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
     }
 
     public void initAffichage(){
