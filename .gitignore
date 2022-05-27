@@ -3,3 +3,5 @@
 *.lock
 .gradle/7.3.3/executionHistory/executionHistory.bin
 *.lock
+*.lock
+.gradle/7.3.3/executionHistory/executionHistory.lock
