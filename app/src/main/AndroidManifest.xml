@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="fr.wiiznokes.horloge11">
+    package="fr.wiiznokes.horloge">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
@@ -16,17 +16,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Horloge11">
         <activity
-            android:name=".temp.addSonnerieActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".app.AlarmActivity"
+            android:name="fr.wiiznokes.horloge.app.AlarmActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:showOnLockScreen="true"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".app.MainActivity"
+            android:name="fr.wiiznokes.horloge.app.MainActivity"
             android:exported="true"
             android:theme="@style/AppTheme"
             tools:ignore="ExtraText">
@@ -38,7 +34,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".utils.alert.AlertReceiver" />
+        <receiver android:name="fr.wiiznokes.horloge.utils.notif.alert.AlertReceiver" />
     </application>
 
 </manifest>
