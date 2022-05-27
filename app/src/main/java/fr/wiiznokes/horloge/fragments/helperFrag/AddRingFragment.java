@@ -22,14 +22,14 @@ import java.util.List;
 
 import fr.wiiznokes.horloge.R;
 import fr.wiiznokes.horloge.app.MainActivity;
-import fr.wiiznokes.horloge.utils.addAlarmHelper.AddRingHelper;
-import fr.wiiznokes.horloge.utils.addAlarmHelper.CustomAdapterAddRing;
-import fr.wiiznokes.horloge.utils.notif.SoundHelper;
-import fr.wiiznokes.horloge.utils.storage.Setting;
+import fr.wiiznokes.horloge.fragments.app.AddFragment;
+import fr.wiiznokes.horloge.utils.helper.UriHelper;
+import fr.wiiznokes.horloge.utils.affichage.addRingFrag.CustomAdapterAddRing;
+import fr.wiiznokes.horloge.utils.helper.SoundHelper;
 import fr.wiiznokes.horloge.utils.storage.StorageUtils;
 
 
-public class AddSonnerieFragment extends Fragment {
+public class AddRingFragment extends Fragment {
 
     public static final int settingSource = 0;
     public static final int addAlarmSource = 1;
@@ -42,7 +42,7 @@ public class AddSonnerieFragment extends Fragment {
     //2 -> uriSonnerie
     private static int type;
 
-    private static String uri = "";
+    private static Uri uri = null;
 
     //recyclerView
     protected List<String> dataset;
@@ -59,9 +59,9 @@ public class AddSonnerieFragment extends Fragment {
                 Intent intent = result.getData();
                 if(intent != null){
                     try {
-                        uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI).toString();
+                        uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                     } catch (Exception e){
-                        uri = intent.getData().toString();
+                        uri = intent.getData();
                     }
                     type = 2;
                     returnHelper();
@@ -70,9 +70,9 @@ public class AddSonnerieFragment extends Fragment {
     );
 
 
-    public static AddSonnerieFragment newInstance(int sourceP) {
+    public static AddRingFragment newInstance(int sourceP) {
         source = sourceP;
-        return new AddSonnerieFragment();
+        return new AddRingFragment();
     }
 
 
@@ -82,19 +82,17 @@ public class AddSonnerieFragment extends Fragment {
 
         //default case
         if(source == settingSource){
-            dataset.add(AddRingHelper.defaultRingText(MainActivity.setting.type, MainActivity.setting.defaultUri));
-            listUri.add(AddRingHelper.defaultRing(MainActivity.setting.type, MainActivity.setting.defaultUri));
-            listSelect.add(false);
+            dataset.add(UriHelper.defaultRingText(MainActivity.setting.type, MainActivity.setting.defaultUri));
+            listUri.add(UriHelper.defaultRingUri(MainActivity.setting.type, MainActivity.setting.defaultUri));
         }
         //silence case
         dataset.add("Silence");
         listUri.add(null);
-        listSelect.add(false);
         //history
         dataset.addAll(MainActivity.setting.ringNameHistory);
         listUri.addAll(MainActivity.setting.uriHistory);
-
-
+        for(int i = 0; i < dataset.size(); i++)
+            listSelect.add(false);
 
     }
 
@@ -154,17 +152,22 @@ public class AddSonnerieFragment extends Fragment {
 
 
     private void returnHelper(){
-        Bundle bundle = new Bundle();
-        bundle.putInt("type", type);
-        if(type == 2){
-            bundle.putString("uri", uri);
-            //save uri for history
-            MainActivity.setting.uriHistory.add(uri);
-            if(source != settingSource)
-                StorageUtils.writeObject(requireContext(), MainActivity.setting, StorageUtils.settingFile);
+
+        if(source == settingSource){
+            MainActivity.setting.type = type;
+            MainActivity.setting.defaultUri = uri;
+            StorageUtils.writeObject(requireContext(), MainActivity.setting, StorageUtils.settingFile);
+        }
+        else {
+            AddFragment.currentAlarm.type = type;
+            AddFragment.currentAlarm.uri = uri;
         }
 
-        getParentFragmentManager().setFragmentResult("data", bundle);
+        //for uri history
+        MainActivity.setting.uriHistory.add(uri);
+        MainActivity.setting.ringNameHistory.add(SoundHelper.uriName(uri));
+        StorageUtils.writeObject(requireContext(), MainActivity.setting, StorageUtils.settingFile);
+
         getParentFragmentManager().popBackStack();
     }
 

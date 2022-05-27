@@ -17,8 +17,8 @@ import androidx.fragment.app.Fragment;
 
 
 import fr.wiiznokes.horloge.app.MainActivity;
-import fr.wiiznokes.horloge.utils.affichage.Affichage;
-import fr.wiiznokes.horloge.utils.affichage.ModelAlarmeAdapter;
+import fr.wiiznokes.horloge.utils.affichage.mainFrag.Affichage;
+import fr.wiiznokes.horloge.utils.affichage.mainFrag.ModelAlarmeAdapter;
 import fr.wiiznokes.horloge.R;
 
 

@@ -1,4 +1,4 @@
-package fr.wiiznokes.horloge.utils.affichage;
+package fr.wiiznokes.horloge.utils.affichage.mainFrag;
 
 import static fr.wiiznokes.horloge.app.MainActivity.items;
 
@@ -15,6 +15,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import fr.wiiznokes.horloge.R;
 import fr.wiiznokes.horloge.app.MainActivity;
+import fr.wiiznokes.horloge.utils.affichage.mainFrag.InteractHelper;
 import fr.wiiznokes.horloge.utils.storage.Alarm;
 
 public class ModelAlarmeAdapter extends ArrayAdapter<Alarm> {

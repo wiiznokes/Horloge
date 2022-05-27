@@ -1,4 +1,4 @@
-package fr.wiiznokes.horloge.utils.addAlarmHelper;
+package fr.wiiznokes.horloge.utils.affichage.addRingFrag;
 
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -10,11 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.net.URI;
 import java.util.List;
 
 import fr.wiiznokes.horloge.R;
-import fr.wiiznokes.horloge.fragments.helperFrag.AddSonnerieFragment;
+import fr.wiiznokes.horloge.fragments.helperFrag.AddRingFragment;
 
 public class CustomAdapterAddRing extends RecyclerView.Adapter<CustomAdapterAddRing.ViewHolder> {
     private static int source;
@@ -23,7 +22,7 @@ public class CustomAdapterAddRing extends RecyclerView.Adapter<CustomAdapterAddR
     private List<Uri> listUris;
     private List<Boolean> listSelects;
 
-    public CustomAdapterAddRing(List<URI> listUrisP, int sourceP) {
+    public CustomAdapterAddRing(List<String> data, int sourceP) {
         dataset = data;
         source = sourceP;
 
@@ -54,13 +53,13 @@ public class CustomAdapterAddRing extends RecyclerView.Adapter<CustomAdapterAddR
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //play the song or choose silence/default
-        if(position == 0 && source == AddSonnerieFragment.settingSource){
+        if(position == 0 && source == AddRingFragment.settingSource){
 
         }
-        if(position == 0 && source == AddSonnerieFragment.addAlarmSource){
+        if(position == 0 && source == AddRingFragment.addAlarmSource){
 
         }
-        if(position == 1 && source == AddSonnerieFragment.addAlarmSource){
+        if(position == 1 && source == AddRingFragment.addAlarmSource){
 
         }
         holder.itemView.setOnClickListener(v -> {});

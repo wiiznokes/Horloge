@@ -1,4 +1,4 @@
-package fr.wiiznokes.horloge.utils.affichage;
+package fr.wiiznokes.horloge.utils.affichage.mainFrag;
 
 
 import androidx.annotation.Nullable;

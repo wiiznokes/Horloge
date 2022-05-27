@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import fr.wiiznokes.horloge.R;
 import fr.wiiznokes.horloge.app.MainActivity;
-import fr.wiiznokes.horloge.fragments.helperFrag.AddSonnerieFragment;
+import fr.wiiznokes.horloge.fragments.helperFrag.AddRingFragment;
 import fr.wiiznokes.horloge.utils.storage.Setting;
 import fr.wiiznokes.horloge.utils.storage.StorageUtils;
 
@@ -58,7 +58,7 @@ public class SettingFragment extends Fragment {
         addSonnerieDefault.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
                     .addToBackStack(null)
-                    .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance(AddSonnerieFragment.settingSource))
+                    .replace(R.id.fragmentContainerView, AddRingFragment.newInstance(AddRingFragment.settingSource))
                     .commit();
         });
 

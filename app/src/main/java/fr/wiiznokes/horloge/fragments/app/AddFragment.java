@@ -19,13 +19,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import java.io.IOException;
 import java.util.Random;
 
 import fr.wiiznokes.horloge.app.MainActivity;
-import fr.wiiznokes.horloge.fragments.helperFrag.AddSonnerieFragment;
-import fr.wiiznokes.horloge.utils.addAlarmHelper.AddAlarmHelper;
-import fr.wiiznokes.horloge.utils.notif.SoundHelper;
+import fr.wiiznokes.horloge.fragments.helperFrag.AddRingFragment;
+import fr.wiiznokes.horloge.utils.affichage.addFrag.AddFragmentHelper;
+import fr.wiiznokes.horloge.utils.helper.SoundHelper;
 import fr.wiiznokes.horloge.utils.storage.Alarm;
 import fr.wiiznokes.horloge.utils.storage.Trie;
 import fr.wiiznokes.horloge.R;
@@ -94,15 +93,15 @@ public class AddFragment extends Fragment {
                     currentAlarm.uriSonnerie = Uri.parse(uri);
             }
             //maj Media Player
-            SoundHelper.setMediaPlayer(requireContext(), SoundHelper.uriAlarm(currentAlarm));
+            SoundHelper.setMediaPlayer(requireContext(), SoundHelper.alarmToUri(currentAlarm));
 
             //maj ring name
-            ringNameTextView.setText(SoundHelper.ringName(currentAlarm));
+            ringNameTextView.setText(SoundHelper.ringText(currentAlarm));
         });
 
         soundHelper = new SoundHelper();
         SoundHelper.setSetting(MainActivity.setting);
-        SoundHelper.setMediaPlayer(requireContext(), SoundHelper.uriAlarm(currentAlarm));
+        SoundHelper.setMediaPlayer(requireContext(), SoundHelper.alarmToUri(currentAlarm));
 
     }
 
@@ -130,11 +129,11 @@ public class AddFragment extends Fragment {
         //add ring listener
         addSonnerieButton.setOnClickListener(v -> getParentFragmentManager().beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.fragmentContainerView, AddSonnerieFragment.newInstance(AddSonnerieFragment.addAlarmSource))
+                .replace(R.id.fragmentContainerView, AddRingFragment.newInstance(AddRingFragment.addAlarmSource))
                 .commit());
 
         //play song test
-        ringNameTextView.setText(SoundHelper.ringName(currentAlarm));
+        ringNameTextView.setText(SoundHelper.ringText(currentAlarm));
         playButton.setOnClickListener(v -> soundHelper.playTest());
 
         return view;
@@ -152,10 +151,10 @@ public class AddFragment extends Fragment {
             if(saveVerif()){
                 getDataView();
                 if(isModif){
-                    AddAlarmHelper.modifAlarm(currentAlarm, requireContext());
+                    AddFragmentHelper.modifAlarm(currentAlarm, requireContext());
                 }
                 else{
-                    AddAlarmHelper.addAlarm(currentAlarm, requireContext());
+                    AddFragmentHelper.addAlarm(currentAlarm, requireContext());
                 }
                 Trie.actualiser();
                 getParentFragmentManager().beginTransaction()
@@ -263,7 +262,7 @@ public class AddFragment extends Fragment {
         currentAlarm.active = true;
 
         currentAlarm.vibreur = vibrateCheckBox.isChecked();
-        currentAlarm.week = AddAlarmHelper.isWeek(currentAlarm);
+        currentAlarm.week = AddFragmentHelper.isWeek(currentAlarm);
         currentAlarm.monday = monday.isChecked();
         currentAlarm.tuesday = monday.isChecked();
         currentAlarm.wednesday = monday.isChecked();
@@ -272,7 +271,7 @@ public class AddFragment extends Fragment {
         currentAlarm.saturday = monday.isChecked();
         currentAlarm.sunday = monday.isChecked();
 
-        currentAlarm.jourSonnerieText = AddAlarmHelper.daysActives(currentAlarm, getString(R.string.all_days_text), getResources().getStringArray(R.array.days_in_week_text));
+        currentAlarm.jourSonnerieText = AddFragmentHelper.daysActives(currentAlarm, getString(R.string.all_days_text), getResources().getStringArray(R.array.days_in_week_text));
     }
 
     private void initDaysListener(){

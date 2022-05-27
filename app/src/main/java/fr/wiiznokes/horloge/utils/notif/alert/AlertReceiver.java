@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat;
 
 import fr.wiiznokes.horloge.R;
 import fr.wiiznokes.horloge.app.AlarmActivity;
-import fr.wiiznokes.horloge.utils.notif.SoundHelper;
+import fr.wiiznokes.horloge.utils.helper.SoundHelper;
 import fr.wiiznokes.horloge.utils.notif.boutonNotifReceiver;
 import fr.wiiznokes.horloge.utils.storage.Alarm;
 import fr.wiiznokes.horloge.utils.storage.Setting;
@@ -64,7 +64,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
         Setting setting = (Setting) StorageUtils.readObject(context, StorageUtils.settingFile);
         SoundHelper.setSetting(setting);
-        Uri uri = SoundHelper.uriAlarm(currentAlarm);
+        Uri uri = SoundHelper.alarmToUri(currentAlarm);
 
         //creation de la notification
         assert setting != null;

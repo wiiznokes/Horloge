@@ -1,4 +1,4 @@
-package fr.wiiznokes.horloge.utils.addAlarmHelper;
+package fr.wiiznokes.horloge.utils.affichage.addFrag;
 
 import static fr.wiiznokes.horloge.app.MainActivity.MapIdAlarm;
 
@@ -10,7 +10,7 @@ import fr.wiiznokes.horloge.utils.storage.Alarm;
 import fr.wiiznokes.horloge.utils.storage.StorageUtils;
 import fr.wiiznokes.horloge.utils.storage.Trie;
 
-public class AddAlarmHelper{
+public class AddFragmentHelper {
 
 
 
