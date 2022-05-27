@@ -53,3 +53,4 @@ lint/tmp/
 .DS_Store# App Specific cases 
 app/release/output.json
 .idea/codeStyles/
+.gradle/7.3.3/executionHistory/executionHistory.lock
