@@ -65,8 +65,6 @@ public class CustomAdapterAddRing extends RecyclerView.Adapter<CustomAdapterAddR
             AddRingFragment.listSelect.set(position, !AddRingFragment.listSelect.get(position));
             holder.radioButton.setChecked(AddRingFragment.listSelect.get(position));
 
-            //test
-            afficherListsTest();
         });
     }
 
@@ -74,6 +72,8 @@ public class CustomAdapterAddRing extends RecyclerView.Adapter<CustomAdapterAddR
     public int getItemCount() {
         return dataset.size();
     }
+
+
 
 
 
