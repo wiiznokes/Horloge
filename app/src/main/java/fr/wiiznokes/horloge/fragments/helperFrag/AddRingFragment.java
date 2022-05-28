@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.wiiznokes.horloge.R;
@@ -36,18 +38,10 @@ public class AddRingFragment extends Fragment {
     private static int source;
 
 
-    //type utilisation
-    //0 -> default
-    //1 -> silence
-    //2 -> uriSonnerie
-    private static int type;
-
-    private static Uri uri = null;
-
     //recyclerView
-    protected List<String> dataset;
-    public static List<Uri> listUri;
-    public static List<Boolean> listSelect;
+    public static List<String> dataset = new ArrayList<>();
+    public static List<Uri> listUri = new ArrayList<>();
+    public static List<Boolean> listSelect = new ArrayList<>();
     protected RecyclerView recyclerView;
     protected CustomAdapterAddRing adapter;
     protected RecyclerView.LayoutManager layoutManager;
@@ -58,14 +52,19 @@ public class AddRingFragment extends Fragment {
 
                 Intent intent = result.getData();
                 if(intent != null){
+                    Uri uri;
                     try {
                         uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                     } catch (Exception e){
                         uri = intent.getData();
                     }
-                    type = 2;
-                    returnHelper();
+                    
+                    if(uri != null)
+                        returnNewUriHelper(uri);
+                    else
+                        Toast.makeText(requireContext(), "impossible de trouver le son", Toast.LENGTH_SHORT).show();
                 }
+
             }
     );
 
@@ -82,8 +81,8 @@ public class AddRingFragment extends Fragment {
 
         //default case
         if(source == settingSource){
-            dataset.add(UriHelper.defaultRingText(MainActivity.setting.type, MainActivity.setting.defaultUri));
-            listUri.add(UriHelper.defaultRingUri(MainActivity.setting.type, MainActivity.setting.defaultUri));
+            dataset.add(UriHelper.defaultRingText(MainActivity.setting.silence, MainActivity.setting.defaultUri));
+            listUri.add(MainActivity.setting.defaultUri);
         }
         //silence case
         dataset.add("Silence");
@@ -106,7 +105,7 @@ public class AddRingFragment extends Fragment {
         //organise les views
         layoutManager = new LinearLayoutManager(requireContext());
         //relie les datas et les views
-        adapter = new CustomAdapterAddRing(dataset, source);
+        adapter = new CustomAdapterAddRing();
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
@@ -137,7 +136,39 @@ public class AddRingFragment extends Fragment {
         //save
         ImageButton saveRingButton = view.findViewById(R.id.saveRingButton);
         saveRingButton.setOnClickListener(v -> {
+            int position = -1;
+            int i = 0;
+            while (position == -1 && i < listSelect.size()){
+                if(listSelect.get(i))
+                    position = i;
+                i++;
+            }
 
+            if(position != -1){
+
+                if(source == settingSource){
+                    if(position == 0){
+                        MainActivity.setting.silence = true;
+                    }
+                    else {
+                        MainActivity.setting.defaultUri = listUri.get(position);
+                        MainActivity.setting.silence = false;
+                    }
+                    StorageUtils.writeObject(requireContext(), MainActivity.setting, StorageUtils.settingFile);
+                }
+                else{
+                    if(position < 2){
+                        AddFragment.currentAlarm.type = position;
+                    }
+                    else{
+                        AddFragment.currentAlarm.type = 2;
+                        AddFragment.currentAlarm.uri = listUri.get(position);
+                    }
+                }
+                getParentFragmentManager().popBackStack();
+            }
+            else
+                Toast.makeText(requireContext(), "aucun choix selectionné", Toast.LENGTH_SHORT).show();
         });
 
         return view;
@@ -148,24 +179,25 @@ public class AddRingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //test
+        CustomAdapterAddRing.afficherListsTest();
     }
 
 
-    private void returnHelper(){
-
+    private void returnNewUriHelper(Uri uri){
         if(source == settingSource){
-            MainActivity.setting.type = type;
+            MainActivity.setting.silence = false;
             MainActivity.setting.defaultUri = uri;
             StorageUtils.writeObject(requireContext(), MainActivity.setting, StorageUtils.settingFile);
         }
         else {
-            AddFragment.currentAlarm.type = type;
+            AddFragment.currentAlarm.type = 2;
             AddFragment.currentAlarm.uri = uri;
         }
 
         //for uri history
         MainActivity.setting.uriHistory.add(uri);
-        MainActivity.setting.ringNameHistory.add(SoundHelper.uriName(uri));
+        MainActivity.setting.ringNameHistory.add(UriHelper.uriName(uri));
         StorageUtils.writeObject(requireContext(), MainActivity.setting, StorageUtils.settingFile);
 
         getParentFragmentManager().popBackStack();

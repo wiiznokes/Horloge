@@ -19,12 +19,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.net.URI;
 import java.util.Random;
 
 import fr.wiiznokes.horloge.app.MainActivity;
 import fr.wiiznokes.horloge.fragments.helperFrag.AddRingFragment;
 import fr.wiiznokes.horloge.utils.affichage.addFrag.AddFragmentHelper;
 import fr.wiiznokes.horloge.utils.helper.SoundHelper;
+import fr.wiiznokes.horloge.utils.helper.UriHelper;
 import fr.wiiznokes.horloge.utils.storage.Alarm;
 import fr.wiiznokes.horloge.utils.storage.Trie;
 import fr.wiiznokes.horloge.R;
@@ -88,20 +90,19 @@ public class AddFragment extends Fragment {
             if(currentAlarm.type == 2){
                 String uri = bundle.getString("uri");
                 if(uri.isEmpty())
-                    currentAlarm.uriSonnerie = null;
+                    currentAlarm.uri = null;
                 else
-                    currentAlarm.uriSonnerie = Uri.parse(uri);
+                    currentAlarm.uri = Uri.parse(uri);
             }
             //maj Media Player
-            SoundHelper.setMediaPlayer(requireContext(), SoundHelper.alarmToUri(currentAlarm));
+            SoundHelper.setMediaPlayer(requireContext(), UriHelper.alarmToUri(currentAlarm, MainActivity.setting.silence, MainActivity.setting.defaultUri));
 
             //maj ring name
-            ringNameTextView.setText(SoundHelper.ringText(currentAlarm));
+            ringNameTextView.setText(UriHelper.alarmRingText(currentAlarm, MainActivity.setting.silence, MainActivity.setting.defaultUri));
         });
 
         soundHelper = new SoundHelper();
-        SoundHelper.setSetting(MainActivity.setting);
-        SoundHelper.setMediaPlayer(requireContext(), SoundHelper.alarmToUri(currentAlarm));
+        SoundHelper.setMediaPlayer(requireContext(), UriHelper.alarmToUri(currentAlarm, MainActivity.setting.silence, MainActivity.setting.defaultUri));
 
     }
 
@@ -133,7 +134,7 @@ public class AddFragment extends Fragment {
                 .commit());
 
         //play song test
-        ringNameTextView.setText(SoundHelper.ringText(currentAlarm));
+        ringNameTextView.setText(UriHelper.alarmRingText(currentAlarm, MainActivity.setting.silence, MainActivity.setting.defaultUri));
         playButton.setOnClickListener(v -> soundHelper.playTest());
 
         return view;
@@ -245,7 +246,7 @@ public class AddFragment extends Fragment {
             Toast.makeText(getContext(), "Heure de l'alarme invalide", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(currentAlarm.type == 2 && currentAlarm.uriSonnerie == null){
+        if(currentAlarm.type == 2 && currentAlarm.uri == null){
             Toast.makeText(getContext(), "Veuillez choisir un sonnerie", Toast.LENGTH_SHORT).show();
             return false;
         }

@@ -13,27 +13,23 @@ public class UriHelper {
     }
 
 
-    public static String defaultRingText(int type, Uri defaultUri){
-        String text = "Default (";
-        switch (type){
-            case 1:
-                text = text + "silence" + ')';
-                break;
-            case 2:
-                text = text + uriName(defaultUri) + ')';
-                break;
-        }
+    public static String defaultRingText(boolean settingSilence, Uri defaultUri){
+        String text;
+        if(settingSilence)
+            text = "Default (silence)";
+        else
+            text = "Default (" + uriName(defaultUri) + ')';
         return text;
     }
 
-    public static String alarmRingText(Alarm currentAlarm, int settingType, Uri defaultUri){
+    public static String alarmRingText(Alarm currentAlarm, boolean settingSilence, Uri defaultUri){
         String text = "";
         switch (currentAlarm.type){
             //0 -> default
             //1 -> silence
             //2 -> uriSonnerie
             case 0:
-                text = defaultRingText(settingType, defaultUri);
+                text = defaultRingText(settingSilence, defaultUri);
                 break;
             case 1:
                 text = "silence";
@@ -45,15 +41,15 @@ public class UriHelper {
         return text;
     }
 
-    public static Uri alarmToUri(Alarm currentAlarm, int settingType, Uri defaultUri){
+    public static Uri alarmToUri(Alarm currentAlarm, boolean settingSilence, Uri defaultUri){
         switch (currentAlarm.type){
             //0 -> default
             //1 -> silence
             //2 -> uriSonnerie
             case 0:
-                if(settingType == 1)
+                if(settingSilence)
                     return null;
-                if(settingType == 2)
+                else
                     return defaultUri;
             case 2:
                 return currentAlarm.uri;

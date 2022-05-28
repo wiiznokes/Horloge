@@ -13,12 +13,9 @@ public class Setting implements Serializable {
     }
 
     public Uri defaultUri = null;
-    public List<String> ringNameHistory;
-    public List<Uri> uriHistory;
-
-    //1 -> silence
-    //2 -> uriSonnerie
-    public int type = 1;
+    public boolean silence = true;
+    public List<String> ringNameHistory = new ArrayList<>();
+    public List<Uri> uriHistory = new ArrayList<>();
 
     public long timeSnooze = 240000;
     public boolean increaseGradually = false;

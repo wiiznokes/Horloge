@@ -1,5 +1,6 @@
 package fr.wiiznokes.horloge.utils.affichage.addRingFrag;
 
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +15,15 @@ import java.util.List;
 
 import fr.wiiznokes.horloge.R;
 import fr.wiiznokes.horloge.fragments.helperFrag.AddRingFragment;
+import fr.wiiznokes.horloge.utils.helper.SoundHelper;
 
 public class CustomAdapterAddRing extends RecyclerView.Adapter<CustomAdapterAddRing.ViewHolder> {
-    private static int source;
 
-    private List<String> dataset;
-    private List<Uri> listUris;
-    private List<Boolean> listSelects;
+    private static List<String> dataset;
+    private static SoundHelper soundHelper;
 
-    public CustomAdapterAddRing(List<String> data, int sourceP) {
-        dataset = data;
-        source = sourceP;
-
-
+    public CustomAdapterAddRing() {
+        dataset = AddRingFragment.dataset;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -52,25 +49,49 @@ public class CustomAdapterAddRing extends RecyclerView.Adapter<CustomAdapterAddR
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //play the song or choose silence/default
-        if(position == 0 && source == AddRingFragment.settingSource){
+        //play the song
+        holder.itemView.setOnClickListener(v -> {
+            Uri uri = AddRingFragment.listUri.get(position);
+            if(uri != null){
+                SoundHelper.setMediaPlayer(holder.itemView.getContext(), uri);
+            }
+        });
 
-        }
-        if(position == 0 && source == AddRingFragment.addAlarmSource){
-
-        }
-        if(position == 1 && source == AddRingFragment.addAlarmSource){
-
-        }
-        holder.itemView.setOnClickListener(v -> {});
 
         //select the song
-        holder.radioButton.setOnClickListener(v -> {});
+        holder.radioButton.setOnClickListener(v -> {
+            AddRingFragment.listSelect.add(position, !AddRingFragment.listSelect.get(position));
+            holder.radioButton.setChecked(AddRingFragment.listSelect.get(position));
+
+            //test
+            afficherListsTest();
+        });
     }
 
     @Override
     public int getItemCount() {
         return dataset.size();
+    }
+
+
+
+    public static void afficherListsTest(){
+        System.out.println("dataset :");
+        for(String text : dataset){
+            System.out.println(text);
+        }
+
+        System.out.println("listUri :");
+        for(Uri uri : AddRingFragment.listUri){
+            System.out.println(uri);
+        }
+
+        System.out.println("listSelect :");
+        for(boolean bool : AddRingFragment.listSelect){
+            System.out.println(bool);
+        }
+
+
     }
 
 

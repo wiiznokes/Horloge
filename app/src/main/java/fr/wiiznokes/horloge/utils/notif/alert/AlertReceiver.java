@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat;
 import fr.wiiznokes.horloge.R;
 import fr.wiiznokes.horloge.app.AlarmActivity;
 import fr.wiiznokes.horloge.utils.helper.SoundHelper;
+import fr.wiiznokes.horloge.utils.helper.UriHelper;
 import fr.wiiznokes.horloge.utils.notif.boutonNotifReceiver;
 import fr.wiiznokes.horloge.utils.storage.Alarm;
 import fr.wiiznokes.horloge.utils.storage.Setting;
@@ -63,27 +64,27 @@ public class AlertReceiver extends BroadcastReceiver {
         }
 
         Setting setting = (Setting) StorageUtils.readObject(context, StorageUtils.settingFile);
-        SoundHelper.setSetting(setting);
-        Uri uri = SoundHelper.alarmToUri(currentAlarm);
+        //si lecture du fichier
+        if(setting != null){
+            Uri uri = UriHelper.alarmToUri(currentAlarm, setting.silence, setting.defaultUri);
 
-        //creation de la notification
-        assert setting != null;
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle(currentAlarm.alarmName)
-                .setContentText(currentAlarm.alarmName)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setFullScreenIntent(fullScreenPendingIntent, true)
-                .setContentIntent(fullScreenPendingIntent)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setSound(uri)
-                .setTimeoutAfter(setting.timeRing)
-                .addAction(R.drawable.ic_launcher_foreground, "reporter", snoozePendingIntent)
-                .addAction(R.drawable.ic_launcher_foreground, "effacer", removePendingIntent);
+            //creation de la notification
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelID)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle(currentAlarm.alarmName)
+                    .setContentText(currentAlarm.alarmName)
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setFullScreenIntent(fullScreenPendingIntent, true)
+                    .setContentIntent(fullScreenPendingIntent)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    .setSound(uri)
+                    .setTimeoutAfter(setting.timeRing)
+                    .addAction(R.drawable.ic_launcher_foreground, "reporter", snoozePendingIntent)
+                    .addAction(R.drawable.ic_launcher_foreground, "effacer", removePendingIntent);
 
 
-        //affichage notif
-        notificationManager.notify((int) currentAlarm.id, notificationBuilder.build());
-
+            //affichage notif
+            notificationManager.notify((int) currentAlarm.id, notificationBuilder.build());
+        }
     }
 }
