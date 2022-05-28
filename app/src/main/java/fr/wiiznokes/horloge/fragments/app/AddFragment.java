@@ -85,25 +85,15 @@ public class AddFragment extends Fragment {
 
         //get data for ringTones
         getParentFragmentManager().setFragmentResultListener("data", this, (requestKey, bundle) -> {
-
-            currentAlarm.type = bundle.getInt("type");
-            if(currentAlarm.type == 2){
-                String uri = bundle.getString("uri");
-                if(uri.isEmpty())
-                    currentAlarm.uri = null;
-                else
-                    currentAlarm.uri = Uri.parse(uri);
-            }
             //maj Media Player
-            SoundHelper.setMediaPlayer(requireContext(), UriHelper.alarmToUri(currentAlarm, MainActivity.setting.silence, MainActivity.setting.defaultUri));
+            SoundHelper.setMediaPlayer(requireContext(), UriHelper.alarmToUri(currentAlarm, MainActivity.setting.silence, MainActivity.setting.getDefaultUri()));
 
             //maj ring name
-            ringNameTextView.setText(UriHelper.alarmRingText(currentAlarm, MainActivity.setting.silence, MainActivity.setting.defaultUri));
+            ringNameTextView.setText(UriHelper.alarmRingText(currentAlarm, MainActivity.setting.silence, MainActivity.setting.getDefaultUri()));
         });
 
         soundHelper = new SoundHelper();
-        SoundHelper.setMediaPlayer(requireContext(), UriHelper.alarmToUri(currentAlarm, MainActivity.setting.silence, MainActivity.setting.defaultUri));
-
+        SoundHelper.setMediaPlayer(requireContext(), UriHelper.alarmToUri(currentAlarm, MainActivity.setting.silence, MainActivity.setting.getDefaultUri()));
     }
 
     @Override
@@ -134,7 +124,7 @@ public class AddFragment extends Fragment {
                 .commit());
 
         //play song test
-        ringNameTextView.setText(UriHelper.alarmRingText(currentAlarm, MainActivity.setting.silence, MainActivity.setting.defaultUri));
+        ringNameTextView.setText(UriHelper.alarmRingText(currentAlarm, MainActivity.setting.silence, MainActivity.setting.getDefaultUri()));
         playButton.setOnClickListener(v -> soundHelper.playTest());
 
         return view;
@@ -145,7 +135,6 @@ public class AddFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         alarmNameEditText.requestFocus();
-
 
         //save
         saveButton.setOnClickListener(v -> {
@@ -246,7 +235,7 @@ public class AddFragment extends Fragment {
             Toast.makeText(getContext(), "Heure de l'alarme invalide", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(currentAlarm.type == 2 && currentAlarm.uri == null){
+        if(currentAlarm.type == 2 && currentAlarm.getUri() == null){
             Toast.makeText(getContext(), "Veuillez choisir un sonnerie", Toast.LENGTH_SHORT).show();
             return false;
         }

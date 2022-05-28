@@ -58,11 +58,9 @@ public class InteractHelper {
             ListInactif.remove(currentAlarm.id);
             Trie.listActifChange(currentAlarm.id);
 
-
             //ajout de l'alarm au AlarmManager
             AlertHelper.add(currentAlarm, mainActivity, MapIdDate.get(currentAlarm.id).getTimeInMillis());
         }
-
 
         MapIdAlarm.put(currentAlarm.id, currentAlarm);
         Trie.listSortId();
@@ -82,9 +80,7 @@ public class InteractHelper {
 
         //maj affichage
         Trie.listItems();
-        for(int i = 0; i < MainActivity.items.size(); i++){
-            System.out.println(items.get(i).id);
-        }
+
         MainFragment.adapter.notifyDataSetChanged();
     }
 

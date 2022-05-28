@@ -20,7 +20,7 @@ import fr.wiiznokes.horloge.utils.storage.Trie;
 
 
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class AlertTest {
 
     // Context of the app under test.
     Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();

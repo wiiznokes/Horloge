@@ -20,7 +20,10 @@ public class Alarm implements Serializable{
     public boolean active = true;
 
     //sonnerie
-    public Uri uri = null;
+    //get and setter because Uri does not implement serializable
+    private String uri = null;
+    public Uri getUri(){ if(uri != null) return Uri.parse(uri); else return null; }
+    public void setUri(Uri uri){ this.uri = uri.toString(); }
 
     public boolean vibreur = false;
 

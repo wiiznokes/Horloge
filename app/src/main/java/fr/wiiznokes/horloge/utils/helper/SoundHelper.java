@@ -1,6 +1,7 @@
 package fr.wiiznokes.horloge.utils.helper;
 
 import android.content.Context;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -19,11 +20,15 @@ public class SoundHelper {
         mediaPlayer = new MediaPlayer();
         try {
             if(uri != null && !uri.toString().isEmpty()){
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+                mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
+                        .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                        .setLegacyStreamType(AudioManager.STREAM_ALARM)
+                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .build());
                 mediaPlayer.setDataSource(context, uri);
                 mediaPlayer.prepare();
-                System.out.println("succes");
-                System.out.println(uri);
+
             }
         } catch (Exception e){
             e.printStackTrace();

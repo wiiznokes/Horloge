@@ -81,6 +81,8 @@ public class MainActivity extends FragmentActivity {
             //ecriture
             StorageUtils.writeObject(this, new Setting(), StorageUtils.settingFile);
         }
+
+
         MapIdAlarm = (Map<Long, Alarm>) StorageUtils.readObject(this, StorageUtils.alarmsFile);
         setting = (Setting) StorageUtils.readObject(this, StorageUtils.settingFile);
 

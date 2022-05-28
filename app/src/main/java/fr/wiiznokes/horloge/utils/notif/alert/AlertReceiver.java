@@ -66,7 +66,7 @@ public class AlertReceiver extends BroadcastReceiver {
         Setting setting = (Setting) StorageUtils.readObject(context, StorageUtils.settingFile);
         //si lecture du fichier
         if(setting != null){
-            Uri uri = UriHelper.alarmToUri(currentAlarm, setting.silence, setting.defaultUri);
+            Uri uri = UriHelper.alarmToUri(currentAlarm, setting.silence, setting.getDefaultUri());
 
             //creation de la notification
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, channelID)

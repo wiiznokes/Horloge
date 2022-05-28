@@ -49,6 +49,9 @@ public class CustomAdapterAddRing extends RecyclerView.Adapter<CustomAdapterAddR
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        //aficherUriName
+        holder.textView.setText(dataset.get(position));
+
         //play the song
         holder.itemView.setOnClickListener(v -> {
             Uri uri = AddRingFragment.listUri.get(position);
@@ -57,10 +60,9 @@ public class CustomAdapterAddRing extends RecyclerView.Adapter<CustomAdapterAddR
             }
         });
 
-
         //select the song
         holder.radioButton.setOnClickListener(v -> {
-            AddRingFragment.listSelect.add(position, !AddRingFragment.listSelect.get(position));
+            AddRingFragment.listSelect.set(position, !AddRingFragment.listSelect.get(position));
             holder.radioButton.setChecked(AddRingFragment.listSelect.get(position));
 
             //test

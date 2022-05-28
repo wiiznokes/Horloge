@@ -39,9 +39,9 @@ public class AddRingFragment extends Fragment {
 
 
     //recyclerView
-    public static List<String> dataset = new ArrayList<>();
-    public static List<Uri> listUri = new ArrayList<>();
-    public static List<Boolean> listSelect = new ArrayList<>();
+    public static List<String> dataset;
+    public static List<Uri> listUri;
+    public static List<Boolean> listSelect;
     protected RecyclerView recyclerView;
     protected CustomAdapterAddRing adapter;
     protected RecyclerView.LayoutManager layoutManager;
@@ -79,17 +79,23 @@ public class AddRingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        dataset = new ArrayList<>();
+        listUri = new ArrayList<>();
+        listSelect = new ArrayList<>();
+
         //default case
-        if(source == settingSource){
-            dataset.add(UriHelper.defaultRingText(MainActivity.setting.silence, MainActivity.setting.defaultUri));
-            listUri.add(MainActivity.setting.defaultUri);
+        if(source == addAlarmSource){
+            dataset.add(UriHelper.defaultRingText(MainActivity.setting.silence, MainActivity.setting.getDefaultUri()));
+            listUri.add(MainActivity.setting.getDefaultUri());
         }
         //silence case
         dataset.add("Silence");
         listUri.add(null);
+
         //history
         dataset.addAll(MainActivity.setting.ringNameHistory);
-        listUri.addAll(MainActivity.setting.uriHistory);
+        for(String uri : MainActivity.setting.uriHistory)
+            listUri.add(Uri.parse(uri));
         for(int i = 0; i < dataset.size(); i++)
             listSelect.add(false);
 
@@ -136,39 +142,7 @@ public class AddRingFragment extends Fragment {
         //save
         ImageButton saveRingButton = view.findViewById(R.id.saveRingButton);
         saveRingButton.setOnClickListener(v -> {
-            int position = -1;
-            int i = 0;
-            while (position == -1 && i < listSelect.size()){
-                if(listSelect.get(i))
-                    position = i;
-                i++;
-            }
-
-            if(position != -1){
-
-                if(source == settingSource){
-                    if(position == 0){
-                        MainActivity.setting.silence = true;
-                    }
-                    else {
-                        MainActivity.setting.defaultUri = listUri.get(position);
-                        MainActivity.setting.silence = false;
-                    }
-                    StorageUtils.writeObject(requireContext(), MainActivity.setting, StorageUtils.settingFile);
-                }
-                else{
-                    if(position < 2){
-                        AddFragment.currentAlarm.type = position;
-                    }
-                    else{
-                        AddFragment.currentAlarm.type = 2;
-                        AddFragment.currentAlarm.uri = listUri.get(position);
-                    }
-                }
-                getParentFragmentManager().popBackStack();
-            }
-            else
-                Toast.makeText(requireContext(), "aucun choix selectionné", Toast.LENGTH_SHORT).show();
+            returnHelper();
         });
 
         return view;
@@ -183,23 +157,60 @@ public class AddRingFragment extends Fragment {
         CustomAdapterAddRing.afficherListsTest();
     }
 
+    private void returnHelper(){
+
+        int position = -1;
+        int i = 0;
+        while (position == -1 && i < listSelect.size()){
+            if(listSelect.get(i))
+                position = i;
+            i++;
+        }
+
+        if(position != -1){
+
+            if(source == settingSource){
+                if(position == 0){
+                    MainActivity.setting.silence = true;
+                }
+                else {
+                    MainActivity.setting.setDefaultUri(listUri.get(position));
+                    MainActivity.setting.silence = false;
+                }
+                StorageUtils.writeObject(requireContext(), MainActivity.setting, StorageUtils.settingFile);
+            }
+            else{
+                if(position < 2){
+                    AddFragment.currentAlarm.type = position;
+                }
+                else{
+                    AddFragment.currentAlarm.type = 2;
+                    AddFragment.currentAlarm.setUri(listUri.get(position));
+                }
+            }
+            getParentFragmentManager().popBackStack();
+        }
+        else
+            Toast.makeText(requireContext(), "aucun choix selectionné", Toast.LENGTH_SHORT).show();
+    }
+
 
     private void returnNewUriHelper(Uri uri){
         if(source == settingSource){
             MainActivity.setting.silence = false;
-            MainActivity.setting.defaultUri = uri;
+            MainActivity.setting.setDefaultUri(uri);
             StorageUtils.writeObject(requireContext(), MainActivity.setting, StorageUtils.settingFile);
         }
         else {
             AddFragment.currentAlarm.type = 2;
-            AddFragment.currentAlarm.uri = uri;
+            AddFragment.currentAlarm.setUri(uri);
         }
 
         //for uri history
-        MainActivity.setting.uriHistory.add(uri);
+        MainActivity.setting.uriHistory.add(uri.toString());
         MainActivity.setting.ringNameHistory.add(UriHelper.uriName(uri));
         StorageUtils.writeObject(requireContext(), MainActivity.setting, StorageUtils.settingFile);
-
+        getParentFragmentManager().setFragmentResult("data", null);
         getParentFragmentManager().popBackStack();
     }
 

@@ -35,7 +35,7 @@ public class UriHelper {
                 text = "silence";
                 break;
             case 2:
-                text = uriName(currentAlarm.uri);
+                text = uriName(currentAlarm.getUri());
                 break;
         }
         return text;
@@ -52,7 +52,7 @@ public class UriHelper {
                 else
                     return defaultUri;
             case 2:
-                return currentAlarm.uri;
+                return currentAlarm.getUri();
             default:
                 return null;
         }

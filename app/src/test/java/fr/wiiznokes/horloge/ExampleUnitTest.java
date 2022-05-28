@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import fr.wiiznokes.horloge.utils.storage.Setting;
+import fr.wiiznokes.horloge.utils.storage.StorageUtils;
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
@@ -15,6 +18,9 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+
+
 
 
 }
