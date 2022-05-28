@@ -13,7 +13,7 @@ public class SoundHelper {
 
     public SoundHelper() {
     }
-    
+
 
     public static void setMediaPlayer(Context context, Uri uri) {
         mediaPlayer = new MediaPlayer();
